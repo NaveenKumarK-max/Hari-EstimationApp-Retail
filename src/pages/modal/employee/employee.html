@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Choose Employee
+    </ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-searchbar [(ngModel)]="input" placeholder="Search Employee" (ionChange)="search()"></ion-searchbar>
+    <ion-list>
+        <ion-item *ngFor="let data of details" (click)="selected(data)">
+            <span *ngIf="data['emp_name']">  {{data['emp_name']}} </span>
+        </ion-item>
+    </ion-list>
+</ion-content>

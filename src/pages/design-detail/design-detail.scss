@@ -1,0 +1,89 @@
+page-design-detail { 
+    .img-blk{
+        height:70px
+    }
+
+    .img-preview-col{ 
+        min-width: 75px;
+        background-color: transparent !important;
+        border : 1px solid #ddd;
+        padding: 1px;
+        margin: 2px;
+    }
+
+    .purity-scroll-blk{
+        height:40px;
+        padding: 0px;
+        .scroll-content{
+            padding: 0px !important;
+        }
+    }
+ 
+    ion-card {
+        position: relative; 
+        width: 100% !important;
+    }
+
+    ion-card img {
+        width: unset;
+    }
+    
+    .full-image { 
+    }
+
+    .proimage{
+        max-height: 500px;
+    }
+    .unselected{
+        color: color($colors, theme-color) !important;
+        background: #fff !important;
+        border:1px solid color($colors, theme-color) !important;
+    } 
+    .selected{
+        color: white !important;
+        background:color($colors, theme-color) !important;
+        border:1px solid color($colors, theme-color) !important;
+    }
+       
+    .text-input-md{ 
+        margin: 10px 8px !important; 
+    }
+         
+    ion-row {
+        display: block;
+        &[responsive-md] [width-25] {
+            width: 50%;
+            display: block;
+            float: left;
+        }
+    }
+    
+    .zoom-in {
+        -webkit-animation: zoomIn 500ms;
+        -moz-animation: zoomIn 500ms;
+        -o-animation: zoomIn 500ms;
+        animation: zoomIn 500ms;
+    } 
+          
+    .scroll-content{
+        margin-bottom: 50px !important;
+        // margin-top: 317px !important;
+    }
+
+    ion-scroll.scroll-x .scroll-content{
+        margin-bottom: 0px !important;
+    }
+    .outofstock{
+		font-size: 11px;
+        color: red;
+        margin-left: 7px;
+
+	}
+    .instock{
+		font-size: 11px;
+        color: #5ca7e2;
+        margin-left: 7px;
+
+    }
+       
+}

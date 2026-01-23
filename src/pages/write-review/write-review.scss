@@ -1,0 +1,22 @@
+
+page-write-review{
+
+  .button-inner{
+
+    // background: black !important;
+  }
+  .card-md{
+    box-shadow: none !important;
+    border-radius: 5px !important;
+    border: 1px solid lightgray !important;
+  }
+  .selected{
+    background: white;
+    font-weight: bold;
+    }
+  .unselected{
+    background: transparent;
+
+  }
+}
+

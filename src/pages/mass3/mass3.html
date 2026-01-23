@@ -1,0 +1,51 @@
+<!--
+  Generated template for the AutoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+
+    <ion-row style="margin-top:2px">
+ 
+     <ion-col >
+         
+       <ion-searchbar  no-padding [(ngModel)]="input"
+                            (ionBlur)="removeFocus()"
+       ></ion-searchbar>    </ion-col>
+       <ion-col col-1  (click)="search()">
+        <ion-icon style="font-size: 1.8em;
+        margin-top:8px;float: right;" name="search"></ion-icon>
+    </ion-col>
+     <ion-col col-1 (click)="goback()">
+         <ion-icon style="font-size: 1.8em;
+         margin-top:8px;float:right" name="close"></ion-icon>
+     </ion-col>
+     </ion-row>
+    </ion-navbar>
+    
+ </ion-header>
+ 
+ 
+     <ion-content padding>
+      
+
+
+      <ion-list>
+        <ion-item *ngFor="let d of temp" (click)="selected(d)">
+          {{ d['old_metal_prod_name'] }}
+        </ion-item>
+      </ion-list>
+      
+
+
+       <div style="font-weight:bold;margin-left:20px;" *ngIf="temp.length == 0 && status == true">
+           No Result Found
+         </div>
+         <div style="font-weight:bolder;text-align: center;color: red;" *ngIf="input.length < 4">
+          * Minimum Four letters Required
+        </div>
+     </ion-content>
+     
+ 

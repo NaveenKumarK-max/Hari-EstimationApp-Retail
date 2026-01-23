@@ -1,0 +1,44 @@
+page-designimg {
+
+        .coverphoto{
+            overflow: auto;
+            font-weight: bold;
+            // white-space: nowrap;
+            width: -webkit-fill-available;
+            }
+            .uploadimg1{
+                height: 65px;
+                width: 75px;
+                object-fit: cover;
+                object-position: center;
+              }
+              .one{
+                  color: green;
+              }
+              .two{
+                color: black;
+            }
+            .progress-outer {
+                width: 96%;
+                margin: 3x 2%;
+                padding: 5px;
+                text-align: center;
+                background-color: #f4f4f4;
+                border: 1px solid #dcdcdc;
+                color: #fff;
+                border-radius: 20px;
+            }
+            
+            .progress-inner {
+                min-width: 15%;
+                white-space: nowrap;
+                overflow: hidden;
+                padding: 5px;
+                border-radius: 20px;
+                background-color: map-get($colors, primary);
+            }
+            .scroll-content{
+                padding: 3px !important;
+            }
+    
+}

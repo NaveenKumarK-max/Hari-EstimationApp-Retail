@@ -1,0 +1,83 @@
+<ion-menu [content]="content">
+
+    <ion-header>
+        <ion-toolbar color="primary">
+            <ion-title align="center"><img  style="height: 85px;" src='assets/header.svg' />
+
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-list>
+        	<button menuClose ion-item *ngFor="let p of pages;let i = index;" [hidden]="p.show == 0" (click)="openPage(p)" no-lines>
+				<ion-icon name="{{p.icon}}" item-left color="theme-color"></ion-icon>
+				<span>{{p.title}}<span *ngIf="i == pages.length - 1">(v -{{app_version}})</span></span>
+			</button>
+	<!-- 		<button menuClose ion-item  (click)="openStatusPage()" no-lines>
+				<ion-icon name="basket" item-left color="theme-color"></ion-icon>
+				<span>Order Status</span>
+			</button>
+			<button menuClose ion-item  (click)="direct()" no-lines>
+				<ion-icon name="basket" item-left color="theme-color"></ion-icon>
+				<span>Order Creation</span>
+			</button> -->
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<div class="my-overlay" padding [hidden]="overlayHidden">
+    <br />
+    <h3>You are Offline.</h3><br />
+    <h4>Turn on Wi-Fi or mobile data.</h4>
+</div>
+<ion-nav #content [root]="rootPage"></ion-nav>
+
+<!-- <ion-footer *ngIf="foot == true" style="background: #88344c !important;">
+    <ion-row>
+        <ion-col col-10 style="font-weight: bold;color:white;">
+            &#169; Sri Krishna Jewellers Retail {{currYear}}
+        </ion-col>
+        <ion-col col-2>
+            <img src='assets/img/logimax.png'>
+        </ion-col>
+    </ion-row>
+</ion-footer> -->
+
+<ion-footer *ngIf="enter" style=" background-color: #575353  !important;    border-top-left-radius: 15px;
+border-top-right-radius: 15px;">
+<!-- Ecom modult footer -->
+	<!-- <ion-row>
+
+
+		<ion-col (click)="color(1)" [ngClass]="page == 1 ? 'ch':'noch'"  style="font-weight: bold;margin: auto;text-align: center;">
+			<span ><ion-icon style="font-size:1.8em !important" name="home"></ion-icon></span><br>
+			<div style="font-size: 8px;">HOME</div>
+		</ion-col>
+		<ion-col  (click)="color(2)"  [ngClass]="page == 2 ? 'ch':'noch'" style="font-weight: bold;margin: auto;text-align: center;">
+			<span><ion-icon style="font-size:1.8em !important" name="md-grid"></ion-icon></span><br>
+			<div style="font-size: 8px;">CATEGORY</div>
+		</ion-col> -->
+		<!-- <ion-col  (click)="color(3)"  [ngClass]="page == 3 ? 'ch':'noch'" style="font-weight: bold;margin: auto;text-align: center;">
+			<span><ion-icon style="font-size:1.8em !important" name="bookmarks"></ion-icon></span><br>
+			<div style="font-size: 8px;">COLLECTION</div>
+		</ion-col> -->
+		<!-- <ion-col  (click)="color(4)" [ngClass]="page == 4 ? 'ch':'noch'" style="font-weight: bold;margin: auto;text-align: center;">
+			<span ><ion-icon style="font-size:1.8em !important" name="people"></ion-icon></span><br>
+			<div style="font-size: 8px;">CATALOGUE</div>
+		</ion-col> -->
+		<!-- <ion-col  (click)="color(5)"  [ngClass]="page == 5 ? 'ch':'noch'" style="font-weight: bold;margin: auto;text-align: center;">
+			<span><ion-icon style="font-size:1.8em !important" name="options"></ion-icon></span><br>
+			<div style="font-size: 8px;">FILTER</div>
+		</ion-col>
+
+
+	</ion-row> -->
+	<ion-row>
+		<ion-col col-10 style="color:white;margin: auto;font-size: 10px !IMPORTANT;">
+			@ {{companyName}} v - {{app_version}} 
+		</ion-col>
+		<ion-col col-2>
+		<img style="height: 17px;" src='assets/logimax.png'>
+		</ion-col>
+	</ion-row>
+</ion-footer>

@@ -1,0 +1,113 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Custom Order</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content> 
+   
+     <ion-card no-margin>  
+      <ion-card-content  no-padding>
+        <ion-row padding >
+
+          <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Product Name <span class="required"> *</span></ion-label>
+              <ion-input type="text" placeholder="Enter product name" [(ngModel)]="customData.proname"> </ion-input>
+            </ion-item>
+            <!-- <span float-right [ngClass]="inpErrorMsg['weight'] == 'Invalid' ? 'input-error-msg' : 'input-msg'"><span *ngIf="item.min_weight > 0">Min. {{item.min_weight}} g </span><span *ngIf="item.max_weight > 0">Max. {{item.max_weight}} g</span></span> -->
+          </ion-col>
+
+            <ion-col col-12 class="custom-2col" *ngIf="item.purities?.length > 0" >
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Purity  <span class="required"> *</span></ion-label> 
+              </ion-item>
+              <ion-scroll class="purity-scroll-blk" scrollX="true">  
+                <ion-chip #chip1 *ngFor="let pur of item.purities" color="light" [ngClass]="customData['id_purity'] == pur['id_purity'] ? 'selected' : 'unselected'" (click)="setPurity(pur.id_purity,pur.purity)" style="margin-left: 5%;">
+                  <ion-label>{{pur.purity}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="item['id_purity'] == pur['id_purity']"></ion-icon> 
+                </ion-chip>
+              </ion-scroll>
+            </ion-col> 
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Weight <span class="required"> *</span></ion-label>
+                <ion-input type="number" placeholder="Enter weight in grams" [(ngModel)]="customData.weight" (ionChange)="customInputChanged('weight',customData.weight)"> </ion-input>
+              </ion-item>
+              <span float-right [ngClass]="inpErrorMsg['weight'] == 'Invalid' ? 'input-error-msg' : 'input-msg'"><span *ngIf="item.min_weight > 0">Min. {{item.min_weight}} g </span><span *ngIf="item.max_weight > 0">Max. {{item.max_weight}} g</span></span>
+            </ion-col>
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Pieces *</ion-label>
+                <ion-input type="number" placeholder="Pieces" [(ngModel)]="customData.pcs" > </ion-input>
+                <span float-right ></span>
+              </ion-item>
+            </ion-col>
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Due Date *</ion-label>
+                <ion-input type="number" readonly="true" class="ion_datetime" placeholder="Select Date" displayFormat="DD-MM-YYYY" [(ngModel)]="customData.due_date" (focusin)="show()"> </ion-input>
+                <span float-right ></span>
+              </ion-item>
+            </ion-col>
+           
+
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="item.weights?.length > 0" >
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Weight</ion-label>
+                <ion-select [(ngModel)]="customData.id_weight" placeholder="-- Choose --">
+                  <ion-option *ngFor="let s of item.weights" [value]="s.id_weight">{{s.name}}</ion-option>
+                </ion-select>
+              </ion-item>
+          </ion-col>
+
+
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="item.sizes?.length > 0" >
+                <ion-item no-padding>
+                  <ion-label color="label-color" stacked>Size</ion-label>
+                  <ion-select [(ngModel)]="customData.id_size" placeholder="-- Choose --">
+                    <ion-option *ngFor="let s of item.sizes" [value]="s.id_size">{{s.value}} {{s.name}}</ion-option>
+                  </ion-select>
+                </ion-item>
+            </ion-col>
+
+         
+
+            <ion-col col-12 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Description</ion-label>
+                <ion-textarea [(ngModel)]="customData.sample_details" placeholder="Enter your description" rows="5"></ion-textarea>
+              </ion-item>
+            </ion-col>
+            <ion-col col-12 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Upload Sample</ion-label> 
+                <button *ngIf="targetPath?.length <= 10" ion-button outline small color="dark" type="button" item-right icon-left (click)="presentActionSheet()">
+                    <ion-icon name="camera"></ion-icon>
+                    Choose Image
+                </button> 
+              </ion-item>
+              <ion-grid> 
+                <ion-row *ngIf="showedit"> 
+                  <ion-col col-6 *ngFor="let targetPath of targetPaths; let id = index"> 
+                    <ion-card class="block"> 
+                      <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon> <img [src]="targetPath" *ngIf="targetPath" /> 
+                    </ion-card> 
+                  </ion-col> 
+                </ion-row>  
+              </ion-grid> 
+            </ion-col> 
+        </ion-row> 
+      </ion-card-content>
+    </ion-card>
+  
+</ion-content> 
+<ion-footer >
+  <button ion-button  icon-start full class="theme-btn" (click)="proceedToWishlist()">Add to Cart</button> 
+</ion-footer>  
+
+    
+    
+    
+    

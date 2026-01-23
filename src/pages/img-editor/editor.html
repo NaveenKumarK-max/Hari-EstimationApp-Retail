@@ -1,0 +1,124 @@
+<!--
+  Generated template for the EditorPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header> 
+  <ion-navbar>
+      <ion-toolbar id="top-toolbar">
+        
+        <ion-row>
+          
+          <ion-col  *ngIf="d == undefined"  col-4 (click)="goback()">
+            <ion-buttons  (click)="goback()" left>
+              <ion-icon  style="color: white !important;    margin-top: 5px;font-size: 1.8em !important" name="arrow-back"></ion-icon> 
+            </ion-buttons>
+          </ion-col>
+        
+          <ion-col *ngIf="d == true"  col-2 (click)="goback()">
+            <ion-buttons  (click)="goback()" left>
+              <ion-icon  style="color: white !important;    margin-top: 5px;font-size: 1.8em !important" name="arrow-back"></ion-icon> 
+            </ion-buttons>
+          </ion-col> 
+            
+          <ion-col col-2>
+            <ion-buttons right>
+              <button [ngClass]="ushow == false ? 'one':'two'"  ion-button icon-only  (click)="undo()">
+                <ion-icon style="color: white !important;"  name="ios-undo"></ion-icon>
+              </button>
+            </ion-buttons>      
+          </ion-col>
+        
+          <ion-col col-2>
+            <ion-buttons right>
+              <button [ngClass]="cshow == false ? 'one':'two'" ion-button icon-only  (click)="edit()">
+                <ion-icon  style="color: white !important;" name="crop"></ion-icon>
+              </button>
+            </ion-buttons>
+          </ion-col>
+
+          <ion-col *ngIf="d == true" col-2>
+            <ion-buttons right>
+              <button [ngClass]="rshow == false ? 'one':'two'"  ion-button icon-only  (click)="rotate()">
+                <ion-icon style="color: white !important;"  name="refresh"></ion-icon>
+              </button>
+            </ion-buttons>
+          </ion-col>
+
+          <ion-col col-2 *ngIf="fshow == false" >
+            <div right  style="height: 31px !important;margin-right: 42px;" (tap)="find()">
+              <!-- <input  (keyup) ="check($event.target.value)" style="    text-align: center;width:40px !important;background:#ffe135 !important;border:none !important;
+              width: -webkit-fill-available;border: 1px solid;margin-top:2px;height: 30px;position: absolute !important;color: #ffe135 !important;
+              margin-bottom: 6px;"  type="text" id="title"/> -->
+              <input  type="text" (keyup) ="check($event.target.value)" class="inputText" id="title" />
+              <span class="floating-label">T</span> 
+              <!-- <ion-icon style="position: relative !important;font-size: 1.8em !important"  name="create"></ion-icon> -->
+            </div>
+          </ion-col>
+
+          <ion-col col-2 *ngIf="fshow == true" > 
+            <div right  style="height: 31px !important;margin-right: 42px;" (tap)="find()">
+                <!-- <input  (keyup) ="check($event.target.value)" style="    text-align: center;width:40px !important;background:#ffe135 !important;border:none !important;
+                width: -webkit-fill-available;border: 1px solid;margin-top:2px;height: 30px;position: absolute !important;color: #ffe135 !important;
+                margin-bottom: 6px;"  type="text" id="title"/> -->
+                <input  type="text" (keyup) ="check($event.target.value)" class="inputTextt" id="title" />
+                <span class="floating-label">T</span>
+                <!-- <ion-icon style="position: relative !important;font-size: 1.8em !important"  name="create"></ion-icon> -->
+            </div>
+          </ion-col>
+
+          <ion-col col-2> 
+            <ion-buttons right>
+              <button  [ngClass]="bshow == false ? 'one':'two'" *ngFor="let colour of availableColours" icon-only ion-button (click)="changeColour(colour)">
+                <ion-icon  style="color: white !important;" name="brush"></ion-icon>
+              </button>
+            </ion-buttons>
+          </ion-col> 
+
+        </ion-row>
+
+        </ion-toolbar>
+  </ion-navbar>
+  
+</ion-header>
+  
+<ion-content>
+    <!-- <canvas  id="canvas" #myCanvas (touchstart)="handleStart($event)" (touchmove)="handleMove($event)"> -->
+    <canvas  style="background:white !important" id="canvas"   #myCanvas (touchstart)="handleStart($event)" (touchmove)="handleMove($event)" (touchend)="end($event)" width="360" height="360"></canvas>
+    <!-- <canvas [ngClass]="scrol == false ? 'onee': 'twoo'"   id="canvas"   #myCanvas (touchstart)="handleStart($event)" (touchmove)="handleMove($event)" (touchend)="end($event)"></canvas> -->
+    <div id="measure"></div>
+    <!-- </canvas>	 -->
+    <ion-row >
+      <ion-col no-padding col-12 style="font-weight: bold;" (tap)="find()">
+        <!-- <input  (keyup) ="check($event.target.value)" style="    text-align: center;
+        width: -webkit-fill-available;border: 1px solid;margin-top:2px;height: 30px;
+        margin-bottom: 4px;"  type="text" id="title" placeholder="Search"/> -->
+      </ion-col> 
+    </ion-row>        
+</ion-content>
+  
+<ion-footer text-center no-border transparent>
+  <ion-row no-padding> 
+    <ion-col col-10>
+      <ion-item style="background-color: transparent !important;color:red !important">
+        <ion-input name="ProductName" [readonly]= 'readc()' [(ngModel)]="msg" placeholder="Add a caption..."></ion-input> 
+      </ion-item> 
+    </ion-col> 
+    <ion-col col-2> 
+    <ion-fab bottom right #fab >
+      <button ion-fab  (click)="save()">
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-fab>
+    </ion-col>
+  </ion-row>
+  <div *ngIf="show == true"  style="text-align: center;    margin-top: 5px;">
+    Upload Progress : 
+  </div>
+  <div *ngIf="show == true" class="progress-outer">
+    <div class="progress-inner" [style.width]="progress + '%'">
+        {{progress}}%
+    </div>
+  </div>
+</ion-footer>

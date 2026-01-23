@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Add Other Metal
+    </ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding>
+
+<ion-card *ngFor="let item of stoneData" class="stone-card">
+
+  <!-- ✅ Row 1 -->
+  <ion-row class="label-row">
+    <ion-col>Metal</ion-col>
+    <ion-col>Purity</ion-col>
+    <ion-col>Pcs</ion-col>
+  </ion-row>
+
+  <ion-row class="value-row">
+    <ion-col>{{ item.metal_name }}</ion-col>
+    <ion-col>{{ item.tag_other_itm_pur_name }}</ion-col>
+    <ion-col>{{ item.tag_other_itm_pcs }}</ion-col>
+  </ion-row>
+
+  <!-- ✅ Row 2 -->
+  <ion-row class="label-row">
+    <ion-col>Gwt</ion-col>
+    <ion-col>VA %</ion-col>
+    <ion-col>Mc Type</ion-col>
+  </ion-row>
+
+  <ion-row class="value-row">
+    <ion-col>{{ item.tag_other_itm_grs_weight | number:'1.3-3' }}</ion-col>
+    <ion-col>{{ item.tag_other_itm_wastage }}</ion-col>
+    <ion-col>{{ item.tag_other_itm_cal_type == 1 ? 'Per Gram' : 'Per Piece' }}</ion-col>
+  </ion-row>
+
+  <!-- ✅ Row 3 -->
+  <ion-row class="label-row">
+    <ion-col>Mc</ion-col>
+    <ion-col>Rate</ion-col>
+    <ion-col>Total</ion-col>
+  </ion-row>
+
+  <ion-row class="value-row">
+    <ion-col>{{ item.tag_other_itm_mc | indianCurrency:2 }}</ion-col>
+    <ion-col>{{ item.tag_other_itm_rate | indianCurrency:2 }}</ion-col>
+    <ion-col>{{ item.tag_other_itm_act_amount | indianCurrency:2 }}</ion-col>
+  </ion-row>
+
+</ion-card>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar color="light" class="footer-box">
+
+    <!-- Label Row -->
+    <ion-row class="footer-label-row">
+      <ion-col text-center class="footer-label">Total Gwt</ion-col>
+      <ion-col text-center class="footer-label">Total Amount</ion-col>
+    </ion-row>
+
+    <!-- Value Row -->
+    <ion-row class="footer-value-row">
+      <ion-col text-center class="footer-value">
+        {{ totalGwt | number:'1.3-3' }}
+      </ion-col>
+      <ion-col text-center class="footer-value total-amt">
+        {{ totalAmount | indianCurrency:2 }}
+      </ion-col>
+    </ion-row>
+
+  </ion-toolbar>
+</ion-footer>
+

@@ -1,0 +1,832 @@
+<!--
+  Generated template for the CreatestockPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <!-- <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button> -->
+    <ion-title  style="text-align: center;
+    "><img class="header-logo" src='assets/header.svg'/>
+	<span  style="float:right;padding:8px;border-radius:7px;font-size: 10px;margin-top: 15px !important;"></span>
+	<!-- <span (click)="non()" style="float:right;padding:8px;border-radius:7px;font-size: 10px;margin-top: 15px !important;background: #efefef">View Status</span> -->
+	</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-segment style="margin-top: 6px !important;    width: 98% !important;margin-left: 3px !important;" [(ngModel)]="type" mode="ios" color="label-color" scrollable (ionChange)="estiTypeChanged($event)">
+    <ion-segment-button value="FactSheet">
+      Fact Sheet
+    </ion-segment-button>
+    <ion-segment-button value="Wishlist">
+      Wishlist
+    </ion-segment-button>
+    <ion-segment-button value="Enquiry">
+      Enquiry
+    </ion-segment-button>
+
+  </ion-segment>
+
+  <div style="margin-bottom: 100px;">
+
+  <ion-row *ngIf="type == 'FactSheet'" style="    margin-bottom: 15px;">
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+      <ion-list style="display: flex !important;margin: 0px 0 0px !important;"  [(ngModel)]="enquiry['taged']" (ngModelChange)="checkesti()" radio-group>
+        <div style="margin-right: 15px;    margin-top: 13px;
+        font-weight: 400;color:#000000 !important;">Against Estimation ?</div>
+        <div style="display: flex;">
+          <ion-label style="color: black !important;">Yes.</ion-label>
+          <ion-radio style="margin: auto;" value="true"></ion-radio>
+        </div>
+        <div style="display: flex;margin-left: 10px;">
+          <ion-label style="color: black !important;">No.</ion-label>
+          <ion-radio style="margin: auto;" value="false"></ion-radio>
+        </div>
+      </ion-list>
+   </ion-col>
+
+   <!-- <div *ngIf="enquiry['taged'] == 'true'" class="row">
+     <div class="col" col-3 style="margin: auto;" >
+      <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text" id="one"  [(ngModel)]="enquiry['tag_code1']" (ngModelChange)="append()" >
+
+      </div>
+      <div class="col" col-1 style="margin: auto;font-weight: bold;">
+        <hr>
+        </div>
+
+      <div class="col" col-6 style="margin: auto;" >
+        <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text"    [(ngModel)]="enquiry['ref_no']" >
+
+      </div>
+      <div class="col" style="margin: auto;" col-2>
+        <button style="" item-right ion-button  color="light" (click)="getref(enquiry['ref_no'])"><ion-icon name="ios-search"></ion-icon></button>
+
+      </div>
+  </div> -->
+
+
+  <ion-col *ngIf="enquiry['taged'] == 'true'" col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+
+ </ion-col>
+ <ion-col *ngIf="enquiry['taged'] == 'true'" col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item   no-padding>
+    <!-- <ion-label color="label-color" stacked>Tag Code <span class="required">*</span></ion-label> -->
+    <ion-input type="number" [(ngModel)]="enquiry['ref_no']" (keyup)="texto($event)"></ion-input>
+    <button item-right ion-button margin-top color="light" (click)="getref(enquiry['ref_no'])"><ion-icon name="ios-search"></ion-icon></button>
+    <!-- <button item-right ion-button margin-top color="light" (click)="openQRScanner('tag')"><ion-icon name="ios-qr-scanner"></ion-icon></button> -->
+
+    <!-- <button item-right ion-button icon-start outline small color="dark" (click)="openQRScanner('tag')">
+      <ion-icon name="ios-qr-scanner"></ion-icon>
+    </button> -->
+  </ion-item>
+</ion-col>
+
+<ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+  <!-- <ion-item no-padding> -->
+    <ion-label color="label-color"  stacked>Sales Person *</ion-label>
+    <!-- <ion-input type="text" [(ngModel)]="enquiry['empname']" readonly></ion-input> -->
+  <!-- </ion-item> -->
+</ion-col>
+<ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item no-padding>
+    <!-- <ion-label color="label-color"  stacked>Sales Person</ion-label> -->
+    <ion-input type="text" [(ngModel)]="enquiry['empname']" (click)="openEmpModal()" readonly></ion-input>
+  </ion-item>
+</ion-col>
+
+
+    <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+      <!-- <ion-item (click)="addWishlist()" no-padding> -->
+        <ion-label color="label-color" stacked>Customer Name</ion-label>
+        <!-- <ion-input type="text" [(ngModel)]="enquiry['name']" readonly></ion-input> -->
+      <!-- </ion-item> -->
+   </ion-col>
+   <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+    <ion-item (click)="addWishlist()" no-padding>
+      <!-- <ion-label color="label-color" stacked>Customer Name</ion-label> -->
+      <ion-input type="text" [(ngModel)]="enquiry['name']" readonly></ion-input>
+    </ion-item>
+ </ion-col>
+   <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+      <!-- <ion-item no-padding> -->
+        <ion-label color="label-color" stacked>Phone *</ion-label>
+        <!-- <ion-input type="number" [(ngModel)]="enquiry['phone']" readonly></ion-input> -->
+      <!-- </ion-item> -->
+   </ion-col>
+   <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+    <ion-item no-padding>
+      <!-- <ion-label color="label-color" stacked>Phone</ion-label> -->
+      <ion-input type="number" [(ngModel)]="enquiry['phone']" readonly></ion-input>
+    </ion-item>
+ </ion-col>
+   <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+    <!-- <ion-item no-padding> -->
+      <ion-label color="label-color" stacked>Area *</ion-label>
+      <!-- <ion-input type="text" [(ngModel)]="enquiry['area']" ></ion-input> -->
+    <!-- </ion-item> -->
+ </ion-col>
+ <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item (tap)="getmodal('Village',village)"  no-padding>
+    <!-- <ion-label color="label-color" stacked>Area</ion-label> -->
+    <ion-input type="text" [(ngModel)]="enquiry['area']" readonly='true'></ion-input>
+  </ion-item>
+</ion-col>
+
+
+
+
+
+  <!-- <ion-col *ngIf="(type == 'FactSheet' && enquiry['taged'] != 'true') || type == 'Wishlist'"   col-12 >  -->
+
+  <ion-col  col-12 >
+
+    <ion-row style="margin-top: 10px" *ngFor="let e of enquiry['whole'];let i = index;">
+
+    <ion-col  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+        <!-- <ion-item no-padding> -->
+          <ion-label color="label-color" stacked>Product *</ion-label>
+          <!-- <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['product_name']" readonly></ion-input>
+          <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['product_name']" readonly (click)="openMasSearch('Product')"></ion-input>
+          <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Product')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item> -->
+      </ion-col>
+      <ion-col  col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+        <ion-item no-padding>
+          <!-- <ion-label color="label-color" stacked>Product</ion-label> -->
+          <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['whole'][i]['product_name']" readonly></ion-input>
+          <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['whole'][i]['product_name']"  readonly (click)="openMasSearch('Product',i)"></ion-input>
+          <button (click)="openMasSearch('Product',i)" *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin"  ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+      </ion-col>
+      <ion-col  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+        <!-- <ion-item no-padding> -->
+          <ion-label color="label-color" stacked>Design *</ion-label>
+          <!-- <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['design_name']" readonly></ion-input>
+          <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['design_name']" readonly (click)="openMasSearch('Design')"></ion-input>
+          <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Design')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item> -->
+      </ion-col>
+      <ion-col  col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+        <ion-item no-padding>
+          <!-- <ion-label color="label-color" stacked>Design</ion-label> -->
+          <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['whole'][i]['design_name']" readonly></ion-input>
+          <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['whole'][i]['design_name']"  readonly (click)="openMasSearch('Design',i)"></ion-input>
+          <button (click)="openMasSearch('Design',i)" *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin"  ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+      </ion-col>
+
+      <ion-col  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+        <!-- <ion-item no-padding> -->
+          <ion-label color="label-color" stacked>Sub Design *</ion-label>
+          <!-- <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['sub_design_name']" readonly></ion-input>
+          <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['sub_design_name']" readonly (click)="openMasSearch('subDesign')"></ion-input>
+          <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('subDesign')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item> -->
+      </ion-col>
+
+      <ion-col  col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+        <ion-item no-padding>
+          <!-- <ion-label color="label-color" stacked>Sub Design</ion-label> -->
+          <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['whole'][i]['sub_design_name']" readonly></ion-input>
+          <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['whole'][i]['sub_design_name']" readonly (click)="openMasSearch('subDesign',i)"></ion-input>
+          <button (click)="openMasSearch('subDesign',i)" *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+      </ion-col>
+
+       <ion-col col-12 *ngIf="enquiry['taged'] != 'true' && i == enquiry['whole'].length - 1">
+        <ion-icon style="float: right;" *ngIf="enquiry['taged'] != 'true' && i != 0"  name="remove" (click)="removefield(i)"></ion-icon>
+        <ion-icon style="float: right;" name="add" (click)="addfield(i)"></ion-icon>
+      </ion-col>
+
+
+ <ion-col *ngIf="type != 'Wishlist'" col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+    <!-- <ion-item no-padding> -->
+      <ion-label color="label-color" stacked>Weight(Gms) *</ion-label>
+      <!-- <ion-input type="text" [(ngModel)]="enquiry['area']" ></ion-input> -->
+    <!-- </ion-item> -->
+ </ion-col>
+ <ion-col *ngIf="type != 'Wishlist'" col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item  no-padding>
+    <!-- <ion-label color="label-color" stacked>Area</ion-label> -->
+    <ion-input type="number" [(ngModel)]="enquiry['whole'][i]['weight']"  (ngModelChange)="setwei(i,enquiry['whole'][i]['weight'])" placeholder="Enter wgt or choose range"></ion-input>
+  </ion-item>
+</ion-col>
+
+<ion-col *ngIf="type != 'Wishlist'" col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+  <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Weight Range: <span class="required"> </span></ion-label>
+
+</ion-col>
+<ion-col *ngIf="type != 'Wishlist'" col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+<ion-item  no-padding>
+  <ion-input type="text" [(ngModel)]="input2"  (ngModelChange)="searchrange()" placeholder="Search range or scroll"></ion-input>
+</ion-item>
+</ion-col>
+
+      <ion-col *ngIf="type != 'Wishlist' && weights?.length > 0" col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+        <!-- <ion-item no-padding> -->
+          <!-- <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Weight Range: <span class="required"> </span></ion-label>  -->
+        <!-- </ion-item> -->
+        <!-- <ion-scroll style="    white-space: nowrap !important;"  class="purity-scroll-blk" scrollX="true">
+          <ion-chip #chip1 *ngFor="let pur of weights" color="light" [ngClass]="enquiry['id_weight'] == pur['id_weight'] ? 'selected' : 'unselected'" (click)="setweight(pur.id_weight,pur['weight_description'])" style="margin-left: 5%;">
+            <ion-label>{{pur['weight_description']}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['id_weight'] == pur['id_weight']"></ion-icon>
+          </ion-chip>
+        </ion-scroll> -->
+      </ion-col>
+
+      <ion-col *ngIf="type != 'Wishlist' && weights?.length > 0" col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8   >
+        <!-- <ion-item no-padding> -->
+          <!-- <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Weight Range <span class="required"> </span></ion-label>  -->
+        <!-- </ion-item> -->
+        <ion-scroll style=" height: 110px !important;"  class="purity-scroll-blk" scrollY="true">
+          <ion-chip #chip1 *ngFor="let pur of weights" color="light" [ngClass]="enquiry['whole'][i]['id_weight'] == pur['id_weight'] ? 'selected' : 'unselected'" (click)="setweight(pur.id_weight,pur['value'],i)" style="margin-left: 5%;">
+            <ion-label>{{pur['weight_description']}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['whole'][i]['id_weight'] == pur['id_weight']"></ion-icon>
+          </ion-chip>
+        </ion-scroll>
+      </ion-col>
+
+
+      <ion-col *ngIf="type != 'Wishlist' && reasons?.length > 0" col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+        <!-- <ion-item no-padding> -->
+          <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Leaving Reason:  <span class="required"> </span></ion-label>
+        <!-- </ion-item> -->
+        <!-- <ion-scroll style="    white-space: nowrap !important;"  class="purity-scroll-blk" scrollX="true">
+          <ion-chip #chip1 *ngFor="let pur of reasons" color="light" [ngClass]="enquiry['reason'] == pur ? 'selected' : 'unselected'" (click)="setreason(pur)" style="margin-left: 5%;">
+            <ion-label>{{pur}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['reason'] == pur"></ion-icon>
+          </ion-chip>
+        </ion-scroll> -->
+      </ion-col>
+
+      <ion-col *ngIf="type != 'Wishlist' && reasons?.length > 0" col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+        <!-- <ion-item no-padding> -->
+          <!-- <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Reason for Leaving  <span class="required"> </span></ion-label>  -->
+        <!-- </ion-item> -->
+        <ion-scroll style=" height: 110px !important;"  class="purity-scroll-blk" scrollY="true">
+          <ion-chip #chip1 *ngFor="let pur of reasons" color="light" [ngClass]="enquiry['whole'][i]['reason'] == pur ? 'selected' : 'unselected'" (click)="setreason(pur,i)" style="margin-left: 5%;">
+            <ion-label>{{pur}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['whole'][i]['reason'] == pur"></ion-icon>
+          </ion-chip>
+        </ion-scroll>
+      </ion-col>
+
+       <ion-grid style="margin-top: 10px" *ngIf="type == 'FactSheet'">
+
+    <ion-col style="margin: auto;color:#000000 !important;">
+      Add Images <span style="font-weight: bold;" *ngIf="enquiry['whole'][i]['images'].length > 0">- ({{enquiry['whole'][i]['images'].length}})</span>
+    </ion-col>
+        <ion-row>
+      <ion-col col-10 style="margin-top: 30px;">
+
+
+          <div style="margin-bottom:10px" class="row" *ngFor="let targetPath of enquiry['whole'][i]['images']; let id = index" >
+
+              <div  class="col" col-7 no-padding style="text-align:center;"><img class="uploadimg1" src="{{targetPath['image_name']}}" imageViewer="{{targetPath['image_name']}}" onerror="this.src='assets/no-img.png'"
+            *ngIf="targetPath" /></div><div style="margin: auto;" class="col" col-2 no-padding  >
+            <ion-icon (click)="deletePhoto(id,i)" style="padding: 0px !important;color: red;    font-size: 1.8em;" name="close-circle"></ion-icon></div>
+          </div>
+
+      </ion-col>
+      <ion-col style="margin: auto;" col-2 (click)="presentActionSheet('gallery',i)">
+        <div  class="col" style="text-align: end;margin: auto;">
+          <span style="padding:5px;border: 1px solid lightgray;"><ion-icon name="add"></ion-icon></span>
+
+        </div>      </ion-col>
+    </ion-row>
+</ion-grid>
+
+
+
+      </ion-row>
+      </ion-col>
+      <ion-col style="margin-bottom: 10px;"  *ngIf=" enquiry['whole'].length > 0" col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+  <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Product Information</ion-label>
+
+  <ion-row style="    border: 1px solid lightgray;">
+    <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold;border-right: 1px solid lightgray;" col-3>
+      Product
+    </ion-col>
+    <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold;border-right: 1px solid lightgray;" col-3>
+      Design
+    </ion-col>
+    <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold;border-right: 1px solid lightgray;" col-3>
+      Subdesign
+    </ion-col>
+    <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold" col-3>
+      Weight
+    </ion-col>
+  </ion-row>
+  <ion-row *ngFor="let e of enquiry['whole'];let i = index;" style="    border: 1px solid lightgray;">
+    <ion-col  col-3 style="border-right: 1px solid lightgray;text-align: center;">
+      {{e['product_name']}}
+    </ion-col>
+    <ion-col  col-3 style="border-right: 1px solid lightgray;text-align: center;">
+      {{e['design_name']}}
+    </ion-col>
+    <ion-col  col-3 style="border-right: 1px solid lightgray;text-align: center;">
+      {{e['sub_design_name']}}
+    </ion-col>
+    <ion-col style="text-align: center;" col-3>
+      {{enquiry['whole'][i]['net_wt']}} g
+    </ion-col>
+  </ion-row>
+</ion-col>
+<!--       </ion-col>
+ -->
+  </ion-row>
+
+
+
+
+
+
+  <div *ngIf="type == 'Wishlist'" style="    margin-bottom: 15px;">
+    <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+      <ion-list style="display: flex !important;margin: 0px 0 0px !important;"  [(ngModel)]="enquiry['taged']" (ngModelChange)="checkesti()" radio-group>
+        <div style="margin-right: 15px;    margin-top: 13px;
+        font-weight: 400;color:#000000 !important;">Against Estimation ?</div>
+        <div style="display: flex;">
+          <ion-label style="color: black !important;">Yes.</ion-label>
+          <ion-radio style="margin: auto;" value="true"></ion-radio>
+        </div>
+        <div style="display: flex;margin-left: 10px;">
+          <ion-label style="color: black !important;">No.</ion-label>
+          <ion-radio style="margin: auto;" value="false"></ion-radio>
+        </div>
+      </ion-list>
+   </ion-col> -->
+   <ion-row style="margin-top: 10px;">
+    <ion-col col-5  style="padding-top: 0px !important;">
+
+      <ion-item >
+        <ion-label *ngIf="checkold != true" style="" color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+        <ion-label *ngIf="checkold == true" style="" color="label-color" stacked>Old Tag Code <span class="required">*</span></ion-label>
+
+        <ion-toggle [(ngModel)]="checkold"></ion-toggle>
+      </ion-item>
+      </ion-col>
+
+</ion-row>
+   <div  class="row">
+    <div class="col" col-3 style="margin: auto;" >
+      <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text" id="one"  [(ngModel)]="enquiry['tag_code1']" (keyup)="append($event)" >
+
+      </div>
+      <div class="col" col-1 style="margin: auto;font-weight: bold;">
+        <hr>
+        </div>
+
+      <div class="col" col-6 style="margin: auto;" >
+        <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text"  id="two"  [(ngModel)]="enquiry['tag_code2']" (keyup)="append($event)" >
+
+      </div>
+      <div class="col" style="margin: auto;" col-2>
+        <button style="" item-right ion-button  color="light" (click)="getTagData(enquiry['tag_code'])"><ion-icon name="ios-search"></ion-icon></button>
+
+      </div>
+  </div>
+
+
+<ion-row>
+  <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+    <!-- <ion-item no-padding> -->
+      <ion-label color="label-color"  stacked>Sales Person:</ion-label>
+      <!-- <ion-input type="text" [(ngModel)]="enquiry['empname']" readonly></ion-input> -->
+    <!-- </ion-item> -->
+  </ion-col>
+  <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+    <ion-item no-padding>
+      <!-- <ion-label color="label-color"  stacked>Sales Person</ion-label> -->
+      <ion-input type="text" [(ngModel)]="enquiry['empname']" (click)="openEmpModal()" readonly></ion-input>
+    </ion-item>
+  </ion-col>
+
+    <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+      <!-- <ion-item (click)="addWishlist()" no-padding> -->
+        <ion-label color="label-color" stacked>Customer Name *</ion-label>
+        <!-- <ion-input type="text" [(ngModel)]="enquiry['name']" readonly></ion-input>
+      </ion-item> -->
+   </ion-col>
+   <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+    <ion-item (click)="addWishlist()" no-padding>
+      <!-- <ion-label color="label-color" stacked>Customer Name</ion-label> -->
+      <ion-input type="text" [(ngModel)]="enquiry['name']" readonly></ion-input>
+    </ion-item>
+ </ion-col>
+   <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+      <!-- <ion-item no-padding> -->
+        <ion-label color="label-color" stacked>Phone *</ion-label>
+        <!-- <ion-input type="number" [(ngModel)]="enquiry['phone']" readonly></ion-input>
+      </ion-item> -->
+   </ion-col>
+   <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+    <ion-item no-padding>
+      <!-- <ion-label color="label-color" stacked>Phone</ion-label> -->
+      <ion-input type="number" [(ngModel)]="enquiry['phone']" readonly></ion-input>
+    </ion-item>
+ </ion-col>
+   <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+    <!-- <ion-item no-padding> -->
+      <ion-label color="label-color" stacked>Area *</ion-label>
+      <!-- <ion-input type="text" [(ngModel)]="enquiry['area']" ></ion-input>
+    </ion-item> -->
+ </ion-col>
+ <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+ <ion-item (tap)="getmodal('Village',village)"  no-padding>
+    <!-- <ion-label color="label-color" stacked>Area</ion-label> -->
+    <ion-input type="text" [(ngModel)]="enquiry['area']" readonly='true'></ion-input>
+  </ion-item>
+</ion-col>
+ <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4>
+  <!-- <ion-item no-padding> -->
+    <ion-label color="label-color" stacked>Due Date *</ion-label>
+    <!-- <ion-input type="number" readonly="true" class="ion_datetime" placeholder="Select Date" displayFormat="DD-MM-YYYY" [(ngModel)]="productdet.due_date" (focusin)="show()"> </ion-input> -->
+    <!-- <ion-input type="number"  placeholder="No of Days to Convert Sale"  [(ngModel)]="enquiry.due_date"> </ion-input>
+
+    <span float-right ></span>
+  </ion-item> -->
+</ion-col>
+<ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8>
+  <ion-item no-padding>
+    <!-- <ion-label color="label-color" stacked>Due Date *</ion-label> -->
+    <!-- <ion-input type="number" readonly="true" class="ion_datetime" placeholder="Select Date" displayFormat="DD-MM-YYYY" [(ngModel)]="productdet.due_date" (focusin)="show()"> </ion-input> -->
+    <ion-input type="number"  placeholder="No of days to convert sale"  [(ngModel)]="enquiry.due_date"> </ion-input>
+
+    <span float-right ></span>
+  </ion-item>
+</ion-col>
+
+<ion-col style="margin-top: 10px" col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+  <!-- <ion-item no-padding> -->
+    <ion-label color="label-color" stacked>Product *</ion-label>
+    <!-- <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['product_name']" readonly></ion-input>
+    <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['product_name']" readonly (click)="openMasSearch('Product')"></ion-input>
+    <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Product')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+  </ion-item> -->
+</ion-col>
+<ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item no-padding>
+    <!-- <ion-label color="label-color" stacked>Product</ion-label> -->
+    <ion-input  type="text" [(ngModel)]="enquiry['product_name']" readonly></ion-input>
+    <!-- <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['product_name']" readonly (click)="openMasSearch('Product')"></ion-input>
+    <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Product')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+   -->
+  </ion-item>
+</ion-col>
+<ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+  <!-- <ion-item no-padding> -->
+    <ion-label color="label-color" stacked>Design *</ion-label>
+    <!-- <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['design_name']" readonly></ion-input>
+    <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['design_name']" readonly (click)="openMasSearch('Design')"></ion-input>
+    <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Design')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+  </ion-item> -->
+</ion-col>
+<ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item no-padding>
+    <!-- <ion-label color="label-color" stacked>Design</ion-label> -->
+    <ion-input  type="text" [(ngModel)]="enquiry['design_name']" readonly></ion-input>
+    <!-- <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['design_name']" readonly (click)="openMasSearch('Design')"></ion-input>
+    <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Design')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+  -->
+  </ion-item>
+</ion-col>
+
+<ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+  <!-- <ion-item no-padding> -->
+    <ion-label color="label-color" stacked>Sub Design *</ion-label>
+    <!-- <ion-input *ngIf="enquiry['taged'] == 'true'" type="text" [(ngModel)]="enquiry['sub_design_name']" readonly></ion-input>
+    <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['sub_design_name']" readonly (click)="openMasSearch('subDesign')"></ion-input>
+    <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('subDesign')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+  </ion-item> -->
+</ion-col>
+<ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item no-padding>
+    <!-- <ion-label color="label-color" stacked>Sub Design</ion-label> -->
+    <ion-input  type="text" [(ngModel)]="enquiry['sub_design_name']" readonly></ion-input>
+    <!-- <ion-input *ngIf="enquiry['taged'] != 'true'" type="text" [(ngModel)]="enquiry['sub_design_name']" readonly (click)="openMasSearch('subDesign')"></ion-input>
+    <button *ngIf="enquiry['taged'] != 'true'" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('subDesign')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+   -->
+  </ion-item>
+</ion-col>
+
+      <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4>
+        <!-- <ion-item no-padding> -->
+          <ion-label color="label-color" stacked>Description:</ion-label>
+          <!-- <ion-textarea [(ngModel)]="enquiry.sample_details" placeholder="Enter your description" rows="3"></ion-textarea>
+        </ion-item> -->
+      </ion-col>
+      <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8>
+        <ion-item no-padding>
+          <!-- <ion-label color="label-color" stacked>Description</ion-label> -->
+          <ion-textarea [(ngModel)]="enquiry.sample_details" placeholder="Enter your description" rows="3"></ion-textarea>
+        </ion-item>
+      </ion-col>
+
+ <ion-col *ngIf="enquiry['gettaged'] == 'true'" col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+    <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Product Information</ion-label>
+
+    <ion-row style="    border: 1px solid lightgray;">
+      <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold;border-right: 1px solid lightgray;" col-3>
+        Product
+      </ion-col>
+      <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold;border-right: 1px solid lightgray;" col-3>
+        Design
+      </ion-col>
+      <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold;border-right: 1px solid lightgray;" col-3>
+        Subdesign
+      </ion-col>
+      <ion-col  style="text-align: center;color:#000000 !important;font-weight:bold" col-3>
+        Weight
+      </ion-col>
+    </ion-row>
+    <ion-row  style="    border: 1px solid lightgray;">
+      <ion-col  col-3 style="border-right: 1px solid lightgray;text-align: center;">
+        {{enquiry['product_name']}}
+      </ion-col>
+      <ion-col  col-3 style="border-right: 1px solid lightgray;text-align: center;">
+        {{enquiry['design_name']}}
+      </ion-col>
+      <ion-col  col-3 style="border-right: 1px solid lightgray;text-align: center;">
+        {{enquiry['sub_design_name']}}
+      </ion-col>
+      <ion-col style="text-align: center;" col-3>
+        {{enquiry['net_wt']}} g
+      </ion-col>
+    </ion-row>
+ </ion-col>
+</ion-row>
+
+</div>
+
+
+
+  <ion-row *ngIf="type == 'Enquiry'" style="    margin-bottom: 15px;">
+
+    <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+      <!-- <ion-item no-padding> -->
+        <ion-label color="label-color"  stacked>Sales Person:</ion-label>
+        <!-- <ion-input type="text" [(ngModel)]="enquiry['empname']" readonly></ion-input> -->
+      <!-- </ion-item> -->
+    </ion-col>
+    <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+      <ion-item no-padding>
+        <!-- <ion-label color="label-color"  stacked>Sales Person</ion-label> -->
+        <ion-input type="text" [(ngModel)]="enquiry['empname']" (click)="openEmpModal()" readonly></ion-input>
+      </ion-item>
+    </ion-col>
+
+      <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+        <!-- <ion-item (click)="addWishlist()" no-padding> -->
+          <ion-label color="label-color" stacked>Customer Name *</ion-label>
+          <!-- <ion-input type="text" [(ngModel)]="enquiry['name']" readonly></ion-input> -->
+        <!-- </ion-item> -->
+     </ion-col>
+     <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+      <ion-item (click)="addWishlist()" no-padding>
+        <!-- <ion-label color="label-color" stacked>Customer Name</ion-label> -->
+        <ion-input type="text" [(ngModel)]="enquiry['name']" readonly></ion-input>
+      </ion-item>
+   </ion-col>
+     <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+        <!-- <ion-item no-padding> -->
+          <ion-label color="label-color" stacked>Phone *</ion-label>
+          <!-- <ion-input type="number" [(ngModel)]="enquiry['phone']" readonly></ion-input> -->
+        <!-- </ion-item> -->
+     </ion-col>
+     <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+      <ion-item no-padding>
+        <!-- <ion-label color="label-color" stacked>Phone</ion-label> -->
+        <ion-input type="number" [(ngModel)]="enquiry['phone']" readonly></ion-input>
+      </ion-item>
+   </ion-col>
+
+   <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+    <!-- <ion-item no-padding> -->
+      <ion-label color="label-color" stacked>Area *</ion-label>
+      <!-- <ion-input type="text" [(ngModel)]="enquiry['area']" ></ion-input> -->
+    <!-- </ion-item> -->
+ </ion-col>
+
+ <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+   <ion-item (tap)="getmodal('Village',village)"  no-padding>
+    <!-- <ion-label color="label-color" stacked>Area</ion-label> -->
+    <ion-input type="text" [(ngModel)]="enquiry['area']" readonly='true'></ion-input>
+  </ion-item>
+</ion-col>
+
+     <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+      <!-- <ion-item no-padding> -->
+        <ion-label color="label-color" stacked>What type of product you want to buy * ?</ion-label>
+        <!-- <ion-input type="text" [(ngModel)]="enquiry['customerproduct']" placeholder="Ex: chain, bangles, rings..."></ion-input> -->
+      <!-- </ion-item> -->
+   </ion-col>
+   <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+    <!-- <ion-item no-padding> -->
+      <!-- <ion-label color="label-color" stacked>What type of product you want to buy?</ion-label> -->
+      <!-- <ion-input type="text" [(ngModel)]="enquiry['customerproduct']" placeholder="Ex: chain, bangles, rings..."></ion-input> -->
+    <!-- </ion-item> -->
+ </ion-col>
+   <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+    <ion-item no-padding>
+      <!-- <ion-label color="label-color" stacked>What type of product you want to buy?</ion-label> -->
+      <ion-input type="text" [(ngModel)]="enquiry['customerproduct']" placeholder="Ex: chain, bangles, rings..."></ion-input>
+    </ion-item>
+ </ion-col>
+
+  <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+    <!-- <ion-item no-padding> -->
+      <ion-label color="label-color" stacked>Weight(Gms) *</ion-label>
+      <!-- <ion-input type="text" [(ngModel)]="enquiry['area']" ></ion-input> -->
+    <!-- </ion-item> -->
+ </ion-col>
+ <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+  <ion-item  no-padding>
+    <!-- <ion-label color="label-color" stacked>Area</ion-label> -->
+    <ion-input type="number" [(ngModel)]="enquiry['weight']" placeholder="Enter wgt or choose range"></ion-input>
+  </ion-item>
+</ion-col>
+<ion-col  col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 >
+  <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Weight Range: <span class="required"> </span></ion-label>
+
+</ion-col>
+<ion-col  col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 >
+<ion-item  no-padding>
+  <ion-input type="text" [(ngModel)]="input2"  (ngModelChange)="searchrange()" placeholder="Search range or scroll"></ion-input>
+</ion-item>
+</ion-col>
+        <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="weights?.length > 0" >
+          <!-- <ion-item no-padding> -->
+            <!-- <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Weight Range: <span class="required"> </span></ion-label>  -->
+          <!-- </ion-item> -->
+          <!-- <ion-scroll style="    white-space: nowrap !important;"  class="purity-scroll-blk" scrollX="true">
+            <ion-chip #chip1 *ngFor="let pur of weights" color="light" [ngClass]="enquiry['id_weight'] == pur['id_weight'] ? 'selected' : 'unselected'" (click)="setweight(pur.id_weight,pur['weight_description'])" style="margin-left: 5%;">
+              <ion-label>{{pur['weight_description']}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['id_weight'] == pur['id_weight']"></ion-icon>
+            </ion-chip>
+          </ion-scroll> -->
+        </ion-col>
+
+        <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 *ngIf="weights?.length > 0" >
+          <!-- <ion-item no-padding> -->
+            <!-- <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Weight Range <span class="required"> </span></ion-label>  -->
+          <!-- </ion-item> -->
+          <ion-scroll style="height: 110px !important;"  class="purity-scroll-blk" scrollY="true">
+            <ion-chip #chip1 *ngFor="let pur of weights" color="light" [ngClass]="enquiry['id_weight'] == pur['id_weight'] ? 'selected' : 'unselected'" (click)="setweight(pur.id_weight,pur['value'],0)" style="margin-left: 5%;">
+              <ion-label>{{pur['weight_description']}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['id_weight'] == pur['id_weight']"></ion-icon>
+            </ion-chip>
+          </ion-scroll>
+        </ion-col>
+
+
+        <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4 *ngIf="prices?.length > 0" >
+          <!-- <ion-item no-padding> -->
+            <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Price Range:  <span class="required"> </span></ion-label>
+          <!-- </ion-item> -->
+          <!-- <ion-scroll style="    white-space: nowrap !important;"  class="purity-scroll-blk" scrollX="true">
+            <ion-chip #chip1 *ngFor="let pur of prices" color="light" [ngClass]="enquiry['price'] == pur ? 'selected' : 'unselected'" (click)="setprice(pur)" style="margin-left: 5%;">
+              <ion-label>{{pur}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['price'] == pur"></ion-icon>
+            </ion-chip>
+          </ion-scroll> -->
+        </ion-col>
+
+        <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 *ngIf="prices?.length > 0" >
+          <!-- <ion-item no-padding> -->
+            <!-- <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Price Range  <span class="required"> </span></ion-label>  -->
+          <!-- </ion-item> -->
+          <ion-scroll style="    height: 110px !important;"  class="purity-scroll-blk" scrollY="true">
+            <ion-chip #chip1 *ngFor="let pur of prices" color="light" [ngClass]="enquiry['price'] == pur ? 'selected' : 'unselected'" (click)="setprice(pur)" style="margin-left: 5%;">
+              <ion-label>{{pur}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['price'] == pur"></ion-icon>
+            </ion-chip>
+          </ion-scroll>
+        </ion-col>
+
+
+        <ion-col col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4>
+          <!-- <ion-item no-padding> -->
+            <ion-label color="label-color" stacked>Description:</ion-label>
+            <!-- <ion-textarea [(ngModel)]="enquiry.sample_details" placeholder="Enter your description" rows="3"></ion-textarea> -->
+          <!-- </ion-item> -->
+        </ion-col>
+
+        <ion-col col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8>
+          <ion-item no-padding>
+            <!-- <ion-label color="label-color" stacked>Description</ion-label> -->
+            <ion-textarea [(ngModel)]="enquiry.sample_details" placeholder="Enter your description" rows="3"></ion-textarea>
+          </ion-item>
+        </ion-col>
+  </ion-row>
+
+
+      <!-- <ion-row *ngIf="type == 'Enquiry'" style="    margin-bottom: 15px;">
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+        <ion-item (click)="addWishlist()" no-padding>
+          <ion-label color="label-color" stacked>Customer Name</ion-label>
+          <ion-input type="text" [(ngModel)]="enquiry['name']" readonly></ion-input>
+        </ion-item>
+     </ion-col>
+     <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Phone</ion-label>
+          <ion-input type="number" [(ngModel)]="enquiry['phone']" readonly></ion-input>
+        </ion-item>
+     </ion-col>
+     <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 >
+      <ion-item no-padding>
+        <ion-label color="label-color" stacked>What type of product you want to buy?</ion-label>
+        <ion-input type="text" [(ngModel)]="enquiry['customerproduct']" placeholder="Ex: chain, bangles, rings..."></ion-input>
+      </ion-item>
+   </ion-col>
+
+
+        <ion-col col-12 *ngIf="weights?.length > 0" >
+            <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Weight Range <span class="required"> </span></ion-label>
+          <ion-scroll style="    white-space: nowrap !important;"  class="purity-scroll-blk" scrollX="true">
+            <ion-chip #chip1 *ngFor="let pur of weights" color="light" [ngClass]="enquiry['id_weight'] == pur['id_weight'] ? 'selected' : 'unselected'" (click)="setweight(pur.id_weight,pur['weight_description'])" style="margin-left: 5%;">
+              <ion-label>{{pur['weight_description']}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['id_weight'] == pur['id_weight']"></ion-icon>
+            </ion-chip>
+          </ion-scroll>
+        </ion-col>
+
+        <ion-col col-12 *ngIf="prices?.length > 0" >
+            <ion-label style="margin-bottom: 10px;" color="label-color" stacked>Price Range  <span class="required"> </span></ion-label>
+          <ion-scroll style="    white-space: nowrap !important;"  class="purity-scroll-blk" scrollX="true">
+            <ion-chip #chip1 *ngFor="let pur of prices" color="light" [ngClass]="enquiry['price'] == pur ? 'selected' : 'unselected'" (click)="setprice(pur)" style="margin-left: 5%;">
+              <ion-label>{{pur}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="enquiry['price'] == pur"></ion-icon>
+            </ion-chip>
+          </ion-scroll>
+        </ion-col>
+
+
+        <ion-col col-12>
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Description</ion-label>
+            <ion-textarea [(ngModel)]="enquiry.sample_details" placeholder="Enter your description" rows="3"></ion-textarea>
+          </ion-item>
+        </ion-col>
+  </ion-row> -->
+
+  <!-- <ion-row *ngIf="type != 'Product'"  style="    margin-bottom: 15px;">
+    <ion-col style="margin: auto;">
+      Default Image *
+    </ion-col>
+    <ion-col>
+      <div class="row" >
+  <div style="
+  height: 80px;
+  width: 100px;
+" class="col">
+<img style="height: 80px;
+width: 90px;
+object-fit: cover;
+object-position: center;" src="{{image}}" imageViewer="{{image}}" onerror="this.src='assets/no-img.png'" />
+
+  </div>
+
+
+      </div>
+    </ion-col>
+  </ion-row> -->
+  <ion-grid *ngIf="type != 'FactSheet'">
+
+    <ion-col style="margin: auto;color:#000000 !important;">
+      Add Images <span style="font-weight: bold;" *ngIf="images.length > 0">- ({{images.length}})</span>
+    </ion-col>
+        <ion-row>
+      <ion-col col-10 style="margin-top: 30px;">
+
+
+          <div style="margin-bottom:10px" class="row" *ngFor="let targetPath of images; let id = index" >
+
+              <div  class="col" col-7 no-padding style="text-align:center;"><img class="uploadimg1" src="{{targetPath['image_name']}}" imageViewer="{{targetPath['image_name']}}" onerror="this.src='assets/no-img.png'"
+            *ngIf="targetPath" /></div><div style="margin: auto;" class="col" col-2 no-padding  >
+            <ion-icon (click)="deletePhoto(id,'')" style="padding: 0px !important;color: red;    font-size: 1.8em;" name="close-circle"></ion-icon></div>
+          </div>
+
+      </ion-col>
+      <ion-col style="margin: auto;" col-2 (click)="presentActionSheet('gallery',0)">
+        <div  class="col" style="text-align: end;margin: auto;">
+          <span style="padding:5px;border: 1px solid lightgray;"><ion-icon name="add"></ion-icon></span>
+
+        </div>      </ion-col>
+    </ion-row>
+</ion-grid>
+  <div *ngIf="show != true" style="text-align: center;margin-top:20px;">
+    <button (click)="submit()" ion-button style="background:#000000 !important">Submit</button>
+  </div>
+</div>
+</ion-content>
+<ion-footer style="bottom: 83px !important;">
+<div *ngIf="show == true"  style="text-align: center;    margin-top: 5px;">
+  Upload Progress :
+</div>
+<div *ngIf="show == true" class="progress-outer">
+  <div class="progress-inner" [style.width]="progress + '%'">
+      {{progress}}%
+  </div>
+</div>
+</ion-footer>

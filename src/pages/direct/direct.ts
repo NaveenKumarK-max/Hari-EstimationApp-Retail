@@ -1,0 +1,3079 @@
+import {
+  Component,
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+  keyframes,
+  ViewChild,
+  ElementRef,
+  ChangeDetectorRef,
+} from "@angular/core";
+import {
+  ModalController,
+  IonicPage,
+  Content,
+  Events,
+  NavController,
+  NavParams,
+  LoadingController,
+  ToastController,
+  Platform,
+  ActionSheetController,
+  Loading,
+  AlertController,
+} from "ionic-angular";
+import { CollectionPage } from "../../pages/collection/collection";
+import { Toast } from "@ionic-native/toast";
+import { CommonProvider, BaseAPIURL } from "../../providers/common";
+import { RetailProvider } from "../../providers/retail";
+
+import {
+  FileTransfer,
+  FileUploadOptions,
+  FileTransferObject,
+} from "@ionic-native/file-transfer";
+import { File } from "@ionic-native/file";
+import { Transfer, TransferObject } from "@ionic-native/transfer";
+import { Camera, CameraOptions } from "@ionic-native/camera";
+import { Http, Headers, RequestOptions } from "@angular/http";
+import { CartPage } from "../../pages/cart/cart";
+import { ScrollHideConfig } from "../../directives/hide-footer/hide-footer";
+import { LoginPage } from "../../pages/login/login";
+import { RegisterPage } from "../../pages/register/register";
+import { DomSanitizer } from "@angular/platform-browser";
+import { Slides } from "ionic-angular";
+import { EditorPage } from "../img-editor/editor";
+import { NgxImageCompressService } from "ngx-image-compress";
+import { FilePath } from "@ionic-native/file-path";
+declare var cordova: any;
+import { FileChooser } from "@ionic-native/file-chooser";
+import {
+  MediaCapture,
+  MediaFile,
+  CaptureError,
+  CaptureImageOptions,
+  CaptureVideoOptions,
+} from "@ionic-native/media-capture";
+import { CusSearchPage } from "../modal/customer/customer";
+import { AddStoneDetailPage } from "../modal/add-stone-detail/add-stone-detail";
+import { Addstone2Page } from "../addstone2/addstone2";
+import { ChargesPage } from "../charges/charges";
+
+import { FileOpener } from "@ionic-native/file-opener";
+import { EstiPage } from "../estimation/estimation";
+import { Masssearch2Page } from "../masssearch2/masssearch2";
+import { EmpSearchPage } from '../modal/employee/employee';
+
+
+/**
+ * Generated class for the ProductDetailPage page.
+ *
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
+ */
+@Component({
+  selector: "page-direct",
+  templateUrl: "direct.html",
+  providers: [CommonProvider, RetailProvider],
+  animations: [
+    trigger("flyInTopSlow", [
+      state(
+        "0",
+        style({
+          transform: "translate3d(0,0,0)",
+        })
+      ),
+      transition("* => 0", [
+        animate(
+          "500ms ease-in",
+          keyframes([
+            style({ transform: "translate3d(0,-500px,0)", offset: 0 }),
+            style({ transform: "translate3d(0,0,0)", offset: 1 }),
+          ])
+        ),
+      ]),
+    ]),
+  ],
+})
+export class DirectPage {
+  @ViewChild(Content) content: Content;
+  fileTransfer: FileTransferObject = this.transfer.create();
+
+  private _header: Headers;
+  private _username: string = "lmxretail";
+  private _password: string = "lmx@2017";
+  checkStatus: boolean = false;
+  /* public photos : any;
+  public base64Image : string; */
+  public targetPaths = [];
+  public vidtargetPaths = [];
+
+  public filenames = [];
+  public vidfilenames = [];
+  public charges = [];
+
+  purityname: String = "";
+  subcategory: any;
+  categoryId: any;
+  namey: any = "D0wqd2IyB1w";
+  proid: any;
+  type: any = 1;
+  lastImage: string = null;
+  productdet: any = this.navParams.get("proid");
+  productdetarr: any = this.navParams.get("single");
+  metal_error_msg:any = true;
+  video: any = "";
+  @ViewChild("slides") slides: Slides;
+  slidess: any[] = this.navParams.get("single");
+  productid: any = 0;
+  inf = false;
+  gif = false;
+  temp = [
+    { name: "Chennai" },
+    { name: "Coimbatore" },
+    { name: "Madurai" },
+    { name: "Salem" },
+  ];
+  // footerScrollConfig: ScrollHideConfig= { cssProperty: 'margin-bottom', maxValue: undefined };
+  base = "data:image/png;base64,";
+  showdiamond: any[] = [];
+  showstone: any[] = [];
+  productItems1: any[] = [];
+  stoneMasData: any[] = [];
+  stone_details: any[] = [];
+
+  calc: any = 350;
+  top: any = 0;
+  loader: any;
+  MAX_FILE_SIZE: any = 60000000;
+  ALLOWED_MIME_TYPE = "video/mp4";
+  selectedVideo: any;
+  ids: any = "";
+  idw: any = "";
+  show = false;
+  progress: any = 0;
+  esti = {
+    choose: "",
+    cus_id: "",
+    customer: "",
+    id_branch: "",
+    id_employee: "",
+    emp_name: "",
+    is_tag: false,
+    is_non_tag: false,
+    is_home_bill: false,
+    is_old_metal: false,
+    tag: [],
+    non_tag: [],
+    home_bill: [],
+    old_metal: [],
+    chit_details: [{ slip_no: "", slip_amt: "" }],
+  };
+
+  tot_purch_wgt = 0;
+  tot_purch_rate = 0;
+  tot_sale_wgt = 0;
+  tot_sale_rate = 0;
+  tot_charge = 0;
+
+  total_esti_value = 0;
+
+  advance = 0;
+  tot_gift_rate = 0;
+  dates = [];
+  tot_incen = 0;
+  slideimg: any = this.productdet["TagImage"];
+  metalRate: any;
+  taxGroupItems: any;
+  hbProducts: any[] = [];
+  hbcat: any[] = [];
+  tax_details: any;
+  hbDesigns: any[] = [];
+  hbsubDesigns: any[] = [];
+  empData = JSON.parse(localStorage.getItem("empDetail"));
+
+  order_type:any = 1;
+  showtagres = true;
+  tagData = {
+    taged: 1,
+    fin_year: "",
+    order_id: "",
+    tag_code: "",
+    tag_code1: "",
+    tag_code2: "",
+    is_partial: 0,
+    stone_details: [],
+  };
+  checkold = false;
+  tagMsg = "";
+  tagErrorMsg = "";
+
+  employees: any[] = [];
+  selectedOption: string;
+
+  // naveen
+  Purities = [];
+  minDate: any;
+  yearValues: number[];
+  nonback = true;
+  nonback1 = false;
+  nonback2 = false;
+
+  othermetals: any[] = []
+  item_type: any;
+  sizes:any[] = []
+
+  constructor(
+    private fileOpener: FileOpener,
+    public modal: ModalController,
+    public retail: RetailProvider,
+    private mediaCapture: MediaCapture,
+    public fileChooser: FileChooser,
+    public filePath: FilePath,
+    public imageCompress: NgxImageCompressService,
+    public cd: ChangeDetectorRef,
+    public sanitizer: DomSanitizer,
+    private commonservice: CommonProvider,
+    public navCtrl: NavController,
+    public platform: Platform,
+    public navParams: NavParams,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
+    private event: Events,
+    private toast: Toast,
+    public actionSheetCtrl: ActionSheetController,
+    private camera: Camera,
+    public transfer: FileTransfer,
+    private file: File,
+    public http: Http,
+    private alertCtrl: AlertController
+  ) {
+    // this.productdet = navParams.get( 'proid' );
+    // this.productdet['TagImage'] = navParams.get( 'proid' )['arr'][0]['TagImage'];
+
+
+
+    const currentDate = new Date();
+    this.minDate = currentDate.toISOString();
+    this.yearValues = this.generateFutureYears(currentDate.getFullYear(), 10);
+
+    // this.selectedOption = 'option1'
+    this.productdet['rate_type'] = 1
+    this.productdet['balance_type'] = 2
+    this.productdet['empname'] = ''
+    this.commonservice.getBranchEmployees(this.empData['id_branch']).then(data => {
+      this.employees = data;
+    });
+
+    let i = this.slidess.findIndex(
+      (data) => data["TagNo"] == this.productdet["TagNo"]
+    );
+    if (i >= 0) {
+      this.slidess.splice(i, 1);
+      this.slidess.unshift(this.productdet);
+    }
+
+    this.productdet["id_purity"] = this.productdet["purity_id"];
+
+    console.log("1", this.productdet);
+    console.log(this.slidess);
+
+    // this.stone_details = this.productdet.hasOwnProperty('TagStoneDetails') ? this.productdet['TagStoneDetails'] : [];
+
+    // if(this.productdet['colorcode'] == ''){
+    //   this.productdet['colorcode'] = 'black';
+    // }
+    let empData = JSON.parse(localStorage.getItem("empDetail"));
+    this.tax_details = this.navParams.get("taxGroupItems");
+    console.log(this.tax_details, "pppppppppppp");
+
+    this.metalRate = this.navParams.get("metal_rates");
+
+    this.esti["id_log"] = empData["id_log"];
+
+    this.esti["id_employee"] = empData["uid"];
+    this.esti["emp_name"] = empData["username"];
+    this.esti["id_branch"] = empData["id_branch"];
+
+    this.retail
+      .getAllStoneMaters({ id_branch: empData["id_branch"] })
+      .then((data) => {
+        this.stoneMasData = data;
+      });
+
+    this.retail.getAllTaxGroupItems().then((data) => {
+      this.taxGroupItems = data;
+      console.log(this.taxGroupItems, "oooooooooo");
+
+      this.event.publish("taxGroup:loaded", true);
+
+      this.commonservice
+        .getCurrencyAndSettings({
+          id_metalrates: this.esti["choose"],
+          id_branch: this.esti["id_branch"],
+        })
+        .then((data) => {
+          this.metalRate = data.metal_rates;
+          this.calculate("");
+        });
+    });
+    console.log(this.productdet.hasOwnProperty("weight"));
+    // this.show = true;
+    // this.showstone = this.productdet['TagStoneDetails'].length > 0 ? this.productdet['TagStoneDetails'].filter(data=>data['Nature'] != 'DIAMOND') : [];
+    // this.stone_details = this.productdet.hasOwnProperty('TagStoneDetails') ? this.productdet['TagStoneDetails'] : [];
+
+    // this.productdet['purities'] = [];
+    // this.productdet['weights'] = [];
+    // this.productdet['sizes'] = [];
+
+    // this.productdet['weight'] = '';
+    // this.productdet['pcs'] = '';
+    // this.productdet['due_date'] = '';
+    // this.productdet['id_weight'] = '';
+    // this.productdet['id_purity'] = '';
+
+    // this.productdet['id_size'] = '';
+    // this.productdet['sample_details'] = '';
+
+    // this.showdiamond = this.productdet['TagStoneDetails'].length > 0 ? this.productdet['TagStoneDetails'].filter(data=>data['Nature'] == 'DIAMOND') : [];
+    this._header = new Headers();
+    this._header.append(
+      "Authorization",
+      "Basic " + btoa(this._username + ":" + this._password)
+    );
+
+    this.productItems1 =
+      JSON.parse(localStorage.getItem("wish")) != null
+        ? JSON.parse(localStorage.getItem("wish")).filter(
+          (data) => data["TagNo"] == this.productdet["TagNo"]
+        )
+        : [];
+    setTimeout(() => {
+      this.content.resize();
+      console.log("271892718927");
+    }, 300);
+
+    //  if(this.customData['stones']){
+    //   this.item['stones'].forEach((value, key) => {
+    //     let stone = this.customData['stones'].filter( i => i.stone_id === value.stone_id );
+    //     if(stone.length > 0){
+    //       this.item['stones'][key]['selected'] = true;
+    //     }
+    //     console.log(key);
+    //     console.log(this.item['stones']);
+    //   });
+    // }
+    this.commonservice.getdivision().then((data) => {
+      this.productdet["allcharges"] = data["charges"];
+      // loader.dismiss();
+    });
+
+    this.clear()
+
+  }
+
+
+  generateFutureYears(startYear: number, numYears: number): number[] {
+    const futureYears = [];
+    for (let i = 0; i < numYears; i++) {
+      futureYears.push(startYear + i);
+    }
+    return futureYears;
+  }
+
+  ionViewDidLoad() { }
+  photoURL(data) {
+    // this.video.safeurl = this.sanitizer.bypassSecurityTrustResourceUrl('https://www.youtube.com/embed/'+data) ;
+    //    this.video  =  this.sanitizer.bypassSecurityTrustResourceUrl(this.video) ;
+    // return this.sanitizer.bypassSecurityTrustResourceUrl(this.video) ;
+  }
+
+  slide() {
+    console.log(this.slides.getActiveIndex());
+    this.productdet =
+      this.slidess.length - 1 < this.slides.getActiveIndex()
+        ? this.slidess[this.slides.getActiveIndex() - 1]
+        : this.slidess[this.slides.getActiveIndex()];
+    console.log(this.productdet);
+    this.slideimg = this.productdet["TagImage"];
+    this.productdet["net_wt"] = this.productdet["NetWt"];
+    this.productdet["gross_wt"] = this.productdet["GrossWt"];
+
+    this.productdet["metal_type"] = this.productdet["rate_field"];
+    this.productdet["market_metal_type"] = this.productdet["market_rate_field"];
+    this.productdet["tax_group_id"] = this.productdet["tgrp_id"];
+    // if(this.productdet['colorcode'] == ''){
+    //   this.productdet['colorcode'] = 'black';
+    // }
+    this.calculate("");
+
+    this.cd.detectChanges();
+  }
+  back() {
+    if (this.slides.getActiveIndex() != 0) {
+      this.slides.slidePrev();
+    }
+  }
+  next() {
+    this.slides.slideNext();
+  }
+
+  // ionViewDidLoad() {
+
+  // }
+
+  private presentToast(text) {
+    let toast = this.toastCtrl.create({
+      message: text,
+      duration: 3000,
+      position: "middle",
+    });
+    toast.present();
+  }
+
+  changeImage(image, type, video) {
+    if (type == 2) {
+      this.type = type;
+      console.log("test");
+      this.content.scrollToTop();
+      console.log(this.type);
+    } else {
+      this.productdet.prodefaultimg = image;
+      this.type = type;
+      console.log(this.type);
+    }
+  }
+
+  addtocart(product) {
+    var loginstatus = JSON.parse(localStorage.getItem("check"));
+
+    if (loginstatus == false || loginstatus == null) {
+      // let toast = this.toastCtrl.create( {
+      //     message: 'Please Login / Register Your Account to Checkout Your Item',
+      //     duration: 4000,
+      //     position: 'middle'
+      // } );
+      // toast.present();
+      let alert = this.alertCtrl.create({
+        title: "Dhamu Chettiar Nagai Maligai",
+        message: "Please Login / Register Your Account to View Item",
+        enableBackdropDismiss: false, // <- Here! :)
+
+        buttons: [
+          {
+            text: "SignIn",
+            role: "cancel",
+            handler: () => {
+              this.navCtrl.push(LoginPage);
+            },
+          },
+          //   {
+          //     text: 'Register',
+          //     handler: () => {
+          //         this.navCtrl.push(RegisterPage);
+          //     }
+          //   }
+        ],
+      });
+      alert.present();
+    }
+    if (loginstatus == true) {
+      let loader = this.loadingCtrl.create({
+        // content: "Please wait...",
+        // spinner: 'hide',
+        // content: `<img src="assets/loader.gif" height="80px" width="80px"/>`,
+      });
+      loader.present();
+
+      if (
+        (product.is_chain &&
+          parseFloat(product.reqweight) <
+          parseFloat(product.order_minweight)) ||
+        product.id_purity == undefined
+      ) {
+        console.log(product);
+        if (
+          product.is_chain &&
+          parseFloat(product.reqweight) < parseFloat(product.order_minweight)
+        ) {
+          if (this.platform.is("cordova")) {
+            this.toast
+              .show(
+                "Minimum order weight is " + product.order_minweight + " g",
+                "short",
+                "center"
+              )
+              .subscribe((toast) => {
+                console.log(toast);
+              });
+          } else {
+            let toast = this.toastCtrl.create({
+              message:
+                "Minimum order weight is " + product.order_minweight + " g",
+              duration: 5000,
+              position: "middle",
+            });
+            toast.present();
+          }
+        } else if (product.id_purity == undefined) {
+          if (this.platform.is("cordova")) {
+            this.toast
+              .show("Select purity", "short", "center")
+              .subscribe((toast) => {
+                console.log(toast);
+              });
+          } else {
+            let toast = this.toastCtrl.create({
+              message: "Select purity",
+              duration: 4000,
+              position: "middle",
+            });
+            toast.present();
+          }
+        }
+        /* else if ( product.sizeorlen == undefined ) {
+            if ( this.platform.is( 'cordova' ) ) {
+                this.toast.show( 'Enter size or length', 'short', 'center' ).subscribe(
+                    toast => {
+                        console.log( toast );
+                    }
+                );
+            } else {
+                let toast = this.toastCtrl.create( {
+                    message: 'Enter size or length',
+                    duration: 5000,
+                    position: 'middle'
+                } );
+                toast.present();
+            }
+        } */
+        loader.dismiss();
+      } else {
+        if (localStorage.getItem("appcartitems") != null) {
+          let curr_cartproducts = JSON.parse(
+            localStorage.getItem("appcartitems")
+          );
+          let deliveryorders = [];
+          let prodavail = true;
+          curr_cartproducts.forEach((orders) => {
+            // foreach statement
+            if (
+              orders.id_product == product.id_product &&
+              orders.id_purity == product.id_purity &&
+              product.sizeorlen == orders.sizeorlen &&
+              product.reqweight == orders.reqweight
+            ) {
+              orders.qty = parseInt(orders.qty) + parseInt(product.qty);
+              prodavail = false;
+            }
+            deliveryorders.push(orders);
+          });
+          if (prodavail) {
+            deliveryorders.push(product);
+          }
+          localStorage.setItem("appcartitems", JSON.stringify(deliveryorders));
+        } else {
+          let deliveryorders = [];
+          deliveryorders.push(product);
+          localStorage.setItem("appcartitems", JSON.stringify(deliveryorders));
+        }
+
+        loader.dismiss();
+        if (this.platform.is("cordova")) {
+          this.toast
+            .show("Item added to cart", "short", "center")
+            .subscribe((toast) => {
+              console.log(toast);
+            });
+        } else {
+          let toast = this.toastCtrl.create({
+            message: "Item added to cart",
+            duration: 3000,
+            position: "middle",
+          });
+          toast.present();
+        }
+        this.event.publish(
+          "cart:changed",
+          JSON.parse(localStorage.getItem("appcartitems")).length
+        );
+        this.navCtrl.push(CartPage, { value: "" });
+        //this.navCtrl.pop();
+      }
+    }
+  }
+  grid() {
+    console.log("grid");
+    this.checkStatus = true;
+  }
+  listgrid() {
+    console.log("listgrid");
+    this.checkStatus = false;
+  }
+  openProductdetails(id_design) {
+    this.navCtrl.push(DirectPage, { proid: id_design });
+  }
+
+  ionViewWillLeave() {
+    this.event.publish("entered", false);
+  }
+  ionViewWillEnter() {
+    this.event.publish("entered", true);
+    this.event.publish("pageno", 20);
+
+    if (localStorage.getItem("dip") != "") {
+      var path: any = JSON.parse(localStorage.getItem("dip"));
+      var name: any = JSON.parse(localStorage.getItem("din"));
+      console.log("dip : " + path + " -- " + "din : " + name);
+    }
+    if (
+      path != null &&
+      path != undefined &&
+      path != "" &&
+      this.navParams.get("state") == true
+    ) {
+      this.targetPaths.push(path);
+      console.log(this.targetPaths);
+      this.filenames.push(name);
+      console.log(this.filenames);
+      this.productdet["targetPaths"] = this.targetPaths;
+
+      this.productdet["sample_images"] = this.filenames;
+    }
+    this.event.subscribe("img", (userEventData) => {
+      // this.productdet['sample_images'] = userEventData;
+    });
+    this.event.subscribe("tar", (userEventData) => {
+      console.log(userEventData);
+      this.targetPaths.pop();
+      this.targetPaths.push(userEventData);
+      console.log(this.targetPaths);
+    });
+    this.event.subscribe("file", (userEventData) => {
+      console.log(userEventData);
+      this.filenames.pop();
+      this.filenames.push(userEventData);
+      console.log(this.filenames);
+      this.productdet["sample_images"] = this.filenames;
+    });
+    this.event.subscribe("err", (userEventData) => {
+      this.targetPaths.splice(userEventData, 1);
+    });
+    this.event.subscribe("errr", (userEventData) => {
+      this.filenames.splice(userEventData, 1);
+    });
+    console.log(this.productdet);
+    console.log(this.targetPaths);
+  }
+  fixprice(data) {
+    let temp1: any = parseFloat(data).toFixed(3);
+
+    // let temp:any = parseFloat(temp1);
+    return temp1;
+    // return temp.toLocaleString(undefined, {minimumFractionDigits: 3,
+    //   maximumFractionDigits: 3});
+    // return parseFloat(data).toLocaleString(undefined, {minimumFractionDigits: 2,
+    //   maximumFractionDigits: 2});
+    // return parseFloat(data).toFixed(2);
+  }
+  price(data) {
+    let temp1: any = parseFloat(data).toFixed();
+
+    return temp1;
+  }
+
+  setimg(img, ind) {
+    this.slideimg = img;
+
+    console.log(this.slideimg);
+  }
+
+  addw() {
+    let productItems =
+      JSON.parse(localStorage.getItem("wish")) != null
+        ? JSON.parse(localStorage.getItem("wish"))
+        : [];
+
+    if (productItems.length > 0) {
+      let productItems1 = productItems.filter(
+        (data) => data["TagNo"] == this.productdet["TagNo"]
+      );
+
+      if (productItems1.length == 0) {
+        productItems.push(this.productdet);
+        localStorage.setItem("wish", JSON.stringify(productItems));
+        this.presentToast("Product Wishlisted Successfully");
+        this.productItems1 =
+          JSON.parse(localStorage.getItem("wish")) != null
+            ? JSON.parse(localStorage.getItem("wish")).filter(
+              (data) => data["TagNo"] == this.productdet["TagNo"]
+            )
+            : [];
+      } else {
+        let index = productItems.findIndex(
+          (data) => data["TagNo"] == this.productdet["TagNo"]
+        );
+        productItems.splice(index, 1);
+        localStorage.setItem("wish", JSON.stringify(productItems));
+        this.presentToast("Product Removed Successfully");
+        this.productItems1 =
+          JSON.parse(localStorage.getItem("wish")) != null
+            ? JSON.parse(localStorage.getItem("wish")).filter(
+              (data) => data["TagNo"] == this.productdet["TagNo"]
+            )
+            : [];
+      }
+    } else {
+      localStorage.setItem("wish", JSON.stringify([this.productdet]));
+      this.presentToast("Product Wishlisted Successfully");
+      this.productItems1 =
+        JSON.parse(localStorage.getItem("wish")) != null
+          ? JSON.parse(localStorage.getItem("wish")).filter(
+            (data) => data["TagNo"] == this.productdet["TagNo"]
+          )
+          : [];
+    }
+  }
+
+  scrolling(event) {
+    if (event.scrollTop == 0) {
+      this.calc = 350;
+    } else {
+      this.calc = 350 - event.scrollTop;
+      this.content.resize();
+      this.cd.detectChanges();
+    }
+    // your content here for scrolling
+  }
+
+  proceedToWishlist() {
+    console.log(this.productdet, '99999999999999999999');
+    console.log(this.productdet["wast_wgt"], '999999999999');
+    console.log(this.productdet['empname']);
+    
+
+
+
+    // if ( (this.productdet["id_purity"] == "" || this.productdet["wast_wgt"] == "" || this.productdet["pcs"] == "" || this.productdet["due_date"] == "" || this.productdet['empname'] == '')) {
+    console.log(this.productdet);
+    console.log("111111111111");
+
+    // naveen
+    // if (this.productdet["id_purity"] == "") {
+    //   console.log("2222222222222");
+    //   this.commonservice.presentToast("Please Select Purity *", 1000);
+    // } else if (this.productdet["wast_wgt"] == "" && this.productdet["wast_wgt"] != 0) {
+    //   this.commonservice.presentToast("Please Enter Weight *", 1000);
+    // } else if (this.productdet["pcs"] == "") {
+    //   this.commonservice.presentToast("Please Enter Pieces *", 1000);
+    // } else if (this.productdet["due_date"] == "") {
+    //   this.commonservice.presentToast("Please Enter No of Days *", 1000);
+    // } else if (this.productdet['empname'] == '' || this.productdet['empname'] == undefined) {
+    //   this.commonservice.presentToast('Please Enter Employee *', 1000);
+    // }
+    // // }
+    // else {
+    //   console.log("elsee");
+
+      if (
+        this.productdet["from_weight"] > 0 && this.productdet["to_weight"] > 0) {
+        console.log("this.productdet :", this.productdet);
+
+        if (parseFloat(this.productdet.weight) >= parseFloat(this.productdet["from_weight"]) && parseFloat(this.productdet.weight) <= parseFloat(this.productdet["to_weight"])) {
+          console.log("2222");
+
+          let empData = JSON.parse(localStorage.getItem("empDetail"));
+          console.log(empData);
+
+          let wishlistData = {
+            id_customer: "",
+            id_branch: empData["id_branch"],
+            id_employee: empData["id_employee"],
+            item_type: 3, // E-catalog
+            is_customized: 1,
+            id_product: this.productdet["id_product"],
+            design_no: this.productdet["design_no"],
+            id_sub_design: this.productdet["id_sub_design"],
+            id_mc_type: this.productdet["mc_type"],
+            mc: this.productdet["mc_value"],
+            stn_amt: 0,
+            due_date: this.productdet["due_date"],
+            length: this.productdet["len"],
+            width: this.productdet["width"],
+            dia: this.productdet["dia"],
+            weight: this.productdet["gross_wt"],
+            id_size: this.productdet["id_size"],
+            id_weight: this.productdet["id_weight"],
+
+            pcs: this.productdet["pcs"],
+            id_purity: this.productdet["id_purity"],
+            hook_type: this.productdet["hook_type"],
+            sample_details: this.productdet["sample_details"],
+            image: this.productdet["TagImage"],
+            targetPaths: this.productdet["targetPaths"],
+            sample_images: this.productdet["targetPaths"],
+            sample_videos: this.vidfilenames,
+            stones: this.productdet["TagStoneDetails"],
+            stone_price: this.productdet["stone_price"],
+            stone_wt: this.productdet["stone_wt"],
+            stone_details: this.productdet["stone_details"],
+            status: 1,
+            id_wishlist: this.productdet["id_wishlist"],
+            sub_design_name: this.productdet["sub_design_name"],
+            design_name: this.productdet["design_name"],
+            product_name: this.productdet["product_name"],
+            id_category: this.productdet["id_category"],
+            // tag_id: this.productdet["id_tag_detail"],
+            // tag_code: this.productdet["TagNo"],
+            tag_id: this.productdet["tag_id"],
+            tag_code: this.productdet["tag_code"],
+
+            MetalCode: this.productdet["MetalCode"],
+            calculation_based_on: this.productdet["calculation_based_on"],
+            sales_value: this.productdet["sales_value"],
+            tgrp_id: this.productdet["tax_group_id"],
+            less_wt: this.productdet["less_wt"],
+            net_wt: this.productdet["net_wt"],
+            charge_value: this.productdet["charge_value"],
+            id_charge: this.productdet["id_charge"],
+            charges: this.productdet["charges"],
+            wast_percent: this.productdet["retail_max_wastage_percent"],
+            rate_type: this.productdet['rate_type'],
+            balance_type: this.productdet['balance_type'],
+            other_metal_details: this.productdet['other_metal_details'],
+            total_tax_rate: this.productdet['tax_price'],
+            order_rate: this.productdet['rate_per'],
+            taxable: this.productdet['taxable'],
+            order_type:this.order_type,
+            sub_product: this.productdet['sub_design_name'],
+            gross_wt: this.productdet['gross_wt'],
+            Purity:  this.productdet['purity'], 
+
+          };
+          console.log(wishlistData,'list');
+          
+          if (localStorage.getItem("carts") == null) {
+            localStorage.setItem(
+              "carts",
+              JSON.stringify({
+                id_branch: empData["id_branch"],
+                id_employee: empData["id_employee"],
+                id_customer: "",
+                status: 1,
+                items: [wishlistData],
+              })
+            );
+          } else {
+            let local: any[] = JSON.parse(localStorage.getItem("carts"))[
+              "items"
+            ];
+            console.log(local);
+            local.push(wishlistData);
+            console.log(local);
+            localStorage.setItem(
+              "carts",
+              JSON.stringify({
+                id_branch: empData["id_branch"],
+                id_employee: empData["id_employee"],
+                id_customer: "",
+                status: 1,
+                items: local,
+              })
+            );
+          }
+
+          // this.loader.dismiss();
+          this.commonservice.presentToast(
+            "Product added to cart successfully",
+            ""
+          );
+          console.log('if wishlistData', wishlistData);
+          this.navCtrl.push(CartPage);
+        } else {
+          this.commonservice.presentToast("Please Enter Valid Weight *", 1000);
+        }
+      } else {
+        let empData = JSON.parse(localStorage.getItem("empDetail"));
+        console.log(empData);
+        console.log("else 1 : ", this.productdet);
+
+        let wishlistData = {
+          id_customer: "",
+          id_branch: empData["id_branch"],
+          id_employee: empData["id_employee"],
+          item_type: 3, // E-catalog
+          is_customized: 1,
+          id_product: this.productdet["id_product"],
+          design_no: this.productdet["design_no"],
+          id_sub_design: this.productdet["id_sub_design"],
+          id_mc_type: this.productdet["mc_type"],
+          mc: this.productdet["mc_value"],
+          stn_amt: 0,
+          due_date: this.productdet["due_date"],
+          length: this.productdet["len"],
+          width: this.productdet["width"],
+          dia: this.productdet["dia"],
+          weight: this.productdet["gross_wt"],
+          id_size: this.productdet["id_size"],
+          id_weight: this.productdet["id_weight"],
+
+          pcs: this.productdet["pcs"],
+          id_purity: this.productdet["id_purity"],
+          hook_type: this.productdet["hook_type"],
+          sample_details: this.productdet["sample_details"],
+          image: this.productdet["TagImage"],
+          targetPaths: this.productdet["targetPaths"],
+          sample_images: this.productdet["targetPaths"],
+          sample_videos: this.vidfilenames,
+          stones: this.productdet["stone_details"],
+          stone_price: this.productdet["stone_price"],
+          stone_wt: this.productdet["stone_wt"],
+          // stone_details: this.productdet["stone_details"],
+          status: 1,
+          id_wishlist: this.productdet["id_wishlist"],
+          sub_design_name: this.productdet["sub_design_name"],
+          design_name: this.productdet["design_name"],
+          product_name: this.productdet["product_name"],
+          id_category: this.productdet["id_category"],
+          // tag_id: this.productdet["id_tag_detail"],
+          // tag_code: this.productdet["TagNo"],
+          tag_id: this.productdet["tag_id"],
+          tag_code: this.productdet["tag_code"],
+
+          MetalCode: this.productdet["MetalCode"],
+          calculation_based_on: this.productdet["calculation_based_on"],
+          sales_value: this.productdet["sales_value"],
+          tgrp_id: this.productdet["tax_group_id"],
+          less_wt: this.productdet["less_wt"],
+          net_wt: this.productdet["net_wt"],
+          charge_value: this.productdet["charge_value"],
+          id_charge: this.productdet["id_charge"],
+          charges: this.productdet["charges"],
+          wast_percent: this.productdet["retail_max_wastage_percent"],
+          rate_type: this.productdet['rate_type'],
+          balance_type: this.productdet['balance_type'],
+          other_metal_details: this.productdet['other_metal_details'],
+          total_tax_rate: this.productdet['tax_price'],
+          order_rate: this.productdet['rate_per'],
+          taxable: this.productdet['taxable'],
+          order_type:this.order_type,
+          sub_product: this.productdet['sub_design_name'],
+          gross_wt: this.productdet['gross_wt'],
+          Purity:  this.productdet['purity'], 
+        
+
+
+        };
+        console.log(wishlistData,'list');
+
+        if (localStorage.getItem("carts") == null) {
+          localStorage.setItem("carts", JSON.stringify({ id_branch: empData["id_branch"], id_employee: empData["id_employee"], id_customer: "", status: 1, items: [wishlistData], }));
+        } else {
+          let local: any[] = JSON.parse(localStorage.getItem("carts"))["items"];
+          console.log(local);
+          local.push(wishlistData);
+          console.log(local);
+          localStorage.setItem("carts", JSON.stringify({ id_branch: empData["id_branch"], id_employee: empData["id_employee"], id_customer: "", status: 1, items: local, }));
+        }
+
+        // this.loader.dismiss();
+        this.commonservice.presentToast("Product added to cart successfully", "");
+        console.log('else wishlistData', wishlistData);
+
+       this.navCtrl.push(CartPage,{'page':'direct'});
+      }
+    // }
+  }
+  public presentActionSheet() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: "Select Image Source",
+      buttons: [
+        {
+          text: "Load from Gallery",
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.PHOTOLIBRARY);
+          },
+        },
+        {
+          text: "Take Picture",
+          handler: () => {
+            this.takePicture(this.camera.PictureSourceType.CAMERA);
+          },
+        },
+        {
+          text: "Cancel",
+          role: "cancel",
+        },
+      ],
+    });
+    actionSheet.present();
+  }
+
+  public presentActionSheetvideo() {
+    let actionSheet = this.actionSheetCtrl.create({
+      title: "Select Video Source",
+      buttons: [
+        {
+          text: "Load from Gallery",
+          handler: () => {
+            this.recordVideo(this.camera.PictureSourceType.PHOTOLIBRARY);
+          },
+        },
+        {
+          text: "Take Video",
+          handler: () => {
+            this.rec();
+          },
+        },
+        {
+          text: "Cancel",
+          role: "cancel",
+        },
+      ],
+    });
+    actionSheet.present();
+  }
+
+  public takePicture(sourceType) {
+    console.log(sourceType);
+    // this.navCtrl.push(EditorPage,{images:'assets/img/earings.jpg'});
+    // Create options for the   Dialog
+    var options = {
+      quality: 100,
+      sourceType: sourceType,
+      saveToPhotoAlbum: false,
+      correctOrientation: true,
+      // allowEdit:true
+    };
+    console.log(options);
+    // Get the data of an image
+    this.camera.getPicture(options).then(
+      (imagePath) => {
+        console.log("getPicture");
+        this.loader = this.loadingCtrl.create({
+          content: "Fetching...",
+          spinner: "bubbles",
+        });
+        this.loader.present();
+        console.log("imagePath : " + imagePath);
+        if (
+          this.platform.is("android") &&
+          sourceType === this.camera.PictureSourceType.PHOTOLIBRARY
+        ) {
+          this.filePath.resolveNativePath(imagePath).then((filePath) => {
+            console.log("ttttttttttt", this.filePath);
+            let correctPath = filePath.substr(0, filePath.lastIndexOf("/") + 1);
+            let currentName = imagePath.substring(
+              imagePath.lastIndexOf("/") + 1,
+              imagePath.lastIndexOf("?")
+            );
+            this.copyFileToLocalDir(
+              correctPath,
+              currentName,
+              this.createFileName()
+            );
+            // this.uploadImage();
+          });
+        } else {
+          var currentName = imagePath.substr(imagePath.lastIndexOf("/") + 1);
+          var correctPath = imagePath.substr(0, imagePath.lastIndexOf("/") + 1);
+          this.copyFileToLocalDir(
+            correctPath,
+            currentName,
+            this.createFileName()
+          );
+          // this.uploadImage();
+        }
+      },
+      (err) => {
+        console.log(err);
+        this.commonservice.presentToast("Error while selecting image.", "");
+      }
+    );
+  }
+
+  // Create a new name for the image
+  private createFileName() {
+    var d = new Date(),
+      n = d.getTime(),
+      newFileName = n + ".jpg";
+    return newFileName;
+  }
+
+  // Copy the image to a local folder
+  private copyFileToLocalDir(namePath, currentName, newFileName) {
+    console.log("#### copyFileToLocalDir ####");
+    console.log("namePath/correctPath : " + namePath);
+    console.log("currentName : " + currentName);
+    console.log("createdFileName : " + newFileName);
+    console.log("Directory : " + cordova.file.dataDirectory);
+    this.file
+      .copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName)
+      .then(
+        (success) => {
+          // console.log("#### copyFile -- Success ####");
+          // console.log(success);
+          //   this.lastImage = newFileName;
+          //   var targetPath = this.pathForImage( newFileName );
+          //   this.targetPaths.push( targetPath );
+          //   this.filenames.push( this.lastImage );
+          //   this.loader.dismiss();
+          //   console.log(targetPath);
+          //   console.log(this.filenames);
+          //   this.navCtrl.push(EditorPage,{"images":targetPath,"design_no":this.design_no})
+          var orientation = -1;
+
+          this.imageCompress
+            .compressFile(this.pathForImage(newFileName), orientation, 100, 100)
+            .then(
+              async (result) => {
+                this.writeFile(result, this.createFileName());
+              },
+              (err) => {
+                console.log(err);
+              }
+            );
+        },
+        (error) => {
+          this.commonservice.presentToast("Error while storing file.", "");
+        }
+      );
+  }
+
+  // Always get the accurate path to your apps folder
+  public pathForImage(img) {
+    if (img === null) {
+      return "";
+    } else {
+      return cordova.file.dataDirectory + img;
+    }
+  }
+  //here is the method is used to write a file in storage
+  writeFile(base64Data: any, fileName: any) {
+    let contentType = this.getContentType(base64Data);
+    let DataBlob = this.base64toBlob(base64Data, contentType);
+    // here iam mentioned this line this.file.externalRootDirectory is a native pre-defined file path storage. You can change a file path whatever pre-defined method.
+    var filePath = cordova.file.dataDirectory;
+
+    this.file
+      .writeFile(filePath, fileName, DataBlob, contentType)
+      .then((success) => {
+        console.log(success["nativeURL"]);
+        var currentName = success["nativeURL"].substr(
+          success["nativeURL"].lastIndexOf("/") + 1
+        );
+        var correctPath = success["nativeURL"].substr(
+          0,
+          success["nativeURL"].lastIndexOf("/") + 1
+        );
+
+        console.log("File Writed Successfully", success);
+        console.log(currentName);
+        console.log(correctPath);
+
+        console.log("#### copyFile -- Success ####");
+        console.log(success);
+        this.lastImage = currentName;
+        var targetPath = this.pathForImage(currentName);
+        this.targetPaths.push(targetPath);
+        this.filenames.push(this.lastImage);
+        this.productdet["targetPaths"] = this.targetPaths
+        this.loader.dismiss();
+        console.log(targetPath);
+        console.log(this.filenames);
+        this.loader.dismiss();
+
+        this.navCtrl.push(EditorPage, {
+          images: targetPath,
+          productdet: this.productdet,
+        });
+      })
+      .catch((err) => {
+        console.log("Error Occured While Writing File", err);
+      });
+  }
+
+  //here is the method is used to get content type of an bas64 data
+  public getContentType(base64Data: any) {
+    let block = base64Data.split(";");
+    let contentType = block[0].split(":")[1];
+    return contentType;
+  }
+
+  //here is the method is used to convert base64 data to blob data
+  public base64toBlob(b64Data, contentType) {
+    contentType = contentType || "";
+    var sliceSize = 512;
+    let byteCharacters = atob(
+      b64Data.replace(/^data:image\/(png|jpeg|jpg);base64,/, "")
+    );
+    let byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      var byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    let blob = new Blob(byteArrays, {
+      type: contentType,
+    });
+    return blob;
+  }
+
+  rec() {
+    let options: CaptureVideoOptions = {
+      limit: 1,
+      duration: 20,
+    };
+    this.loader = this.loadingCtrl.create({
+      content: "Fetching...",
+      spinner: "bubbles",
+    });
+    this.loader.present();
+
+    this.mediaCapture.captureVideo(options).then(
+      async (videoUrl) => {
+        if (videoUrl) {
+          console.log(videoUrl);
+          setTimeout(async () => {
+            console.log("outttt");
+            this.loader.dismiss();
+            this.recordVideo(this.camera.PictureSourceType.PHOTOLIBRARY);
+
+            // this.loader = this.loadingCtrl.create( {
+            //     content: "Fetching...",
+            //     spinner: 'bubbles',
+            // } );
+            // this.loader.present();
+
+            //   var filename = videoUrl[0]['fullPath'].substr(videoUrl[0]['fullPath'].lastIndexOf('/') + 1);
+            //   var dirpath = videoUrl[0]['fullPath'].substr(0, videoUrl[0]['fullPath'].lastIndexOf('/') + 1);
+
+            //   dirpath = dirpath.includes("file://") ? dirpath : "file://" + dirpath;
+
+            //   try {
+            //     var dirUrl = await this.file.resolveDirectoryUrl(dirpath);
+            //     var retrievedFile = await this.file.getFile(dirUrl, filename, {});
+
+            //   } catch(err) {
+            //     console.log(err);
+            //     this.loader.dismiss();
+            //     return this.presentAlert("Error","Something went wrong.");
+            //   }
+            //   retrievedFile.file( data => {
+            //     this.loader.dismiss();
+            //     if (data.size > this.MAX_FILE_SIZE) return this.presentAlert("Error", `You cannot upload more than 5mb.`);
+            //     if (data.type !== this.ALLOWED_MIME_TYPE) return this.presentAlert("Error", "Upload mp4 file type only.");
+
+            //     this.selectedVideo = retrievedFile.nativeURL;
+            //     console.log(this.selectedVideo)
+            //     this.selectedVideo = decodeURIComponent(this.selectedVideo);
+            //     console.log(this.selectedVideo)
+
+            //     var currentName = this.selectedVideo.substr( this.selectedVideo.lastIndexOf( '/' ) + 1 );
+            //     var correctPath = this.selectedVideo.substr( 0, this.selectedVideo.lastIndexOf( '/' ) + 1 );
+            //     let type = this.selectedVideo.substr( this.selectedVideo.lastIndexOf( '.' ) + 1);
+            //     console.log(currentName)
+            //     console.log(correctPath)
+
+            //     this.copyvideoToLocalDir( correctPath, currentName, this.createvideoName(),data,data.size,type );
+            // });
+          }, 2000);
+        }
+      },
+      (err) => {
+        this.loader.dismiss();
+        console.log(err);
+      }
+    );
+  }
+  recordVideo(source) {
+    const options: CameraOptions = {
+      mediaType: this.camera.MediaType.VIDEO,
+      sourceType: source,
+    };
+    this.camera.getPicture(options).then(
+      async (videoUrl) => {
+        if (videoUrl) {
+          this.loader = this.loadingCtrl.create({
+            content: "Fetching...",
+            spinner: "bubbles",
+          });
+          this.loader.present();
+
+          var filename = videoUrl.substr(videoUrl.lastIndexOf("/") + 1);
+          var dirpath = videoUrl.substr(0, videoUrl.lastIndexOf("/") + 1);
+
+          dirpath = dirpath.includes("file://") ? dirpath : "file://" + dirpath;
+
+          try {
+            var dirUrl = await this.file.resolveDirectoryUrl(dirpath);
+            var retrievedFile = await this.file.getFile(dirUrl, filename, {});
+          } catch (err) {
+            console.log(err);
+            this.loader.dismiss();
+            return this.presentAlert("Error", "Something went wrong.");
+          }
+          retrievedFile.file((data) => {
+            this.loader.dismiss();
+            if (data.size > this.MAX_FILE_SIZE)
+              return this.presentAlert(
+                "Error",
+                `You cannot upload more than 60mb.`
+              );
+            if (data.type !== this.ALLOWED_MIME_TYPE)
+              return this.presentAlert("Error", "Upload mp4 file type only.");
+
+            this.selectedVideo = retrievedFile.nativeURL;
+            console.log(this.selectedVideo);
+            this.selectedVideo = decodeURIComponent(this.selectedVideo);
+            console.log(this.selectedVideo);
+
+            var currentName = this.selectedVideo.substr(
+              this.selectedVideo.lastIndexOf("/") + 1
+            );
+            var correctPath = this.selectedVideo.substr(
+              0,
+              this.selectedVideo.lastIndexOf("/") + 1
+            );
+            let type = this.selectedVideo.substr(
+              this.selectedVideo.lastIndexOf(".") + 1
+            );
+
+            this.copyvideoToLocalDir(
+              correctPath,
+              currentName,
+              this.createvideoName(),
+              data,
+              data.size,
+              type
+            );
+          });
+        }
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  // selectVideo(){
+
+  //   // choose your file from the device
+  // this.fileChooser.open().then(uri => {
+  //     this.loader = this.loadingCtrl.create( {
+  //         content: "Fetching...",
+  //         spinner: 'bubbles',
+  //     } );
+  //     this.loader.present();
+  // console.log(111111111111)
+  // console.log(uri)
+
+  //   this.filePath.resolveNativePath(uri)
+  //   .then(async(file) => {
+  //     console.log(666666666666)
+
+  //     console.log(file)
+
+  //     var currentName = file.substr( file.lastIndexOf( '/' ) + 1 );
+  //     var correctPath:any = file.substr( 0, file.lastIndexOf( '/' ) + 1 );
+  //     let type =file.substr(file.lastIndexOf( '.' ) + 1);
+
+  //     var filename = file.substr(file.lastIndexOf('/') + 1);
+  //     var dirpath = file.substr(0, file.lastIndexOf('/') + 1);
+  //     console.log(7777777777)
+
+  //     console.log(dirpath)
+
+  //     dirpath = dirpath.includes("file://") ? dirpath : "file://" + dirpath;
+
+  //     try {
+  //       var dirUrl = await this.file.resolveDirectoryUrl(dirpath);
+  //       var retrievedFile = await this.file.getFile(dirUrl, filename, {});
+
+  //     } catch(err) {
+  //       console.log(888888888888)
+
+  //       console.log(err)
+  //       this.loader.dismiss();
+  //       return this.presentAlert("Error","Please Choose File from File Explorer.");
+  //     }
+  //     retrievedFile.file( data => {
+  //       console.log(999999999999)
+  //       this.loader.dismiss();
+
+  //       console.log(data)
+  //       console.log(retrievedFile.nativeURL)
+
+  //       if (data.size > this.MAX_FILE_SIZE) {
+  //         this.loader.dismiss();
+  //       }
+  //       if (data.size > this.MAX_FILE_SIZE)  return this.presentAlert("Error", `You cannot upload more than 5mb.`);
+  //       // this.selectedVideo = retrievedFile.nativeURL;
+
+  //       if((type == 'mp4')){
+  //         console.log(file)
+  //         this.copyvideoToLocalDir( correctPath, currentName, this.createvideoName(),data,data.size,type );
+
+  //       }
+  //       else{
+  //         this.loader.dismiss();
+  //         let toast = this.toastCtrl.create( {
+  //           message: 'Wrong File format',
+  //           duration: 2000,
+  //           position: "bottom"
+  //       } );
+  //       toast.present( toast );
+  //       }
+
+  //     });
+
+  // })
+  // .catch(err=>{
+  //   this.loader.dismiss();
+  //   let toast = this.toastCtrl.create( {
+  //     message: 'Please Choose File from File Explorer',
+  //     duration: 2000,
+  //     position: "bottom"
+  // } );
+  // toast.present( toast );
+  // console.log('000000000000')
+
+  // console.log(err)
+
+  // });
+
+  // })
+  // .catch(err=>{
+  //   this.loader.dismiss();
+
+  //   console.log(10101010110)
+
+  //   console.log(err)
+  // });
+  // }
+  public pathForvideo(img) {
+    if (img === null) {
+      return "";
+    } else {
+      return cordova.file.dataDirectory + img;
+    }
+  }
+  // Create a new name for the image
+  private createvideoName() {
+    var d = new Date(),
+      n = d.getTime(),
+      newFileName = n + ".mp4";
+    return newFileName;
+  }
+
+  // Copy the image to a local folder
+  private copyvideoToLocalDir(
+    namePath,
+    currentName,
+    newFileName,
+    data,
+    size,
+    type
+  ) {
+    this.file
+      .copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName)
+      .then(
+        (success) => {
+          console.log(this.pathForvideo(newFileName));
+
+          this.vidtargetPaths.push(this.pathForvideo(newFileName));
+          this.vidfilenames.push(newFileName);
+          this.productdet["sample_videos"] = this.vidfilenames;
+
+          this.uploadvideo(this.pathForvideo(newFileName), newFileName);
+        },
+        (error) => {
+          let toast = this.toastCtrl.create({
+            message: "Rename file and try again",
+            duration: 3000,
+            position: "bottom",
+          });
+          toast.present();
+          this.loader.dismiss();
+          console.log("Error while storing file.");
+          console.log(error);
+        }
+      );
+  }
+  formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return "0 Bytes";
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB"];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
+  presentAlert(title, message) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: message,
+      buttons: ["Dismiss"],
+    });
+    alert.present();
+  }
+  checkstock(id) {
+    let empData = JSON.parse(localStorage.getItem("empDetail"));
+
+    this.ids = id;
+    this.commonservice
+      .checkstock({
+        id_branch: empData["id_branch"],
+        id_weight: this.idw,
+        id_size: id,
+        id_category: this.productdet["product_id"],
+        id_product: this.productdet["product_id"],
+        design_no: this.productdet["design_id"],
+        id_sub_design: this.productdet["id_sub_design"],
+        tag_id: this.productdet["id_tag_detail"],
+        tag_code: this.productdet["TagNo"],
+      })
+      .then((result) => {
+        this.productdet["is_stock_avail"] = result["avail_pcs"];
+        this.productdet["Status"] = result["avail_pcs"] > 0 ? "OPEN" : "CLOSE";
+      });
+  }
+  checkwgstock(id) {
+    let empData = JSON.parse(localStorage.getItem("empDetail"));
+
+    this.idw = id;
+    let ind = this.productdet.weights.findIndex(
+      (data) => data["id_weight"] == id
+    );
+
+    console.log(ind);
+
+    this.productdet["to_weight"] = this.productdet.weights[ind]["to_weight"];
+    this.productdet["from_weight"] =
+      this.productdet.weights[ind]["from_weight"];
+    this.commonservice
+      .checkwgstock({
+        id_branch: empData["id_branch"],
+        id_size: this.ids,
+        id_weight: id,
+        id_category: this.productdet["product_id"],
+        id_product: this.productdet["product_id"],
+        design_no: this.productdet["design_id"],
+        id_sub_design: this.productdet["id_sub_design"],
+        tag_id: this.productdet["id_tag_detail"],
+        tag_code: this.productdet["TagNo"],
+      })
+      .then((result) => {
+        this.productdet["is_stock_avail"] = result["avail_pcs"];
+        this.productdet["Status"] = result["avail_pcs"] > 0 ? "OPEN" : "CLOSE";
+      });
+  }
+
+  setPurity(data, name, whole) {
+    this.productdet["id_purity"] = data;
+
+    this.productdet["metal_type"] = whole.rate_field;
+    this.productdet["market_metal_type"] = whole.market_rate_field;
+    this.calculate("");
+  }
+
+  // Sample image
+  deletevideo(index) {
+    let confirm = this.alertCtrl.create({
+      title: "Do you want to delete the video?",
+      message: "",
+      buttons: [
+        {
+          text: "No",
+          handler: () => {
+            console.log("Disagree clicked");
+          },
+        },
+        {
+          text: "Yes",
+          handler: () => {
+            console.log("Agree clicked");
+            this.vidtargetPaths.splice(index, 1);
+            this.vidfilenames.splice(index, 1);
+          },
+        },
+      ],
+    });
+    confirm.present();
+  }
+  // Sample image
+  deletePhoto(index) {
+    let confirm = this.alertCtrl.create({
+      title: "Do you want to delete the image?",
+      message: "",
+      buttons: [
+        {
+          text: "No",
+          handler: () => {
+            console.log("Disagree clicked");
+          },
+        },
+        {
+          text: "Yes",
+          handler: () => {
+            console.log("Agree clicked");
+            this.targetPaths.splice(index, 1);
+            this.filenames.splice(index, 1);
+            this.productdet["targetPaths"] = this.targetPaths;
+            this.productdet["sample_images"] = this.filenames;
+            // this.lastImage == '';
+          },
+        },
+      ],
+    });
+    confirm.present();
+  }
+
+  addWishlist(item) {
+    this.retail.addToWishlist((data) => { });
+  }
+
+  public uploadvideo(path, name) {
+    // let loader = this.load.create( {
+    //   content: "Uploading..."
+    // } );
+    // loader.present();
+    this.show = true;
+
+    // Destination URL
+    var url =
+      "https://sriganeshjewels.com/sriganeshemi/admin/index.php/admin_app_api/uploadvideo";
+    var d = new Date(),
+      n = d.getTime();
+    // File for Upload
+    let empData = JSON.parse(localStorage.getItem("empDetail"));
+
+    // File name only
+    var filename = name;
+    var options = {
+      fileKey: "name",
+      fileName: name,
+      chunkedMode: false,
+      mimeType: "multipart/form-data",
+      params: {
+        fileName: name,
+        id_sub_design: this.productdet["id_sub_design"],
+        branch_id: empData["id_branch"],
+        created_by: empData["uid"],
+      },
+    };
+
+    console.log(path);
+    console.log(name);
+
+    console.log(encodeURI(url));
+    console.log(options);
+    console.log(url);
+
+    // Use the FileTransfer to upload the image
+    this.fileTransfer.upload(path, encodeURI(url), options).then(
+      (data) => {
+        console.log(data);
+
+        let result = JSON.parse(data.response);
+        console.log(result);
+        console.log(result["imageid"]);
+
+        let toastMsg = this.toastCtrl.create({
+          message: "Video succesfully uploaded.",
+          duration: this.commonservice.toastTimeout,
+          position: "center",
+        });
+        toastMsg.present();
+        this.show = false;
+      },
+      (err) => {
+        // loader.dismissAll()
+        console.log(err);
+        let toastMsg = this.toastCtrl.create({
+          message: "Error while uploading Video.",
+          duration: this.commonservice.toastTimeout,
+          position: "center",
+        });
+        toastMsg.present();
+        this.show = false;
+      }
+    );
+
+    this.fileTransfer.onProgress((data) => {
+      console.log(data);
+
+      this.progress = Math.round((data.loaded / data.total) * 100);
+      this.refresh();
+      console.log(this.progress);
+    });
+    // },err=>{
+    //   console.log(err);
+    // });
+  }
+  refresh() {
+    console.log("refresheed");
+    this.cd.detectChanges();
+  }
+
+  addWishlistw(item) {
+    let empData = JSON.parse(localStorage.getItem("empDetail"));
+
+    let modal = this.modal.create(CusSearchPage, { show: "true" });
+    modal.present();
+    modal.onDidDismiss((mData) => {
+      console.log(mData);
+      if (mData != null) {
+        // this.idcus = mData['id_customer'];
+
+        let loader = this.loadingCtrl.create({
+          content: "Please Wait",
+          spinner: "bubbles",
+        });
+        loader.present();
+
+        this.retail
+          .addToWishlist({
+            customer_name: mData["firstname"],
+            mobile: mData["mobile"],
+            customer_id: mData["id_customer"],
+            tag_id: item["id_tag_detail"],
+            tag_code: item["TagNo"],
+            branch_id: empData["id_branch"],
+            employee_id: empData["uid"],
+            id_sub_design: item["id_sub_design"],
+            product_id: item["product_id"],
+            design_id: item["design_id"],
+          })
+          .then(
+            (data) => {
+              let toastMsg = this.toastCtrl.create({
+                message: data.msg,
+                duration: this.commonservice.toastTimeout,
+                position: "middle",
+              });
+              toastMsg.present();
+
+              loader.dismiss();
+            },
+            (err) => {
+              let toastMsg = this.toastCtrl.create({
+                message: "try again",
+                duration: this.commonservice.toastTimeout,
+                position: "middle",
+              });
+              toastMsg.present();
+              loader.dismiss();
+            }
+          );
+      } else {
+      }
+    });
+  }
+  stoneChaned(value, idx) {
+    console.log(value + " " + idx);
+    console.log(this.productdet["stones"]);
+  }
+
+  // Stone Details
+  addStone() {
+    let gross: any = 0;
+
+    gross = this.productdet["gross_wt"];
+    console.log('addStone : ',this.stone_details);
+
+
+    let modal = this.modal.create(AddStoneDetailPage, { stoneMasData: this.stoneMasData, action: "add", stone_details: JSON.parse(JSON.stringify(this.stone_details)), ptype: this.item_type, gross: gross, });
+    modal.present();
+    modal.onDidDismiss(data => {
+      console.log('data : ', data)
+
+      if (data != null) {
+        this.stone_details = data['data']
+        console.log('stone_details : ', this.stone_details);
+
+        let stData = this.calcStoneDetail();
+        console.log('stData : ', stData)
+        if (data.type == 'tag') {
+          this.productdet["stone_wt"] = stData["wt"];
+          this.productdet["stone_price"] = stData["amount"];
+
+          this.stone_details.forEach((i, index) => {
+            this.stone_details[index]["stone_wt"] = this.stone_details[index]["wt"];
+            this.stone_details[index]["stone_price"] = this.stone_details[index]["amount"];
+          });
+          this.productdet["stones"] = this.stone_details;
+          console.log('this.productdet["stones"]  ==> ',this.productdet["stones"]);
+
+
+          console.log('stones 1 : ', this.productdet["stones"]);
+          console.log('Detail : ', this.stone_details);
+          if (this.stone_details.length != 0) {
+            this.productdet["less_wt"] = this.retail.setAsNumber(stData["wt"]);
+
+            this.productdet["net_wt"] =
+              this.productdet["gross_wt"] - this.productdet["less_wt"];
+
+            this.productdet["net_wt"] = this.retail.setAsNumber(this.productdet["net_wt"]).toFixed(3);
+
+            this.productdet["actual_net_wt"] = this.productdet["net_wt"];
+            this.calcSaleValue("");
+          }
+        } else {
+          this.productdet["stone_wt"] = stData["stone_wt"];
+          this.productdet["stone_price"] = stData["stone_price"];
+          this.productdet["stones"] = this.stone_details;
+          console.log('stones 1 : ', this.productdet["stones"]);
+          console.log('Detail : ', this.stone_details);
+          if (this.stone_details.length != 0) {
+            this.productdet["less_wt"] = this.retail.setAsNumber(stData["wt"]);
+            this.productdet["net_wt"] =
+              this.productdet["gross_wt"] - this.productdet["less_wt"];
+            this.productdet["net_wt"] = this.retail.setAsNumber(this.productdet["net_wt"]).toFixed(3);
+            this.productdet["actual_net_wt"] = this.productdet["net_wt"];
+            this.calcSaleValue("");
+          }
+        }
+
+      }
+    });
+  }
+
+  calcStoneDetail() {
+    if (this.item_type == 'tag') {
+      console.log('tag : ', this.item_type);
+      console.log('tag  stone: ', this.stone_details);
+      /* this.stone_details = this.stone_details['data'];
+      console.log('tag  stone: ',this.stone_details);
+       */
+      let data = { wt: 0, amount: 0 };
+   
+      this.stone_details.forEach((i, index) => {
+        
+        if (this.stone_details[index]['lwt'] && this.stone_details[index]['lwt'] != 0 ) {
+          this.stone_details[index]['is_apply_in_lwt'] = 1;
+          // data['wt']   = data['wt'] + Number(i['wt']);
+          data['wt'] = data['wt'] + (i['uom_id'] == '6' ? Number(i['wt']) / 5 : Number(i['wt']));
+
+        } else {
+          this.stone_details[index]['is_apply_in_lwt'] = 0;
+        }
+        data['amount'] = data['amount'] + Number(i['amount']);
+      })
+      return data;
+    }
+    else {
+      console.log('tag else : ', this.item_type);
+      console.log('tag  stone eles: ', this.stone_details);
+      let data = { "stone_wt": 0, "stone_price": 0 };
+      this.stone_details.forEach((i, index) => {
+        if (this.stone_details[index]['lwt']) {
+          this.stone_details[index]['is_apply_in_lwt'] = 1;
+
+          console.log(i['uom_id'] == 'Carat', Number(i['stone_wt']) / 5)
+          data['stone_wt'] = data['stone_wt'] + (i['uom_id'] == '6' ? Number(i['stone_wt']) / 5 : Number(i['stone_wt']));
+          console.log(data['stone_wt'])
+
+        }
+        else {
+          this.stone_details[index]['is_apply_in_lwt'] = 0;
+        }
+        data['stone_price'] = data['stone_price'] + Number(i['stone_price']);
+      })
+      return data;
+    }
+  }
+
+  createEsti() {
+    this.navCtrl.push(EstiPage, {
+      page_type: "create",
+      ecat: this.productdet.TagNo,
+      bcode: this.productdet.BranchCode,
+    });
+  }
+  createEsti2() {
+    if (
+      this.esti["cus_id"] == "" ||
+      this.esti["id_employee"] == "" ||
+      this.esti["id_branch"] == ""
+    ) {
+      let modal = this.modal.create(CusSearchPage, { show: "true" });
+      modal.present();
+      modal.onDidDismiss((mData) => {
+        console.log(mData);
+        if (mData != null) {
+          this.esti["cus_id"] = mData["id_customer"];
+          this.esti["customer"] = mData["label"];
+
+          this.esti["is_tag"] = true;
+          this.esti["tag"].push(this.productdet);
+          this.calcEstiSummary();
+          this.createEstisubmit();
+        } else {
+        }
+      });
+    } else {
+      this.createEstisubmit();
+    }
+  }
+
+  createEstisubmit() {
+    this.esti["is_tag"] = this.esti["tag"].length > 0 ? true : false;
+    this.esti["is_non_tag"] = this.esti["non_tag"].length > 0 ? true : false;
+    this.esti["is_home_bill"] =
+      this.esti["home_bill"].length > 0 ? true : false;
+    this.esti["is_old_metal"] =
+      this.esti["old_metal"].length > 0 ? true : false;
+    console.log(this.esti);
+    // Validate Postdata
+    if (
+      this.esti["cus_id"] == "" ||
+      this.esti["id_employee"] == "" ||
+      this.esti["id_branch"] == ""
+    ) {
+      let toastMsg = this.toastCtrl.create({
+        message: "Please fill required fields",
+        duration: this.commonservice.toastTimeout,
+        position: "middle",
+      });
+      toastMsg.present();
+    } else if (
+      this.esti["is_tag"] ||
+      this.esti["is_non_tag"] ||
+      this.esti["is_home_bill"] ||
+      this.esti["is_old_metal"]
+    ) {
+      if (
+        this.esti["tag"] ||
+        this.esti["non_tag"] ||
+        this.esti["home_bill"] ||
+        this.esti["old_metal"]
+      ) {
+        let loader = this.loadingCtrl.create({
+          content: "Please Wait",
+          spinner: "bubbles",
+        });
+        loader.present();
+        this.esti["type"] = 1;
+        this.esti["total_cost"] = this.total_esti_value;
+        this.retail.createEstimation(this.esti).then((data) => {
+          if (data.status) {
+            this.tot_sale_wgt = 0;
+            this.tot_sale_rate = 0;
+            this.tot_purch_wgt = 0;
+            this.tot_purch_rate = 0;
+            this.total_esti_value = 0;
+            this.tot_charge = 0;
+
+            this.esti = {
+              choose: "",
+              cus_id: this.esti["cus_id"],
+              customer: this.esti["customer"],
+              id_branch: this.esti["id_branch"],
+              id_employee: this.esti["id_employee"],
+              emp_name: this.esti["emp_name"],
+              is_tag: false,
+              is_non_tag: false,
+              is_home_bill: false,
+              is_old_metal: false,
+              tag: [],
+              non_tag: [],
+              home_bill: [],
+              old_metal: [],
+              chit_details: [{ slip_no: "", slip_amt: "" }],
+            };
+            if (data.printURL != "") {
+              console.log(data.printURL);
+              this.downloadfile(data.printURL, data.esti_name);
+            }
+          }
+          loader.dismiss();
+          let toastMsg = this.toastCtrl.create({
+            message: data.msg,
+            duration: this.commonservice.toastTimeout,
+            position: "middle",
+          });
+          toastMsg.present();
+          // this.navCtrl.setRoot(HomePage);
+        });
+      } else {
+        let toastMsg = this.toastCtrl.create({
+          message: "Minimum 1 estimation item is required",
+          duration: this.commonservice.toastTimeout,
+          position: "middle",
+        });
+        toastMsg.present();
+      }
+    } else {
+      let toastMsg = this.toastCtrl.create({
+        message: "Invalid Estimation",
+        duration: this.commonservice.toastTimeout,
+        position: "middle",
+      });
+      toastMsg.present();
+    }
+  }
+
+  calcEstiSummary() {
+    console.log(this.esti);
+    this.tot_sale_wgt = 0;
+    this.tot_sale_rate = 0;
+    this.tot_purch_wgt = 0;
+    this.tot_purch_rate = 0;
+    this.tot_charge = 0;
+    this.tot_incen = 0;
+
+    this.esti["tag"].forEach((tag) => {
+      this.tot_sale_wgt = Number(this.tot_sale_wgt) + Number(tag.net_wt);
+      this.tot_charge = Number(this.tot_charge) + Number(tag.charge_value);
+
+      this.tot_sale_rate = Number(this.tot_sale_rate) + Number(tag.sales_value);
+    });
+
+    this.esti["tag"].forEach((tag) => {
+      this.tot_incen = Number(this.tot_incen) + Number(tag.incentive);
+    });
+
+    this.tot_gift_rate = 0;
+    this.esti["chit_details"].forEach((gift) => {
+      this.tot_gift_rate = Number(this.tot_gift_rate) + Number(gift.slip_amt);
+    });
+    this.total_esti_value =
+      Number(this.tot_sale_rate) -
+      Number(this.tot_purch_rate) -
+      Number(this.advance) -
+      Number(this.tot_gift_rate);
+  }
+
+  downloadfile(url, name) {
+    console.log(url);
+    var date = new Date();
+    date.setDate(date.getDate());
+    console.log(date.toISOString().split("T")[0]);
+    this.platform.ready().then(() => {
+      console.log("Platform ready");
+      if (this.platform.is("android")) {
+        console.log("Platform Android");
+        this.file
+          .checkDir(
+            this.file.externalDataDirectory,
+            this.commonservice.cmpShortName
+          )
+          .then((data) => {
+            console.log("Check directory IDO");
+            this.file
+              .checkDir(
+                this.file.externalDataDirectory +
+                "" +
+                this.commonservice.cmpShortName +
+                "/",
+                date.toISOString().split("T")[0]
+              )
+              .then((_) => {
+                console.log(
+                  "Check directory IDO " + date.toISOString().split("T")[0]
+                );
+                this.viewFile(url, name);
+              })
+              .catch((er) => {
+                this.file
+                  .createDir(
+                    this.file.externalDataDirectory +
+                    "" +
+                    this.commonservice.cmpShortName +
+                    "/",
+                    date.toISOString().split("T")[0],
+                    false
+                  )
+                  .then((_) => {
+                    console.log(
+                      "Create directory IDO " + date.toISOString().split("T")[0]
+                    );
+                    this.viewFile(url, name);
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    console.log("Couldn't create directory");
+                  });
+              });
+          })
+          .catch((err) => {
+            this.file
+              .createDir(
+                this.file.externalDataDirectory,
+                this.commonservice.cmpShortName,
+                false
+              )
+              .then((_) => {
+                console.log("Create directory IDO");
+                this.file
+                  .createDir(
+                    this.file.externalDataDirectory +
+                    "" +
+                    this.commonservice.cmpShortName +
+                    "/",
+                    date.toISOString().split("T")[0],
+                    false
+                  )
+                  .then((_) => {
+                    console.log(
+                      "Create directory IDO / " +
+                      date.toISOString().split("T")[0]
+                    );
+                    this.viewFile(url, name);
+                  })
+                  .catch((err1) => {
+                    console.log(err1);
+                    console.log("Couldn't create directory");
+                  });
+              })
+              .catch((err2) => {
+                console.log(err2);
+                console.log("Couldn't create directory");
+              });
+          });
+      }
+    });
+  }
+
+  viewFile(url, name) {
+    var date = new Date();
+    date.setDate(date.getDate());
+    console.log(date);
+    console.log(date.toISOString().split("T")[0]);
+    this.platform.ready().then(() => {
+      console.log("platform ready viewFile");
+      this.file
+        .resolveDirectoryUrl(
+          this.file.externalDataDirectory +
+          "" +
+          this.commonservice.cmpShortName +
+          "/" +
+          date.toISOString().split("T")[0]
+        )
+        .then(
+          (resolvedDirectory) => {
+            console.log(resolvedDirectory);
+            console.log("resolved  directory: " + resolvedDirectory.nativeURL);
+            this.file.checkFile(resolvedDirectory.nativeURL, name).then(
+              (data) => {
+                console.log(data);
+                console.log(resolvedDirectory.nativeURL + name);
+                this.fileOpener
+                  .open(resolvedDirectory.nativeURL + name, "application/pdf")
+                  .then(() => console.log("File is opened"))
+                  .catch((e) => console.log("Error opening file", e));
+                // this.printEsti(resolvedDirectory.nativeURL+name,name);
+              },
+              (err) => {
+                console.log(err);
+                let loader = this.loadingCtrl.create({
+                  content: "Please Wait",
+                  spinner: "bubbles",
+                });
+                loader.present();
+
+                var targetPath =
+                  this.file.externalDataDirectory +
+                  "" +
+                  this.commonservice.cmpShortName +
+                  "/" +
+                  date.toISOString().split("T")[0] +
+                  "/" +
+                  name;
+                this.fileTransfer.download(url, targetPath, true).then(
+                  (entry) => {
+                    console.log("download complete: " + entry.toURL());
+                    loader.dismiss();
+                    this.fileOpener
+                      .open(entry.toURL(), "application/pdf")
+                      .then(() => console.log("File is opened"))
+                      .catch((e) => console.log("Error opening file", e));
+                    // this.printEsti(entry.toURL(),name);
+                  },
+                  (error) => {
+                    loader.dismiss();
+                    console.log(error);
+                  }
+                );
+              }
+            );
+          },
+          (err) => {
+            console.log(err);
+          }
+        );
+    });
+  }
+  // }
+  checkcode() {
+    let temp: any[] = this.productdet["allcharges"].filter(
+      (data) => data["id_charge"] == this.productdet["id_charge"]
+    );
+    this.productdet["chargecode"] = temp[0]["code_charge"];
+    this.productdet["charge_value"] = temp[0]["value_charge"];
+    this.productdet["id_charge"] = temp[0]["id_charge"];
+    this.productdet["charges"] = temp;
+  }
+
+  // Stone Details
+  addcharge() {
+    let modal = this.modal.create(ChargesPage, {
+      stoneMasData: this.stoneMasData,
+      action: "add",
+      stone_details: this.charges,
+      ptype: "pro",
+      gross: "",
+    });
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (data != null) {
+        this.charges = data;
+
+        this.productdet["charges"] = this.charges;
+
+        if (this.charges.length != 0) {
+          this.productdet["charge_value"] = 0;
+
+          this.charges.forEach((tag) => {
+            this.productdet["charge_value"] =
+              Number(this.productdet["charge_value"]) +
+              Number(tag.charge_value);
+          });
+          this.calcSaleValue("");
+        }
+      }
+    });
+  }
+
+  calculate(changedInput) {
+    console.log(this.productdet["gross_wt"]);
+    console.log(this.productdet["less_wt"]);
+    this.productdet["net_wt"] = this.productdet["gross_wt"];
+    console.log(this.productdet["net_wt"]);
+
+    if (this.productdet["less_wt"] > 0) {
+      this.productdet["net_wt"] =
+        this.productdet["net_wt"] - this.productdet["less_wt"];
+    }
+    console.log(this.productdet["retail_max_wastage_percent"]);
+  }
+
+  calculatecus() {
+    this.productdet["metalratec"] = "true";
+      var max_tol = parseFloat(this.empData['emp_setting']['max_gold_tol']);
+      var min_tol = parseFloat(this.empData['emp_setting']['min_gold_tol']);
+      
+      var metal_rate = parseFloat(this.metalRate[this.productdet['metal_type']]);
+
+      var max_metal_val = metal_rate + (metal_rate * max_tol / 100);
+      var min_metal_value = metal_rate - (metal_rate * min_tol / 100);
+      var rate_per = parseFloat(this.productdet['rate_per']);
+      console.log(max_metal_val);
+      console.log(min_metal_value);
+      
+      if (rate_per >= min_metal_value && rate_per <= max_metal_val) {
+        this.metal_error_msg =true;
+        this.calcSaleValue("");
+        } else {
+        this.metal_error_msg = false;
+
+        }
+
+  }
+
+  openMasSearch(master) {
+    console.log(master);
+    console.log(this.productdet);
+
+    if (master == "category") {
+      let loader = this.loadingCtrl.create({
+        content: "Please Wait",
+        spinner: "bubbles",
+      });
+      loader.present();
+      var postData = {
+        id_employee: this.empData != null ? this.empData["uid"] : null,
+        type: "active",
+        last_id: 0,
+        page_no: 1,
+      };
+      if (this.hbcat.length == 0) {
+        this.retail.getCategories(postData).then((data) => {
+          this.hbcat = data;
+          loader.dismiss();
+          this.openMasModal(
+            { searchArr: this.hbcat, page: master, listType: "normal" },
+            master
+          );
+        });
+      } else {
+        loader.dismiss();
+        this.openMasModal(
+          { searchArr: this.hbcat, page: master, listType: "normal" },
+          master
+        );
+      }
+    } else if (master == "Product") {
+      if (this.productdet["id_category"]) {
+        this.openMasModal(
+          { searchArr: this.hbProducts, page: master, listType: "normal" },
+          master
+        );
+      }
+    } else if (master == "Design") {
+      if (this.productdet["id_product"]) {
+        this.openMasModal(
+          { searchArr: this.hbDesigns, page: master, listType: "normal" },
+          master
+        );
+        this.retail
+          .getAllPurities(this.productdet["id_product"])
+          .then((data) => {
+            this.Purities = data;
+            // loader.dismiss();
+          });
+      }
+    } else if (master == "subDesign") {
+      if (this.productdet["design_no"]) {
+        console.log(this.hbsubDesigns, "99999999999");
+        this.openMasModal(
+          { searchArr: this.hbsubDesigns, page: master, listType: "normal" },
+          master
+        );
+      }
+    } else if (master == "Purity") {
+      console.log(this.productdet["id_product"]);
+      console.log(this.Purities);
+      this.productdet['purity'] = this.Purities['purity']
+
+      if (this.productdet["id_product"]) {
+        this.openMasModal(
+          { searchArr: this.Purities, page: master, listType: "normal" },
+          master
+        );
+      }
+    }
+  }
+
+  openMasModal(data, master) {
+    let modal = this.modal.create(Masssearch2Page, data);
+    console.log(data, "00000000");
+
+    modal.present();
+    modal.onDidDismiss((data) => {
+      if (data != null) {
+        if (master == "Design") {
+          this.productdet["design_no"] = data.id_design;
+          this.productdet["design_name"] = data.label;
+          this.productdet["sub_design_name"] = "";
+          this.hbdesignSelected();
+        } else if (master == "subDesign") {
+          console.log(data);
+          this.productdet = Object.assign(this.productdet, data);
+          console.log(this.productdet);
+          this.productdet["net_wt"] = this.productdet["NetWt"];
+          this.productdet["gross_wt"] = this.productdet["GrossWt"];
+
+          this.productdet["metal_type"] = this.productdet["rate_field"];
+          this.productdet["market_metal_type"] =
+            this.productdet["market_rate_field"];
+
+          // this.productdet['tax_group_id'] = this.productdet['tgrp_id'];
+          console.log(this.productdet["design_no"]);
+
+          this.commonservice
+            .getset({
+              id_product: this.productdet["id_product"],
+              id_design: this.productdet["design_no"],
+              id_sub_design: this.productdet["sub_design_id"],
+              gross_wt: this.productdet["gross_wt"],
+              type: 2,
+              lot_no: "",
+            })
+            .then((data) => {
+              console.log(data, "0000000000");
+
+              this.productdet["checkwas"] = data["data"]["wastag_min"];
+              this.productdet["mc_min"] = data["data"]["mc_min"];
+            });
+
+          // this.calculate('');
+
+          // this.cd.detectChanges();
+        } else if (master == "category") {
+          this.productdet["category_name"] = data.name;
+          this.productdet["id_category"] = data.id_ret_category;
+          this.productdet["product_name"] = "";
+          this.productdet["design_name"] = "";
+          this.productdet["sub_design_name"] = "";
+          this.hbcatSelected();
+        } else if (master == "Product") {
+          this.productdet["id_product"] = data.pro_id;
+          this.productdet["tax_type"] = data.tax_type;
+          this.productdet["scheme_closure_benefit"] =
+            data.scheme_closure_benefit;
+
+          // this.productdet['pro_id'] = data.pro_id;
+          this.productdet["tax_group_id"] = data.tax_group_id;
+          this.productdet["tax_percentage"] = data.tax_percentage;
+          this.productdet["calculation_based_on"] = data.calculation_based_on;
+          console.log(data);
+
+          this.productdet["product_name"] = data.product_name;
+          this.productdet["design_name"] = "";
+          this.productdet["sub_design_name"] = "";
+          this.getproductsize()
+          this.hbProdSelected();
+        } else if (master == "Purity") {
+          this.productdet["id_purity"] = data.id_purity;
+          this.productdet["purname"] = data.label;
+          this.productdet["metal_type"] = data.rate_field;
+          this.productdet["market_metal_type"] = data.market_rate_field;
+          this.calcSaleValue("");
+        }
+      }
+    });
+  }
+
+  hbdesignSelected() {
+    console.log("1111");
+    // if(this.hbDesigns.length == 0) {
+    let loader = this.loadingCtrl.create({
+      content: "Please Wait",
+      spinner: "bubbles",
+    });
+    loader.present();
+    var temp = {
+      Category: [
+        {
+          category_code: this.productdet["id_category"],
+        },
+      ],
+      Product: [
+        {
+          productcode: this.productdet["id_product"],
+          category_code: this.productdet["id_category"],
+          id_product: this.productdet["id_product"],
+        },
+      ],
+      Design: [
+        {
+          id_product: this.productdet["id_product"],
+          id_design: this.productdet["design_no"],
+          design_code: this.productdet["design_code"],
+          productcode: this.productdet["id_product"],
+          category_code: this.productdet["id_category"],
+        },
+      ],
+      last_id: 0,
+      page_no: 1,
+    };
+    console.log(temp);
+
+    this.commonservice
+      .getsubdesigns({
+        id_product: this.productdet["id_product"],
+        design_no: this.productdet["design_no"],
+      })
+      .then((data) => {
+        this.hbsubDesigns = data;
+        console.log(this.hbsubDesigns, "pppppppppp");
+
+        console.log(this.hbsubDesigns);
+        //  if (this.hbsubDesigns.length == 1) {
+        //     this.productdet['sub_design_no'] = this.hbsubDesigns[0].id_sub_design;
+        //     this.productdet['sub_design_name'] = this.hbsubDesigns[0].label;
+        //     }
+        //     else {
+        //           this.productdet['sub_design_no'] = '';
+        //           this.productdet['sub_design_name'] = '';
+        //          }
+        loader.dismiss();
+      });
+  }
+
+  getproductsize(){
+    console.log('00000000000');
+    
+    this.sizes = []
+    this.retail
+    .getProductsizes(this.productdet["id_product"])
+    .then((data) => {
+      this.sizes = data;
+
+    });
+  }
+
+  hbProdSelected() {
+    // if(this.hbDesigns.length == 0) {
+    let loader = this.loadingCtrl.create({
+      content: "Please Wait",
+      spinner: "bubbles",
+    });
+    loader.present();
+    this.retail
+      .getDesigns({
+        id_employee: this.empData["uid"] != null ? this.empData["uid"] : null,
+        type: "active",
+        id_product: this.productdet["id_product"],
+        last_id: 0,
+        page_no: 1,
+      })
+      .then((data) => {
+        this.hbDesigns = data;
+
+        loader.dismiss();
+      });
+
+    // }
+  }
+
+  hbcatSelected() {
+    // if(this.hbDesigns.length == 0) {
+    let loader = this.loadingCtrl.create({
+      content: "Please Wait",
+      spinner: "bubbles",
+    });
+    loader.present();
+    this.retail
+      .getProducts({
+        id_employee: this.empData["uid"] != null ? this.empData["uid"] : null,
+        type: "active",
+        id_category: this.productdet["id_category"],
+        last_id: -1,
+        page_no: 1,
+      })
+      .then((data) => {
+        this.hbProducts = data;
+
+        // if (this.hbProducts.length == 1) {
+        //   this.productdet["id_product"] = this.hbProducts[0].pro_id;
+        //   this.productdet["product_name"] = this.hbProducts[0].label;
+        //   this.hbdesignSelected();
+        // } else {
+        //   this.productdet["id_product"] = "";
+        //   this.productdet["product_name"] = "";
+        // }
+        loader.dismiss();
+      });
+
+    // }
+  }
+
+  change(data) {
+    console.log(data);
+
+    this.order_type = data;
+    console.log(this.order_type, 'pppppppppppppppp');
+
+    this.item_type = this.order_type == 1 ? 'non_tag' : 'tag';
+    console.log(this.item_type);
+
+    this.clear();
+    // this.cd.detectChanges();
+  }
+
+  getTagByID(tagData) {
+    console.log("0000000000");
+    console.log();
+    if (tagData != "") {
+      var istagId = tagData.search("/") > 0 ? true : false;
+      var isTagCode = tagData.search("-") > 0 ? true : false;
+      if (istagId) {
+        var tId = tagData.split("/");
+        var searchTxt = tId.length >= 2 ? tId[0] : "";
+        var searchField = this.checkold == true ? "old_tag_id" : "tag_id";
+      } else if (isTagCode) {
+        var searchTxt = tagData;
+        var searchField = this.checkold == true ? "old_tag_id" : "tag_code";
+      } else if (this.checkold) {
+        var searchTxt = tagData;
+        var searchField = "old_tag_id";
+      }
+      // Search Tag
+      let loader = this.loadingCtrl.create({
+        content: "Please Wait",
+        spinner: "bubbles",
+      });
+      loader.present();
+      var postData = {
+        searchTxt: searchTxt,
+        searchField: searchField,
+        id_branch: this.esti["id_branch"],
+      };
+      this.retail.getTagData(postData).then((data) => {
+        if (data.status) {
+          this.tagMsg = data.msg;
+          this.tagErrorMsg = "";
+
+          let toastMsg = this.toastCtrl.create({
+            message: this.tagMsg,
+            duration: this.commonservice.toastTimeout,
+            position: "middle",
+          });
+          toastMsg.present();
+          console.log(data.tagData, "oooooooo");
+              if (data.tagData['stone_details'] && data.tagData['stone_details'].length > 0) {
+          // reset before summing
+          data.tagData['less_wt'] = 0; 
+          data.tagData['stone_price'] = 0;  
+
+
+            data.tagData['stone_details'].forEach(element => {
+          let wt = parseFloat(element['wt']) || 0; // ensure number
+
+   if(element['is_apply_in_lwt'] == '1'){
+          if (element['uom_id'] == '6') {
+            wt = wt / 5;
+            // element['wt'] = wt.toString(); // keep as string if needed
+          }
+             data.tagData['less_wt'] = parseFloat((data.tagData['less_wt'] + wt).toFixed(3)); // proper numeric addition
+
+        }
+          this.tag_stoneamount_calc(element);
+          let amt = parseFloat(element['amount']) || 0; // ensure number
+
+             data.tagData['stone_price'] = parseFloat((data.tagData['stone_price'] + amt).toFixed(3)); // proper numeric addition
+
+        });
+         }
+
+          setTimeout(() => {
+            this.tagMsg = "";
+          }, this.commonservice.msgTimeout);
+          this.productdet = data.tagData;
+          this.productdet["due_date"] = '';
+
+          console.log(this.productdet);
+
+          // data.tagData['actual_gross_wt'] = data.tagData['gross_wt'];
+          // data.tagData['actual_less_wt'] = data.tagData['less_wt'];
+          // data.tagData['actual_net_wt'] = data.tagData['net_wt'];
+          // data.tagData['charge_value'] = data.tagData['charge_value'];
+          // data.tagData['charges'] = data.tagData['charges'];
+          // data.tagData['checkwas'] = data.tagData['retail_max_wastage_percent'];
+          // this.productdet['net_wt'] = data.tagData['net_wt']
+          this.productdet["category_name"] = data.tagData["category_name"];
+          this.productdet["product_name"] = data.tagData["product_name"];
+          this.productdet["design_name"] = data.tagData["design_name"];
+          this.productdet["sub_design_name"] = data.tagData["sub_design_name"];
+          console.log(this.productdet["sub_design_name"]);
+          this.productdet["id_category"] = data.tagData["id_ret_category"];
+          this.productdet["id_product"] = data.tagData["pro_id"];
+          this.productdet["design_no"] = data.tagData["design_no"];
+          this.productdet["sub_design_no"] = data.tagData["sub_design_no"];
+          this.productdet["pcs"] = Number(data.tagData['piece']);
+          this.productdet["size"] = data.tagData['size'];
+          this.productdet['rate_type'] = 1
+          this.productdet['balance_type'] = 2
+          console.log(this.productdet["sub_design_no"]);
+          //this.hbdesignSelected();
+
+          this.showstone = this.productdet['stone_details'].length > 0 ? this.productdet['stone_details'].filter(data => data['Nature'] != 'DIAMOND') : [];
+          this.stone_details = this.productdet.hasOwnProperty('stone_details') ? this.productdet['stone_details'] : [];
+          console.log(this.stone_details)
+          this.othermetals = this.productdet.hasOwnProperty('other_metal_details') ? this.productdet['other_metal_details'] : [];
+          console.log(this.othermetals);
+
+          let detail = {
+            itemData: data.tagData,
+            metalRate: this.metalRate,
+            tax_details: this.taxGroupItems,
+            item_type: "tag",
+          };
+          let tagItem = this.retail.calculateSaleValue(detail);
+          this.productdet["net_wt"] = parseFloat(tagItem.net_wt).toFixed(2)
+          // parseFloat(this.productdet["net_wt"]).toFixed(2)
+          console.log(this.productdet["net_wt"], '00000000');
+
+
+          let addItem = true;
+          this.get_data();
+          this.getproductsize()
+          this.esti["tag"].forEach((item) => {
+            if (item.tag_id == tagItem.tag_id) {
+              this.tagMsg = "";
+              addItem = false;
+              this.tagErrorMsg = "Tag Already exist..";
+
+              let toastMsg = this.toastCtrl.create({
+                message: this.tagErrorMsg,
+                duration: this.commonservice.toastTimeout,
+                position: "middle",
+              });
+              toastMsg.present();
+
+              setTimeout(() => {
+                this.tagErrorMsg = "";
+              }, this.commonservice.msgTimeout);
+            }
+          });
+          if (addItem) {
+            this.esti["is_tag"] = true;
+            this.esti["tag"].push(tagItem);
+          }
+          let y: any = Object.assign({}, this.esti["tag"]);
+          console.log(y);
+
+          this.esti["tag"].reverse();
+          console.log(this.esti["tag"]);
+        } else {
+          this.tagMsg = "";
+          this.tagErrorMsg = data.msg;
+
+          let toastMsg = this.toastCtrl.create({
+            message: this.tagErrorMsg,
+            duration: this.commonservice.toastTimeout,
+            position: "middle",
+          });
+          toastMsg.present();
+          setTimeout(() => {
+            this.tagErrorMsg = "";
+          }, this.commonservice.msgTimeout);
+        }
+
+        loader.dismiss();
+      });
+    }
+    console.log(this.productdet["design_no"]);
+
+    console.log(this.productdet);
+  }
+
+  tag_stoneamount_calc(data){
+    if (data["stone_cal_type"] == "2") {
+      data["amount"] =
+        (data["pieces"] * data["rate_per_gram"]).toFixed(3);
+    } else if (data["stone_cal_type"] == "1") {
+      data["amount"] =
+        (data["wt"] * data["rate_per_gram"]).toFixed(3);
+    }
+}
+
+  get_data() {
+    console.log(this.productdet);
+    this.commonservice
+      .getset({
+        id_product: this.productdet["id_product"],
+        id_design: this.productdet["design_no"],
+        id_sub_design: this.productdet["sub_design_id"],
+        gross_wt: this.productdet["gross_wt"],
+        type: 2,
+        lot_no: "",
+      })
+      .then((data) => {
+        console.log(data, "0000000000");
+
+        this.productdet["checkwas"] = data["data"]["wastag_min"];
+        this.productdet["mc_min"] = data["data"]["mc_min"];
+      });
+  }
+
+  append(event) {
+    var one: any = (<HTMLInputElement>(
+      document.getElementById("one")
+    )).value.toUpperCase();
+    var two: any = (<HTMLInputElement>(
+      document.getElementById("two")
+    )).value.toUpperCase();
+
+    this.tagData["tag_code1"] = this.tagData["tag_code1"].toUpperCase();
+    this.tagData["tag_code2"] = this.tagData["tag_code2"].toUpperCase();
+    console.log(one);
+    console.log(two);
+
+    if (this.tagData["tag_code1"] != "" && this.tagData["tag_code2"] != "") {
+      this.tagData["tag_code"] = one + "-" + two;
+    } else {
+      this.tagData["tag_code"] = one + two;
+    }
+
+    if (event.keyCode == 13) {
+      this.getTagByID(this.tagData["tag_code"]);
+    }
+  }
+
+  // calcSaleValue(changedInput) {
+  //   console.log(this.tagData);
+  //   console.log(this.productdet["gross_wt"]);
+  //   console.log(this.productdet["stone_details"]);
+  //   this.productdet["net_wt"] = this.productdet["gross_wt"]
+  //   console.log( this.productdet["gross_wt"]);
+
+  //   // this.checkinghome();
+  //   let stData = this.calcStoneDetail();
+  //   this.productdet["stone_wt"] = stData["stone_wt"];
+  //   this.productdet["stone_price"] = stData["stone_price"];
+  //   this.productdet["stone_details"] = this.stone_details;
+  //   console.log(this.productdet["stone_details"]);
+  //   if (this.productdet["is_partly_sold"] == 1) {
+  //     if (
+  //       parseFloat(this.productdet["gross_wt"]) >
+  //       parseFloat(this.productdet["stock_gross_wt"])
+  //     ) {
+  //       this.productdet["gross_wt"] = this.retail.setAsNumber(
+  //         this.productdet["stock_gross_wt"]
+  //       );
+  //     }
+  //     if (
+  //       parseFloat(this.productdet["less_wt"]) >
+  //       parseFloat(this.productdet["stock_less_wt"])
+  //     ) {
+  //       this.productdet["less_wt"] = this.retail.setAsNumber(
+  //         this.productdet["stock_less_wt"]
+  //       );
+  //     }
+  //   }
+  //   if (this.stone_details.length != 0) {
+  //     this.productdet["less_wt"] = this.retail.setAsNumber(stData["stone_wt"]);
+  //   }
+  //   console.log( this.retail.setAsNumber(this.productdet["less_wt"]),'ppppppppppppp');
+  //   console.log( parseFloat(this.productdet["gross_wt"]) ,'ooooooooooooo');
+
+
+  //   this.productdet["net_wt"] = parseFloat(this.productdet["gross_wt"]) - this.retail.setAsNumber(this.productdet["less_wt"]);
+  //   console.log( this.productdet["net_wt"] ,'eeeeeeeeeeeeeee');
+
+  //   if (changedInput == "wastage_wt") {
+  //     let wast_percent = parseFloat(
+  //       ((this.retail.setAsNumber(this.productdet["wast_wgt"]) * 100) / this.retail.setAsNumber(this.productdet["net_wt"])).toFixed(3)
+  //     );
+  //     this.productdet["retail_max_wastage_percent"] = wast_percent;
+  //   } else if (changedInput == "wast") {
+  //     let wast_wgt = parseFloat(
+  //       (
+  //         this.productdet["net_wt"] *
+  //         (this.retail.setAsNumber(
+  //           this.productdet["retail_max_wastage_percent"]
+  //         ) /
+  //           100)
+  //       ).toFixed(3)
+  //     );
+  //     this.productdet["wast_wgt"] = wast_wgt;
+  //   }
+  //   console.log(this.productdet["checkwas"]);
+  //   // let detail = { itemData: this.productdet, metalRate: this.metalRate, tax_details: this.taxGroupItems, item_type: "home_bill" };
+  //   console.log(this.productdet["id_purity"]);
+
+  //   // console.log(detail)
+  //   /*    if (this.productdet['retail_max_wastage_percent'] <= parseInt(this.productdet['checkwas']))
+  //       { */
+  //   let detail = {
+  //     itemData: this.productdet,
+  //     metalRate: this.metalRate,
+  //     tax_details: this.taxGroupItems,
+  //     item_type: "home_bill",
+  //   };
+  //   console.log(detail);
+  //   this.productdet = this.retail.calculateSaleValue(detail);
+
+  //   if (this.productdet["calculation_based_on"] == 3) {
+  //     this.productdet["sales_value"] = this.productdet["taxable"];
+  //   }
+  //   this.productdet = this.retail.calculateSaleValue(detail);
+  //   console.log(    this.productdet ,'9999999999999');
+
+  //   /*     }else
+  //           {
+  //             console.log('11111111111111111')
+  //            this.tagMsg = "Please Enter required wastage";
+  //             this.tagErrorMsg = "Please Enter required wastage";
+  //            // Alert Message Timeout setTimeout(() => {this.tagMsg = ""; }, this.commonservice.msgTimeout);}
+  //            } */
+  // }
+  calcSaleValue(changedInput) {
+    console.log(this.tagData);
+    console.log(this.productdet["gross_wt"]);
+    console.log(this.productdet["stone_details"]);
+    console.log('less_wt :::', this.productdet["less_wt"]);
+
+   this.productdet["less_wt"] = isNaN(this.productdet["less_wt"]) ? 0 : this.productdet["less_wt"];
+
+    console.log(this.productdet["less_wt"],'less wt');
+
+
+    // this.checkinghome();
+    let stData = this.calcStoneDetail();
+  
+    this.productdet["stone_details"] = this.stone_details;
+    console.log(this.productdet["stone_details"]);
+    if (this.productdet["is_partly_sold"] == 1) {
+      if (
+        parseFloat(this.productdet["gross_wt"]) >
+        parseFloat(this.productdet["stock_gross_wt"])
+      ) {
+        this.productdet["gross_wt"] = this.retail.setAsNumber(
+          this.productdet["stock_gross_wt"]
+        );
+      }
+      if (parseFloat(this.productdet["less_wt"]) > parseFloat(this.productdet["stock_less_wt"])) {
+        this.productdet["less_wt"] = this.retail.setAsNumber(this.productdet["stock_less_wt"]);
+      }
+    }
+
+    if (this.stone_details.length != 0 && this.order_type == 1) {
+        this.productdet["stone_wt"] = stData["stone_wt"];
+    this.productdet["stone_price"] = stData["stone_price"];
+      this.productdet["less_wt"] = this.retail.setAsNumber(stData["stone_wt"]);
+    }else if (this.stone_details.length != 0 && this.order_type == 2) {
+
+          this.productdet["stone_wt"] = stData["wt"];
+    this.productdet["stone_price"] = stData["amount"];
+      this.productdet["less_wt"] = this.retail.setAsNumber(stData["wt"]);
+    }
+    this.productdet["net_wt"] = parseFloat(this.productdet["gross_wt"]) - this.retail.setAsNumber(this.productdet["less_wt"]);
+    if (changedInput == "wastage_wt") {
+      let wast_percent = parseFloat(
+        ((this.retail.setAsNumber(this.productdet["wast_wgt"]) * 100) / this.retail.setAsNumber(this.productdet["net_wt"])).toFixed(3)
+      );
+      this.productdet["retail_max_wastage_percent"] = wast_percent;
+    } else if (changedInput == "wast") {
+      let wast_wgt = parseFloat(
+        (
+          this.productdet["net_wt"] *
+          (this.retail.setAsNumber(
+            this.productdet["retail_max_wastage_percent"]
+          ) /
+            100)
+        ).toFixed(3)
+      );
+      this.productdet["wast_wgt"] = wast_wgt;
+    }
+    console.log(this.productdet["checkwas"]);
+    // let detail = { itemData: this.productdet, metalRate: this.metalRate, tax_details: this.taxGroupItems, item_type: "home_bill" };
+    console.log(this.productdet["id_purity"]);
+
+    // console.log(detail)
+    /*  if (this.productdet['retail_max_wastage_percent'] <= parseInt(this.productdet['checkwas']))
+      { */
+    let detail = {
+      itemData: this.productdet,
+      metalRate: this.metalRate,
+      tax_details: this.taxGroupItems,
+      item_type: "home_bill",
+    };
+    console.log(detail);
+    //  this.productdet = this.retail.calculateSaleValue(detail);
+
+    if (this.productdet["calculation_based_on"] == 3) {
+      this.productdet["sales_value"] = this.productdet["taxable"];
+    }
+    this.productdet = this.retail.calculateSaleValue(detail);
+    /*   }else
+        {
+         console.log('11111111111111111')
+        this.tagMsg = "Please Enter required wastage";
+         this.tagErrorMsg = "Please Enter required wastage";
+        // Alert Message Timeout setTimeout(() => {this.tagMsg = ""; }, this.commonservice.msgTimeout);}
+        } */
+  }
+
+  get_purity(data: any) {
+    console.log(data);
+    this.productdet["id_purity"] = data.id_purity;
+    this.productdet["purname"] = data.label;
+    this.productdet["metal_type"] = data.rate_field;
+    this.productdet["market_metal_type"] = data.market_rate_field;
+  }
+
+  clear() {
+    this.productdet["category_name"] = "";
+    this.productdet["product_name"] = "";
+    this.productdet["design_name"] = "";
+    this.productdet["sub_design_name"] = "";
+    this.productdet["gross_wt"] = "";
+    this.productdet["less_wt"] = "";
+    this.productdet["net_wt"] = "";
+    this.productdet["purname"] = "";
+    this.productdet["id_purity"] = "";
+    this.productdet["retail_max_wastage_percent"] = "";
+    this.productdet["wast_wgt"] = "";
+    this.productdet["rate_per"] = "";
+    this.productdet["mc_type"] = "";
+    this.productdet["mc_value"] = "";
+    this.productdet["making_charge"] = "";
+    this.productdet["taxable"] = "";
+    this.productdet["tax_price"] = "";
+    this.productdet["sales_value"] = "";
+    this.productdet["due_date"] = "";
+    this.productdet['empname'] = "";
+    this.productdet['rate_type'] = 1
+    this.productdet['balance_type'] = 2
+
+  }
+
+  // naveen
+  openEmpModal() {
+    let modal = this.modal.create(EmpSearchPage, { "empData": this.employees })
+    modal.present();
+    modal.onDidDismiss(data => {
+      if (data != null) {
+
+        this.productdet['empname'] = data.emp_name;
+        this.productdet['id_employee'] = data.id_employee;
+      }
+    });
+  }
+
+  radio_option(data: any) {
+    console.log(data, 'options');
+
+  }
+
+  nnext(data) {
+    this.nonback1 = data;
+    this.nonback = false;
+    this.nonback2 = false;
+    this.content.scrollToTop();
+
+  }
+  nxt(data) {
+    this.nonback2 = data;
+    this.nonback = false;
+    this.nonback1 = false;
+    this.content.scrollToTop();
+  }
+  nback(data) {
+    this.nonback = data;
+    this.nonback1 = false;
+    this.nonback2 = false;
+    this.content.scrollToTop();
+
+  }
+
+
+
+  nxtback(data) {
+    this.nonback1 = data;
+    this.nonback = false;
+    this.nonback2 = false;
+    this.content.scrollToTop();
+  }
+
+
+
+  canAddToCart(): boolean {
+  const p = this.productdet;
+
+  return (
+    !!p.sub_design_name &&
+    !!p.design_name &&
+    !!p.product_name &&
+    !!p.category_name &&
+    p.gross_wt !== undefined &&
+    p.net_wt !== undefined &&
+    p.pcs !== undefined &&
+    !!p.due_date &&
+    !!p.sample_details 
+  );
+}
+
+}

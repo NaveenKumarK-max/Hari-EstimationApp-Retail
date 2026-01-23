@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar>
+      <button ion-button menuToggle><ion-icon name="menu"></ion-icon></button>
+      <ion-title>Supplier Categories
+          <ion-icon  name="md-funnel" (click)="open()" style="color:black !important;float: right;" ></ion-icon>
+
+      </ion-title> 
+  </ion-navbar> 
+</ion-header> 
+
+
+<ion-content> 
+  <ion-grid no-padding>
+      <ion-row *ngIf="categories.length > 0" text-center>
+          <ion-col text-wrap col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4  *ngFor="let item of categories; let i=index" class="custom-2col" [ngClass]="animateClass" (click)="openProduct(item.id_ret_category)">
+              <ion-card style="border: 1px solid#000000;
+              border-style: dotted;
+              border-bottom: none;">
+                  <div style="float: right;width: 64%;" text-center no-margin>
+                      <h5 class="text-small theme-color" style="color: white !important;    text-transform: capitalize;background: black !important;
+                      border-top-left-radius: 15px;
+                      border-bottom-right-radius: 15px;    padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-bottom: 2px;    overflow: scroll;
+  white-space: nowrap;">{{item.metal}}</h5>
+                  </div>
+                  <div>
+                      <img class="full-image" src='{{item.image}}' onerror="this.onerror=null;this.src='assets/no-img.png';" imageCache/>
+
+                  </div>
+                  <ion-item style="background:#000000 !important;
+                  border-top-left-radius: 15px;
+                  border-top-right-radius: 15px;    margin-top: 2px !important;" text-center no-margin>
+                      <h5 class="text-small theme-color" style="color: white !important;    text-transform: uppercase;    overflow: scroll;
+                      white-space: nowrap;">{{item.name}}</h5>
+                  </ion-item>
+              </ion-card> 
+          </ion-col>
+      </ion-row> 
+  </ion-grid> 
+  <ion-row *ngIf="categories.length == 0 " style="text-align: center;">
+      <ion-col>
+          <h4>No Products Found</h4>
+      </ion-col>
+  </ion-row>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content>

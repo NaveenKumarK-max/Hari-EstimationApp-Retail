@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Add Charges
+    </ion-title>
+    <ion-buttons end *ngIf="action == 'add'">
+      <!-- <button ion-button icon-only (click)="add()">
+        <ion-icon item-right name="add"></ion-icon>
+    </button> -->
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding>
+  <div >
+  <ion-card class="errorMsg" padding *ngIf="errorMsg">
+    {{errorMsg}}
+  </ion-card>
+  <ion-card class="msg" padding *ngIf="msg">
+    {{msg}}
+  </ion-card>
+     <ion-row>
+      
+       <ion-col col-6>
+        <ion-label color="label-color" stacked>Charge Name <span class="required"> *</span></ion-label>
+
+       </ion-col>
+    
+    
+      <ion-col col-6>
+        <ion-label color="label-color" stacked>Value <span class="required"> *</span></ion-label>
+
+      </ion-col>
+    </ion-row>
+     <ion-row *ngFor="let s of tagstoneData;let i = index;">
+      
+      <ion-col col-6 >
+          <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="tagstoneData[i]['id_charge']"  (ngModelChange)="checkcode(i)" placeholder="Name"  >
+            <ion-option *ngFor="let s of stones" [value]="s.id_charge">{{s.code_charge}}</ion-option>
+          </ion-select>
+      </ion-col>
+    
+      
+      <ion-col col-6 >
+          <ion-input style="border: 1px solid lightgrey;" type="number" [(ngModel)]="tagstoneData[i]['charge_value']"></ion-input>
+      </ion-col>
+ 
+      <div  style="    width: 100%;">
+        <ion-icon style="float: right;" (click)="remove(i)" name="remove"></ion-icon>
+
+        <ion-icon style="float: right;" (click)="add()" name="add"></ion-icon>
+      </div>
+
+
+     </ion-row>
+     </div>
+
+
+</ion-content>
+<ion-footer>
+    <ion-row *ngIf="action == 'add'">
+      <ion-col col-6>
+        <button ion-button icon-start full color="danger" (click)="dismiss()">Close</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button icon-start full color="primary" (click)="addStone('S')">Save</button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="action == 'edit'">
+      <ion-col col-12>
+        <button ion-button icon-start full color="primary" (click)="updateItem('S')">Update</button>
+      </ion-col>
+    </ion-row>
+</ion-footer>

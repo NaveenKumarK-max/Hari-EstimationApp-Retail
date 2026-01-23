@@ -1,0 +1,65 @@
+<!--
+  Generated template for the BluetoothPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title style="text-align: center;
+    margin-right: 15%;" (click)="goto()"><img class="header-logo" src='assets/header.svg'/></ion-title>
+  </ion-navbar>
+  <!-- <ion-toolbar text-center *ngIf="page_type == 'print'">
+      <ion-title>Print Estimation</ion-title>
+  </ion-toolbar> -->
+</ion-header>
+
+
+<ion-content padding>
+  <ion-row>
+    <ion-col no-padding text-wrap col-12>
+      <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon> Bluetooth Devices  <ion-badge color="light" float-right></ion-badge></div>
+    </ion-col>
+    </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-list radio-group [(ngModel)]="pairedDeviceID" *ngIf="listToggle">
+        <ion-item *ngFor="let i of pairedList;let j=index">
+          <ion-label style="color: black ;">{{i.name}}</ion-label>
+          <ion-radio value="{{j}}" ></ion-radio>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-4>
+      <button ion-button  class="submit-button" (click)="listPairedDevices()">
+        <ion-icon name="refresh"></ion-icon>&nbsp;Refresh </button>
+    </ion-col>
+    <ion-col col-4>
+      <button ion-button  class="submit-button" *ngIf="listToggle" (click)="selectDevice()">
+        <ion-icon name="bluetooth"></ion-icon>&nbsp;Connect </button>
+    </ion-col>
+    <ion-col col-4>
+      <button ion-button  class="submit-button" (click)="sendData()">
+        <ion-icon name="send"></ion-icon>&nbsp;Print
+      </button>
+    </ion-col>
+  </ion-row>
+
+
+ 
+  
+  <!-- <ion-list>
+    <ion-item>
+      <ion-label floating>Type The Data You want to Send</ion-label>
+      <ion-input type="text" name="datasend" [(ngModel)]="dataSend"></ion-input>
+    </ion-item>
+  </ion-list> -->
+  <!-- <button ion-button full class="submit-button" (click)="sendData()">
+    <ion-icon name="send"></ion-icon>&nbsp;Send Data Via Bluetooth
+  </button> -->
+</ion-content>

@@ -1,0 +1,400 @@
+<!--
+  Generated template for the CreatestockPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <!-- <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button> -->
+    <!-- <ion-title  style="text-align: center;
+    margin-right: 15%;"><img class="header-logo" src='assets/header.svg'/></ion-title> -->
+
+
+    <ion-row>
+      <ion-col col-2 style="margin-top: 25px;">
+        <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-8 >
+           <!-- <ion-title><img class="header-logo" src='assets/img/homeheader.svg'/></ion-title> -->
+    <ion-title style="text-align: center;
+    "><img  class="header-logo" src='assets/header.svg'/>
+    <!-- <ion-badge style="float: right;background-color: red;margin-top: 10px;">Test</ion-badge> -->
+
+    </ion-title>
+      </ion-col>
+      <ion-col col-2></ion-col>
+      </ion-row>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div style="margin-bottom: 200px;">
+
+    <ion-row>
+      <ion-col no-padding text-wrap col-12>
+        <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon> Tags  <ion-badge color="light" float-right></ion-badge></div>
+      </ion-col>
+      </ion-row>
+    <!-- <ion-row>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">   
+        <ion-item no-padding> 
+          <ion-label color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+          <ion-input type="text" [(ngModel)]="tag_code"></ion-input> 
+          <button item-right ion-button margin-top color="light" (click)="getTagData(tag_code)"><ion-icon name="ios-search"></ion-icon></button>
+          <button item-right ion-button margin-top color="light" (click)="openQRScanner('tag')"><ion-icon name="ios-qr-scanner"></ion-icon></button>
+  
+        
+        </ion-item>
+      </ion-col>
+      </ion-row> -->
+<!--       <ion-row>
+        <ion-col col-7  class="custom-2col" style="padding-top: 0px !important;">   
+
+          <ion-item >
+            <ion-label *ngIf="checkold != true" style="" color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+            <ion-label *ngIf="checkold == true" style="" color="label-color" stacked>Old Tag Code <span class="required">*</span></ion-label>
+  
+            <ion-toggle [(ngModel)]="checkold"></ion-toggle>
+          </ion-item>
+          </ion-col>
+      <ion-col col-5  class="custom-2col" style="padding-top: 0px !important;">   
+
+      </ion-col>
+
+      
+    </ion-row>
+
+      <div class="row">
+        <div class="col" col-3 style="margin: auto;" >
+          <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text" id="one"  [(ngModel)]="tagData['tag_code1']" (keyup)="append($event)" >
+
+          </div>
+          <div class="col" col-1 style="margin: auto;font-weight: bold;">
+            <hr>
+            </div>
+
+          <div class="col" col-6 style="margin: auto;" >
+            <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text"  id="two"  [(ngModel)]="tagData['tag_code2']" (keyup)="append($event)" > 
+
+          </div>
+          <div class="col" style="margin: auto;" col-2>
+            <button style="" item-right ion-button  color="light" (click)="getTagData(tagData['tag_code'])"><ion-icon name="ios-search"></ion-icon></button>
+
+          </div>
+      </div>
+ -->
+
+        <div class="tag-card" >
+<ion-row class="tag-single-row">
+
+  <!-- Toggle -->
+  <!-- <ion-col col-2 class="center-col">
+    
+   
+  </ion-col> -->
+
+  <!-- Single Tag Input -->
+  <ion-col col-10 style="display: flex;">
+    <ion-toggle [(ngModel)]="checkold"></ion-toggle>
+
+    <ion-item class="tag-box no-border soft-bg compact-item">
+      <ion-input type="text" placeholder="{{ checkold ? 'Old Tag Code' : 'New Tag Code' }}" [(ngModel)]="tagData['tag_code']" (keyup)="append($event)">
+      </ion-input>
+    </ion-item>
+  </ion-col>
+
+  <!-- Search -->
+  <ion-col col-2 class="search-col">
+    <button ion-button icon-only small class="search-btn"
+            (click)="getTagByID(tagData['tag_code'])">
+      <ion-icon name="search"></ion-icon>
+    </button>
+  </ion-col>
+
+</ion-row>
+
+      </div>
+
+      <ion-card class="errorMsg" padding *ngIf="tagErrorMsg">
+        {{tagErrorMsg}}
+      </ion-card>
+      <ion-card class="msg" padding *ngIf="tagMsg">
+        {{tagMsg}}
+      </ion-card>
+
+  <ion-row *ngIf="esti['tag'].length > 0" style="    margin-bottom: 15px;"> 
+    <ion-col style="margin: auto;">
+      Default Image *
+    </ion-col>
+    <ion-col>
+      <div class="row" >
+  <div style="
+  height: 80px;
+  width: 100px;
+" class="col">
+<img style="height: 80px;
+width: 90px;
+object-fit: cover;
+object-position: center;" src="{{image}}" imageViewer="{{image}}" onerror="this.src='assets/no-img.png'" />
+
+  </div>
+  <div (click)="presentActionSheet('default')" class="col" style="text-align: end;margin: auto;">
+    <span style="padding:5px;border: 1px solid lightgray;"><ion-icon name="add"></ion-icon></span>
+
+  </div>
+
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-grid *ngIf="esti['tag'].length > 0">
+
+    <ion-col  style="margin: auto;">
+      Add Images <span style="font-weight: bold;" *ngIf="images.length > 0">- ({{images.length}})</span> *
+    </ion-col>
+        <ion-row>
+      <ion-col col-10 style="margin-top: 30px;">
+        <!-- <ion-row>
+        
+          <div *ngIf="images.length > 0" class="coverphoto">
+            <button style="width: 135px;background: transparent !important;margin-bottom: 10px;" *ngFor="let targetPath of images; let id = index">
+           <div class="row">
+              <div  class="col" col-10 no-padding><img class="uploadimg1" src="{{targetPath['image_name']}}" imageViewer="{{targetPath['image_name']}}" onerror="this.src='assets/no-img.png'"
+            *ngIf="targetPath" /></div><div class="col" col-2 no-padding  ><ion-icon (click)="checkdefault(id)" [ngClass]="targetPath['is_default'] == 1 ? 'one':'two'" style="padding: 0px !important;" name="checkmark-circle"></ion-icon><ion-icon (click)="deletePhoto(id)" style="padding: 0px !important;color: red;bottom: 0;
+              right: 0;
+              position: absolute;" name="close-circle"></ion-icon></div>
+          </div>
+          </button>
+          </div>
+
+        </ion-row> -->
+        
+          <div style="margin-bottom:10px" class="row" *ngFor="let targetPath of images; let id = index" >
+            <!-- <button style="width: 135px;background: transparent !important;margin-bottom: 10px;" *ngFor="let targetPath of images; let id = index"> -->
+              <div class="col"  col-3 no-padding style="text-align: center;" >
+                Default<br>
+                <ion-icon (click)="checkdefault(id)" [ngClass]="targetPath['is_default'] == 1 ? 'one':'two'" style="padding: 0px !important;    font-size: 1.8em;" name="checkmark-circle"></ion-icon>
+             </div>
+              <div  class="col" col-7 no-padding style="text-align:center;"><img class="uploadimg1" src="{{targetPath['image_name']}}" imageViewer="{{targetPath['image_name']}}" onerror="this.src='assets/no-img.png'"
+            *ngIf="targetPath" /></div><div style="margin: auto;" class="col" col-2 no-padding  >
+            <ion-icon (click)="deletePhoto(id)" style="padding: 0px !important;color: red;    font-size: 1.8em;" name="close-circle"></ion-icon></div>
+          <!-- </button> -->
+          </div>
+
+      </ion-col>
+      <ion-col style="margin: auto;" col-2 (click)="presentActionSheet('gallery')">
+        <div  class="col" style="text-align: end;margin: auto;">
+          <span style="padding:5px;border: 1px solid lightgray;"><ion-icon name="add"></ion-icon></span>
+      
+        </div>      </ion-col>
+    </ion-row>
+</ion-grid>
+<!-- <div  *ngFor="let hb of  esti['tag'];let i = index;"> -->
+  <!-- <ion-list style="border: 1px solid lightgray;
+  border-bottom: 1px solid gray;
+  margin: 10px;" *ngFor="let hb of  esti['tag'];let i = index;">
+      <ion-item margin-top #tags  class="no-padding">
+<ion-row>
+  <ion-col text-wrap col-3 col-md-2 class="vip">
+    {{hb.tag_code}} 
+  </ion-col>
+  <ion-col text-wrap col-12 col-md-12 class="vip" *ngIf="ret_settings['subproduct_required'] == 1" style="font-size: 11px !important;">
+    <span *ngIf="hb.collection_name != null">{{hb.collection_name}} <b> | </b> </span>
+    {{hb.product_name}} <b> | </b> 
+    {{hb.design_name}}
+  </ion-col>
+  <ion-col text-wrap col-4 col-md-2 class="vip" *ngIf="ret_settings['subproduct_required'] == 0">
+    {{hb.product_name}}
+  </ion-col>
+  <ion-col text-wrap col-5 col-md-2 class="vip" *ngIf="ret_settings['subproduct_required'] == 0">
+    {{hb.design_name}}
+  </ion-col>
+  </ion-row>
+    <ion-row>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Purity </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.purname}} 
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Pcs </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.piece}} 
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Size </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.size}} 
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Gross wgt </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.gross_wt}} 
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Less wgt </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.less_wt}}
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Net Wgt </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.net_wt}}
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Wast ({{hb.retail_max_wastage_percehb}} %)  </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.wast_wgt}}
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">MC </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.making_charge | number:'1.2-2' }}
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Taxable </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.taxable | number:'1.2-2' }}
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Tax </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    {{hb.tax_price | number:'1.2-2' }}
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <p class="text-small">Amount </p>
+  </ion-col>
+  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+    <b>{{hb.sales_value | number:'1.2-2' }}</b>
+  </ion-col>
+</ion-row>
+</ion-item>
+</ion-list> -->
+
+
+<ion-card *ngFor="let hb of esti['tag']" class="tag-card">
+
+  <!-- HEADER -->
+  <ion-item class="tag-header">
+    <h2 class="tag-code">{{ hb.tag_code }}</h2>
+    <p *ngIf="ret_settings['subproduct_required'] == 1">
+      <span *ngIf="hb.collection_name">{{ hb.collection_name }} | </span>
+      {{ hb.product_name }} | {{ hb.design_name }}
+    </p>
+    <p *ngIf="ret_settings['subproduct_required'] == 0">
+      {{ hb.product_name }} | {{ hb.design_name }}
+    </p>
+  </ion-item>
+
+  <!-- CONTENT -->
+  <ion-card-content>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Purity</ion-col>
+      <ion-col col-6 class="value">{{ hb.purname }}</ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Pieces</ion-col>
+      <ion-col col-6 class="value">{{ hb.piece }}</ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Size</ion-col>
+      <ion-col col-6 class="value">{{ hb.size }}</ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Gross Weight</ion-col>
+      <ion-col col-6 class="value">{{ hb.gross_wt }}</ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Less Weight</ion-col>
+      <ion-col col-6 class="value">{{ hb.less_wt }}</ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Net Weight</ion-col>
+      <ion-col col-6 class="value">{{ hb.net_wt }}</ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">
+        Wastage ({{ hb.retail_max_wastage_percehb }}%)
+      </ion-col>
+      <ion-col col-6 class="value">{{ hb.wast_wgt }}</ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Making Charge</ion-col>
+      <ion-col col-6 class="value">
+        {{ hb.making_charge | number:'1.2-2' }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Taxable</ion-col>
+      <ion-col col-6 class="value">
+        {{ hb.taxable | number:'1.2-2' }}
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="row-item">
+      <ion-col col-6 class="label">Tax</ion-col>
+      <ion-col col-6 class="value">
+        {{ hb.tax_price | number:'1.2-2' }}
+      </ion-col>
+    </ion-row>
+
+    <!-- TOTAL -->
+    <ion-row class="total-row">
+      <ion-col col-6 class="label">Amount</ion-col>
+      <ion-col col-6 class="value amount">
+        {{ hb.sales_value | number:'1.2-2' }}
+      </ion-col>
+    </ion-row>
+
+  </ion-card-content>
+
+</ion-card>
+
+  <div style="text-align: center;margin-top:20px;">
+    <button (click)="submit()" ion-button style="background:#000000 !important">Submit</button>
+  </div>
+</div>
+</ion-content>
+<ion-footer style="bottom: 83px !important;">
+  <ion-fab center bottom style="left: 78% !important;" *ngIf="!scannerOn && show != true"> 
+    <button ion-fab mini color="primary" style="    width: 95px !important;
+    border-radius: 10px !important;
+    background:#000000 !important;" (click)="openQRScanner('tag')"><ion-icon name="ios-qr-scanner"></ion-icon>SCAN</button>
+  </ion-fab>
+  <!-- <button *ngIf="scannerOn" ion-button icon-start full class="warning" (click)="closeScanner()">Close Scanner</button>   -->
+</ion-footer>  
+<ion-footer style="bottom: 83px !important;">
+  <div *ngIf="show == true"  style="text-align: center;    margin-top: 5px;">
+    Upload Progress : 
+  </div>
+  <div *ngIf="show == true" class="progress-outer">
+    <div class="progress-inner" [style.width]="progress + '%'">
+        {{progress}}%
+    </div>
+  </div>
+  </ion-footer>

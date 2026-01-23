@@ -1,0 +1,96 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title style="text-align: center !important;
+    margin-right: 15% !important;"><img class="header-logo" src='assets/header.svg'/>
+  
+  </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content >
+
+  <ion-row>
+    <ion-col no-padding text-wrap col-10>
+      <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon> Chit Details  <ion-badge color="light" float-right></ion-badge>
+      </div>
+    </ion-col>
+    <ion-col no-padding text-wrap col-2>
+
+    <button style="float: right" [ngClass]="ani == true ? 'show' : '' " ion-fab mini color="primary" (click)="openEstiBasicDetailModal()"><ion-icon name="person"></ion-icon></button>
+  </ion-col>
+
+    </ion-row>
+   
+    <ion-row style="    margin-top: 10px;" >
+      <ion-col col-5 style="font-weight: bold;">
+        V.A(%)-
+        </ion-col>
+        <ion-col col-5 style="font-weight: bold;">
+          MC-
+  
+        </ion-col>
+        </ion-row>
+  
+        <ion-row style="    margin-top: 10px;">
+          <ion-col col-4 style="border: 1px solid #aea6a6;">
+            <!-- (ionChange)="upper(f['slip_no'],i)" -->
+            <ion-input placeholder="Enter V.A(%)-" type="text" (ionChange)="vacehck()" [(ngModel)]="va" [readonly] = "weightschemecaltype != 1 && weight_scheme_closure_type != 2"></ion-input>
+  
+          </ion-col>
+        
+            <ion-col col-5 style="border: 1px solid #aea6a6;">
+                  <ion-input  type="number" [(ngModel)]="mc" (ionChange)="mccehck()"  placeholder="Enter MC-" [readonly] = "weightschemecaltype != 1 && weight_scheme_closure_type != 2"></ion-input>  
+                </ion-col>
+       
+        </ion-row>
+
+
+
+  <ion-row style="    margin-top: 10px;" >
+    <ion-col col-5 style="font-weight: bold;">
+      Slip No
+      </ion-col>
+      <ion-col col-5 style="font-weight: bold;">
+         Amount
+
+      </ion-col>
+      </ion-row>
+
+      <ion-row style="    margin-top: 10px;" *ngFor="let f of fields;let i = index;">
+        <ion-col col-4 style="border: 1px solid #aea6a6;">
+          <!-- (ionChange)="upper(f['slip_no'],i)" -->
+          <ion-input placeholder="Enter No" type="text" [(ngModel)]="f['slip_no']" ></ion-input>
+
+        </ion-col>
+        <ion-col col-1>
+          <ion-icon   name="search" (click)="upper(f['slip_no'],i)"></ion-icon>
+
+        </ion-col>
+          <ion-col col-5 style="border: 1px solid #aea6a6;">
+                <ion-input  type="number" [(ngModel)]="f['slip_amt']" (ionChange)="fvalid(i)"  placeholder="Enter Amount" readonly></ion-input>  
+              </ion-col>
+        <ion-col col-1>
+          <ion-icon *ngIf="i == fields.length - 1"  name="add" (click)="addfield(i)"></ion-icon>
+
+        </ion-col>
+        <ion-col col-1>
+          <ion-icon  *ngIf="i != 0"  name="remove" (click)="removefield(i)"></ion-icon>
+
+        </ion-col>
+      </ion-row>
+
+               <p *ngIf="ferror == false" style="color: red;">Enter Valid Details</p>
+
+<div style="text-align: center;">
+  <button (click)="submit()" style="border-radius: 20px !important;background:#000000;margin-top: 15px;" ion-button>Done</button>
+  </div>
+
+</ion-content>
+
+<!-- <ion-footer style="text-align: center;">
+  <ion-fab left bottom [ngClass]="ani == true ? 'show' : '' " > 
+    <button [ngClass]="ani == true ? 'show' : '' " ion-fab mini color="primary" (click)="openEstiBasicDetailModal()"><ion-icon name="person"></ion-icon></button>
+  </ion-fab>
+  </ion-footer> -->

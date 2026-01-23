@@ -1,0 +1,22 @@
+<ion-header>
+<ion-navbar hideBackButton="true">
+    <ion-row>
+        <ion-col col-2>
+  <button ion-button clear icon-only style="color: black !important;" (click)="goHome()">
+    <ion-icon name="arrow-back"></ion-icon>
+  </button>
+        </ion-col>
+        <ion-col col-10 style="margin: auto;">
+  <ion-title>Cart</ion-title>
+        </ion-col>
+    </ion-row>
+
+</ion-navbar>
+</ion-header>
+
+<ion-content padding-vertical> 
+    <items-list [page] ="'Cart'"></items-list>    
+</ion-content>
+<ion-footer style="bottom: 83px !important;">
+    <button ion-button style="border-radius: 5px;" [disabled] = "!allowPlaceOrder" icon-start full class="theme-btn" (click)="openCusModal()">Place Order</button> 
+</ion-footer> 

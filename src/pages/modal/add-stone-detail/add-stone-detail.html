@@ -1,0 +1,277 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Add Stone
+    </ion-title>
+    <ion-buttons end *ngIf="action == 'add'">
+      <!-- <button ion-button icon-only (click)="add()">
+        <ion-icon item-right name="add"></ion-icon>
+    </button> -->
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-padding>
+  <div *ngIf="ptype == 'tag'">
+  <ion-card class="errorMsg" padding *ngIf="errorMsg">
+    {{errorMsg}}
+  </ion-card>
+  <ion-card class="msg" padding *ngIf="msg">
+    {{msg}}
+  </ion-card>
+     <!-- <ion-row nowrap style="overflow:scroll">
+      <ion-col col-2>
+        <ion-label color="label-color" stacked>LWT</ion-label>
+
+     </ion-col>
+       <ion-col col-3>
+        <ion-label color="label-color" stacked>Stone <span class="required"> *</span></ion-label>
+
+       </ion-col>
+
+      <ion-col col-2>
+        <ion-label color="label-color" stacked>Pcs <span class="required"> *</span></ion-label>
+
+      </ion-col>
+      <ion-col col-2>
+        <ion-label color="label-color" stacked>Wgt <span class="required"> *</span></ion-label>
+
+      </ion-col>
+      <ion-col col-3>
+        <ion-label color="label-color" stacked>Cal.Type <span class="required"> *</span></ion-label>
+
+      </ion-col>
+
+      <ion-col col-3>
+        <ion-label color="label-color" stacked>Rate <span class="required"> *</span></ion-label>
+
+      </ion-col>
+
+      <ion-col col-3>
+        <ion-label color="label-color" stacked>Amount <span class="required"> *</span></ion-label>
+
+      </ion-col>
+    </ion-row> -->
+
+
+
+    <ion-card *ngFor="let s of tagstoneData;let i = index;">
+     <ion-row>
+       <ion-col style="margin: auto;" col-1>
+        <ion-checkbox  [(ngModel)]="tagstoneData[i]['lwt']" (ngModelChange)="checkt(i)" [disabled]="tagstoneData[i]['show']"></ion-checkbox>
+       </ion-col>
+       <ion-col col-2 >
+        <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="tagstoneData[i]['stone_type']" (ngModelChange)="typechange(i)" interface="popover" placeholder="Type" [disabled]="tagstoneData[i]['show']" >
+          <ion-option *ngFor="let s of stoneMasTypes" [value]="s.stone_type">{{s.stone_type_name}}</ion-option>
+        </ion-select>
+    </ion-col>
+      <ion-col col-2 >
+          <!-- <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="tagstoneData[i]['stone_id']" placeholder="Stone"  >
+            <ion-option *ngFor="let s of stones" [value]="s.stone_id">{{s.stone_name}}</ion-option>
+          </ion-select> -->
+          <ion-input style="border: 1px solid lightgrey;" (click)="openstoneModal(i)" type="text" placeholder="Stone" [(ngModel)]="tagstoneData[i]['stone_name']" readonly></ion-input>
+
+      </ion-col>
+      <ion-col col-1>
+          <ion-input style="border: 1px solid lightgrey;" type="number" (keyup)="onKeyUp($event)" [readonly] ="tag_data?.is_partial == 0" [(ngModel)]="tagstoneData[i]['pieces']"  placeholder="Pcs" (ngModelChange)="ctypecheck(i,'pcs')"></ion-input>
+      </ion-col>
+      <ion-col col-2>
+        <ion-row no-padding>
+          <ion-col col-12 no-padding >
+              <ion-input style="border: 1px solid lightgrey;" type="number" [readonly] ="tag_data?.is_partial == 0"  [(ngModel)]="tagstoneData[i]['wt']"  placeholder="Wgt" (ngModelChange)="ctypecheck(i,'wt')"></ion-input>
+          </ion-col>
+
+        </ion-row>
+      </ion-col>
+
+   <ion-col col-3>
+        <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="tagstoneData[i]['uom_id']"  [disabled]="tag_data?.is_partial == 0" (ngModelChange)="uomchange()" interface="popover" placeholder="Stone UOM"  >
+          <ion-option *ngFor="let s of gtype_filter" [value]="s.uom_id">{{s['uom_name']}}</ion-option>
+        </ion-select>
+    </ion-col>
+<!-- naveen -->
+      <!-- <ion-col col-3 *ngIf="tagstoneData[i]['stone_type'] == 1">
+        <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="tagstoneData[i]['uom_id']"  [disabled]="tag_data?.is_partial == 0" (ngModelChange)="uomchange()" interface="popover" placeholder="Stone UOM"  >
+          <ion-option *ngFor="let s of gtype" [value]="s.uom_id">{{s['uom_name']}}</ion-option>
+        </ion-select>
+    </ion-col>
+
+    <ion-col col-3 *ngIf="tagstoneData[i]['stone_type'] != 1">
+      <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="tagstoneData[i]['uom_id']"  [disabled]="tag_data?.is_partial == 0" (ngModelChange)="uomchange()" interface="popover" placeholder="Stone UOM"  >
+        <ion-option *ngFor="let s of uomtype" [value]="s.uom_id">{{s['uom_name']}}</ion-option>
+      </ion-select>
+  </ion-col> -->
+
+      <ion-col col-3 >
+        <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="tagstoneData[i]['stone_cal_type']"  [disabled]="tag_data?.is_partial == 0" interface="popover" placeholder="Cal.Type" (ngModelChange)="ctypecheck(i,'caltype')" >
+          <ion-option *ngFor="let s of ctype" [value]="s.stone_cal_type">{{s.name}}</ion-option>
+        </ion-select>
+    </ion-col>
+
+      <ion-col col-3 >
+          <ion-input style="border: 1px solid lightgrey;" type="number" (keyup)="onKeyUp($event)" placeholder="Rate"  [(ngModel)]="tagstoneData[i]['rate_per_gram']" (ngModelChange)="ctypecheck(i,'rate')"></ion-input>
+      </ion-col>
+
+      <ion-col col-3 >
+        <ion-input style="border: 1px solid lightgrey;" type="number"  [(ngModel)]="tagstoneData[i]['amount']" placeholder="Amount" (ngModelChange)="ctypecheck(i,'amt')" ></ion-input>
+    </ion-col>
+
+      <ion-col col-2 style="margin:auto" *ngIf="tag_data?.is_partial != 0">
+        <ion-icon style="float: right;" (click)="remove(i)" name="remove"></ion-icon>
+
+        <ion-icon style="float: right;margin-right: 3px;" (click)="add()" name="add"></ion-icon>
+      </ion-col>
+
+
+     </ion-row>
+    </ion-card>
+     </div>
+
+
+     <div *ngIf="ptype != 'tag'">
+
+      <ion-card class="errorMsg" padding *ngIf="errorMsg">
+        {{errorMsg}}
+      </ion-card>
+      <ion-card class="msg" padding *ngIf="msg">
+        {{msg}}
+      </ion-card>
+         <!-- <ion-row nowrap style="overflow:scroll">
+          <ion-col col-2>
+            <ion-label color="label-color" stacked>LWT</ion-label>
+
+         </ion-col>
+           <ion-col col-3>
+            <ion-label color="label-color" stacked>Stone <span class="required"> *</span></ion-label>
+
+           </ion-col>
+
+          <ion-col col-2>
+            <ion-label color="label-color" stacked>Pcs <span class="required"> *</span></ion-label>
+
+          </ion-col>
+          <ion-col col-2>
+            <ion-label color="label-color" stacked>Wgt <span class="required"> *</span></ion-label>
+
+          </ion-col>
+          <ion-col col-3>
+            <ion-label color="label-color" stacked>Cal.Type <span class="required"> *</span></ion-label>
+
+          </ion-col>
+
+          <ion-col col-3>
+            <ion-label color="label-color" stacked>Rate <span class="required"> *</span></ion-label>
+
+          </ion-col>
+
+          <ion-col col-3>
+            <ion-label color="label-color" stacked>Amount <span class="required"> *</span></ion-label>
+
+          </ion-col>
+        </ion-row> -->
+
+        <ion-row>
+          <ion-col col-2 style="margin: 10px;">
+            <ion-checkbox  [(ngModel)]="old_stone_settings" (ngModelChange)="oldstone()"></ion-checkbox>
+           </ion-col>
+          <ion-col style="margin: auto;font-weight: 600;">STONE VISIBLE</ion-col>
+        </ion-row>
+        <ion-card *ngFor="let s of stoneData;let i = index;">
+         <ion-row>
+           <ion-col style="margin: auto;" col-1>
+            <ion-checkbox  [(ngModel)]="stoneData[i]['lwt']" (ngModelChange)="checko(i)"></ion-checkbox>
+
+           </ion-col>
+           <ion-col col-2 >
+            <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="stoneData[i]['stone_type']" (ngModelChange)="typechange(i)" interface="popover" placeholder="Type"  >
+              <ion-option *ngFor="let s of stoneMasTypes" [value]="s.stone_type">{{s.stone_type_name}}</ion-option>
+            </ion-select>
+        </ion-col>
+          <ion-col col-2 >
+              <!-- <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="stoneData[i]['stone_id']" placeholder="Stone"  >
+                <ion-option *ngFor="let s of stones" [value]="s.stone_id">{{s.stone_name}}</ion-option>
+              </ion-select> -->
+              <ion-input style="border: 1px solid lightgrey;" (click)="openstoneModal2(i)" type="text" placeholder="Stone" [(ngModel)]="stoneData[i]['stone_name']" readonly></ion-input>
+
+          </ion-col>
+          <ion-col col-1>
+              <ion-input style="border: 1px solid lightgrey;" type="number" (keyup)="onKeyUp($event)" [(ngModel)]="stoneData[i]['stone_pcs']" placeholder="Pcs" (ngModelChange)="ctypecheck2(i,'pcs')" ></ion-input>
+          </ion-col>
+          <ion-col col-2>
+            <ion-row no-padding>
+              <ion-col col-12 no-padding >
+                  <ion-input style="border: 1px solid lightgrey;" type="number" (keyup)="onKeyUp($event)" [(ngModel)]="stoneData[i]['stone_wt']" placeholder="Wgt" (ngModelChange)="ctypecheck2(i,'wt')"></ion-input>
+              </ion-col>
+
+            </ion-row>
+          </ion-col>
+
+          <ion-col col-3 *ngIf="stoneData[i]['stone_type'] == 1"  >
+            <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="stoneData[i]['uom_id']" (ngModelChange)="uomchange()" interface="popover" placeholder="Stone UOM"  >
+              <ion-option *ngFor="let s of gtype" [value]="s.uom_id">{{s.uom_name}}</ion-option>
+            </ion-select>
+        </ion-col>
+
+        <ion-col col-3  *ngIf="stoneData[i]['stone_type'] != 1" >
+          <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="stoneData[i]['uom_id']" (ngModelChange)="uomchange()" interface="popover" placeholder="Stone UOM"  >
+            <ion-option *ngFor="let s of uomtype" [value]="s.uom_id">{{s.uom_name}}</ion-option>
+          </ion-select>
+      </ion-col>
+
+          <ion-col col-3 >
+            <ion-select style="border: 1px solid lightgrey;" [(ngModel)]="stoneData[i]['stone_cal_type']" interface="popover" placeholder="Cal.Type" (ngModelChange)="ctypecheck2(i,'caltype')" >
+              <ion-option *ngFor="let s of ctype" [value]="s.stone_cal_type">{{s.name}}</ion-option>
+            </ion-select>
+        </ion-col>
+
+        <ion-col col-3 >
+          <ion-input style="border: 1px solid lightgrey;" type="number" (keyup)="onKeyUp($event)" [(ngModel)]="stoneData[i]['rate']" placeholder="Rate" (ngModelChange)="ctypecheck2(i,'rate')"></ion-input>
+      </ion-col>
+
+          <ion-col col-3 >
+              <ion-input style="border: 1px solid lightgrey;" type="number" (keyup)="onKeyUp($event)" [(ngModel)]="stoneData[i]['stone_price']" placeholder="Amount" (ngModelChange)="ctypecheck2(i,'amt')"></ion-input>
+          </ion-col>
+
+          <ion-col col-2 style="margin:auto">
+            <ion-icon style="float: right;" (click)="remove(i)" name="remove"></ion-icon>
+
+            <ion-icon style="float: right;" (click)="add()" name="add"></ion-icon>
+          </ion-col>
+
+
+         </ion-row>
+         </ion-card>
+         </div>
+
+</ion-content>
+<ion-footer>
+  <ion-card>
+    <ion-row style="text-align: center !important;">
+      <ion-col col-4 style="font-weight: bold;font-size: 15px !important;">
+        Tot.Stn.Amt : ₹ {{totalvalue}}
+      </ion-col>
+      <ion-col col-4 style="font-weight: bold;font-size: 15px !important;">
+        C.Stn.Wgt : {{totalgram}} Gm
+      </ion-col>
+      <ion-col col-4 style="font-weight: bold;font-size: 15px !important;">
+        Dia.Wgt : {{totalct}} Ct
+      </ion-col>
+    </ion-row>
+  </ion-card>
+    <ion-row *ngIf="action == 'add'">
+      <ion-col col-6>
+        <button ion-button icon-start full color="danger" (click)="dismiss()">Close</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button icon-start full color="primary" (click)="addStone('S')">Save</button>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-row *ngIf="action == 'edit'">
+      <ion-col col-12>
+        <button ion-button icon-start full color="primary" (click)="updateItem('S')">Update</button>
+      </ion-col>
+    </ion-row> -->
+</ion-footer>

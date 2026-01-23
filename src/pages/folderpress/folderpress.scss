@@ -1,0 +1,63 @@
+// page-folderpress {
+    
+//     [col-3]{
+//         text-align: center;
+//     }
+//     .toolbar-md {
+//       min-height: 38px !important;
+//   }
+//   .toolbar-background-md {
+//     background: #eaeaea !important;
+//   }
+//   .toolbar-title-md{
+
+//     color: black !important;
+//   }
+//   .scroll-content{
+//     background: url("../assets/icon/Background.jpg") no-repeat center/cover fixed !important;
+// }
+//   }
+  ion-modal.folderpress {
+     
+    [col-3]{
+        text-align: center;
+    }
+  
+      @media (min-width: 300px) and (min-height: 500px) {
+          ion-backdrop {
+            visibility: visible;
+          }
+        }
+        .row{
+            border-bottom: 1px solid black;
+            padding: 5px !important;
+        }
+        ion-icon{
+            color: rgba(0,0,0,.54) !important;
+        }
+      
+        .modal-wrapper {
+          position: absolute;
+          overflow: hidden;
+          max-width: 300px;
+          border-radius: 10px;
+          width: 250px;
+          height: 250px;    
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: auto;
+          border: 0;
+          box-shadow: 0 16px 20px rgba(0,0,0,.4);
+          background-color: #222324;
+          overflow-y: scroll;
+        }
+        .scroll-content{
+          // background: url("../assets/icon/Background.jpg") no-repeat center/cover fixed !important;
+      }
+        
+    }
+        
+         
+  

@@ -1,0 +1,68 @@
+<!--
+  Generated template for the AutoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header style="background:#efefef;min-height:56px;">
+
+   <ion-row style="margin-top:2px">
+
+    <ion-col >
+
+      <ion-searchbar placeholder="Search Product" no-padding [(ngModel)]="input" (keyup)="texto($event)"
+      ></ion-searchbar>    </ion-col>
+    <ion-col col-3 >
+
+        <ion-icon (click)="goback()" style="font-size: 1.8em;
+        color: black;margin-top:8px;float:right" name="close"></ion-icon>
+
+<ion-icon style="font-size: 1.8em;
+color: black;margin-top:8px;float:right" (click)="search()" name="search"></ion-icon>
+    </ion-col>
+    </ion-row>
+
+
+</ion-header>
+
+
+<ion-content padding>
+    <ion-content padding>
+      <ion-list>
+        <ion-item *ngFor="let data of temp" >
+        <ion-row>
+          <ion-col (click)="onItemSelect(data)" col-3>
+            <div [ngStyle]="{'width.px': 30,'height.px': 30,'color':data.colorcode,'position':'absolute','left.px':-10,'top':0,'z-index':1}">
+              <ion-icon *ngIf="data.colorcode != '' " style="font-size:2em !important;" name="bookmark"></ion-icon>
+              </div>
+            <img  style="height: 100px;width: auto;margin: 0 auto;object-fit: cover !important;" *ngIf='data.TagImage != null' src='{{data.TagImage}}' onerror="this.src='assets/no-img.png'" imageCache/>
+            <img  style="height: 100px;margin: 0 auto;object-fit: cover !important;" *ngIf='data.TagImage == null' src='assets/no-img.png' imageCache/>
+          </ion-col>
+          <ion-col col-9 style="margin: auto;">
+              <div (click)="onItemSelect(data)">
+                {{data['ProductName']}}&nbsp;<span *ngIf="data.hasOwnProperty('TagNo')">({{data['TagNo']}})</span>
+              </div>
+              <div style="font-weight: bold;
+              padding: 5px;">
+              <div  style="margin-bottom: 5px;" (click)="onItemSelect(data)">
+                {{fixprice(data['GrossWt'])}} g
+              </div>
+
+              <span style="font-size: 15px;"  (click)="onItemSelect(data)">
+                ₹ {{price(data['Rate'])}}
+              </span>
+                 <ion-icon style="
+                color: black;
+                border-radius: 5px;float: right;" (click)="addWishlist(data)" name="heart-outline"></ion-icon>
+              </div>
+          </ion-col>
+          </ion-row>
+        </ion-item>
+
+      </ion-list>
+      <div style="font-weight:bold;margin-left:20px;" *ngIf="temp.length == 0 && status == true">
+          No Result Found
+        </div>
+    </ion-content>
+
+</ion-content>

@@ -1,0 +1,95 @@
+<!-- 1. Customer Search Block -->
+<!-- <ion-row>
+	<ion-col>
+		<ion-item no-padding>
+			<ion-label color="label-color" stacked>Customer <span class="required"> *</span></ion-label>
+			<ion-input type="text" [(ngModel)]="cusData['label']" (tap)="openCusModal()" readonly></ion-input>
+			<button ion-button outline small color="dark" type="button" item-right (click)="getItemslist(1,'')"> Get {{page}} </button> 
+		</ion-item>
+	</ion-col>
+</ion-row> -->
+
+
+<!-- 2. No Data Block -->
+<div class="no-data-blk" text-center *ngIf="is_empty == 1" >
+	<p class="no-data-txt">{{page}} Is Empty</p>
+</div>
+	
+
+ <!-- 3. List Block -->  
+<ion-list *ngIf="itemsList?.length > 0" class="list-blk">
+	<ion-card *ngFor=" let item of itemsList; let i=index " nowrap> 
+		<ion-row style="background: #cccccc2e;">
+			<ion-col col-8>
+				<ion-checkbox [(ngModel)]="item.selected" (ngModelChange)="itemSelected($event,item,i)"></ion-checkbox>
+			</ion-col>
+			<ion-col col-2>
+				<!-- <button ion-button clear small float-right no-margin color="primary" (click)="editItem(item,i)" [disabled]="item.selected"><ion-icon name="create"></ion-icon></button> -->
+			</ion-col>
+			<ion-col col-2>
+				<button ion-button clear small float-right no-margin color="danger" (click)="deleteItem(item.id_wishlist,item.weight,i)" [disabled]="item.selected"><ion-icon name="trash"></ion-icon></button>
+			</ion-col>
+		</ion-row>
+		<ion-row no-padding>
+			<ion-col (press)="holdCount(item,i)"  no-padding>
+				<ion-item-sliding (click)="openModel(item,i)">
+				<ion-item no-padding>
+					<!-- <ion-thumbnail *ngIf="!item.hasOwnProperty('sample_images.length == 0')" item-start><img style="object-fit: cover;" src="{{item.image}}" imageViewer="{{item.image}}" onerror="this.onerror=null;this.src='assets/no-img.png';"/></ion-thumbnail> 
+					<ion-thumbnail *ngIf="item.hasOwnProperty('sample_images.length != 0')" item-start><img style="object-fit: cover;" src="{{BaseURL}}/assets/img/orders/{{item['sample_images'][0]}}" imageViewer="{{BaseURL}}/assets/img/orders/{{item['sample_images'][0]}}" onerror="this.onerror=null;this.src='assets/no-img.png';"/></ion-thumbnail>  -->
+				<ion-thumbnail *ngIf="!item.sample_images || item.sample_images.length === 0" item-start>
+				<img
+					style="object-fit: cover;"
+					[src]="item.image"	
+					[imageViewer]="item.image"
+					onerror="this.onerror=null;this.src='assets/no-img.png';" />
+				</ion-thumbnail>
+
+				<ion-thumbnail *ngIf="item.sample_images && item.sample_images.length > 0" item-start>
+				<img
+					style="object-fit: cover;"
+					[src]="item.sample_images[0]"
+					[imageViewer]="item.sample_images[0]"
+					onerror="this.onerror=null;this.src='assets/no-img.png';" />
+				</ion-thumbnail>
+
+					<p style="font-weight: bold;"> {{item.sub_design_name}}</p>
+					<p no-margin class="text-xsmall">{{item.design_name}}</p>
+					<p no-margin class="text-xsmall">{{item.ProductName}}</p>
+					<p no-margin class="text-small" float-left>{{item.weight}} g</p>
+					<!-- <p no-margin class="text-small" float-right><span [innerHTML]="currAndSett.settings.curr_symb_html"></span> {{item.rate}}</p> -->
+				</ion-item>
+				<ion-item-options side="right">
+					<button ion-button color="danger" (click)="deleteItem(item.id_wishlist,item.weight,i)"><ion-icon name="trash"></ion-icon></button>
+				</ion-item-options>
+			</ion-item-sliding>
+			</ion-col>
+		</ion-row>
+	</ion-card>
+	<p style="text-align: right;margin-right: 10px;" class="theme-color-secondary">Total Weight : {{total_weight | number : '1.0-3'}} g </p>
+
+	<!-- <ion-item-sliding *ngFor=" let item of itemsList; let i=index ">
+		<ion-item-options side="left">
+			<button ion-button color="danger" (click)="deleteItem()"><ion-icon name="trash"></ion-icon></button>
+		</ion-item-options>
+		<ion-item no-lines no-padding nowrap>
+			<ion-thumbnail item-start><img src="{{item.image}}"></ion-thumbnail>
+			<span>
+				<p>{{item.design_name}}</p>
+				<p class="text-xsmall">{{item.product_name}}</p>
+				<p class="text-small" float-left>{{item.weight}} g</p>
+				<p class="text-small" float-right><span [innerHTML]="currAndSett.settings.curr_symb_html"></span> {{item.rate}}</p>
+			</span>  
+		</ion-item> 
+		<ion-item-options side="right">
+			<button ion-button color="primary" (click)="viewItem(item,i)"><ion-icon name="eye"></ion-icon></button>
+			<button ion-button color="danger" (click)="deleteItem(item,i)"><ion-icon name="trash"></ion-icon></button>
+		</ion-item-options>
+	</ion-item-sliding> -->
+</ion-list>
+<!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+	<ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+</ion-infinite-scroll> -->
+<div *ngIf="no_more_data" align="center">
+	<ion-note floar-center>No more Items</ion-note>
+</div>
+

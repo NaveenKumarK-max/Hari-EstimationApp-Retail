@@ -1,0 +1,63 @@
+page-avrsearch {
+
+    // .item-md{
+
+    //     border-radius: 10px !important;
+    //     padding-left: 5px !important;
+    // }
+    // .label-md{
+
+    //     font-weight: bold !important;
+    // }
+
+
+        background:white;
+        ion-col{
+            border-right: 1px solid #eee;
+        }
+        ion-item,.scroll-content{
+            padding:0px !important ;
+            font-size:12px !important;
+        }
+        ion-label{
+            margin:2px !important ;
+        }
+        ion-checkbox{
+          margin:2px !important ;
+        }
+        .one{
+            background: lightgrey !important;
+        }
+        .two{
+            background: none !important;
+        }
+        .label-md {
+            font-weight: bold !important;
+        }
+        [has-header] .scroll-content {
+            top: 0px !important;
+        }
+        .range-md .range-bar-active{
+            background: maroon !important;
+        }
+        .range-md .range-slider {
+            margin-left: 8px !important;
+            margin-right: 8px !important;
+        }
+        .range-md{
+            padding-top: 0px !important;
+        }
+        .searchbar-md .searchbar-input{
+            // background: white !important;
+        }
+        .dis{
+    
+            display: none !important;
+        }
+        .nodis{
+    
+            display: flex !important;
+        }
+    
+    
+}

@@ -1,0 +1,923 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Add Item
+    </ion-title>
+    <ion-buttons end >
+        <button  ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+        <button *ngIf="item_type != 'tag' && item_type != 'non_tag' " end ion-button icon-only (click)="clear()"><ion-icon name="trash"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card class="errorMsg" padding *ngIf="errorMsg">
+    {{errorMsg}}
+  </ion-card>
+  <ion-card class="msg" padding *ngIf="msg">
+    {{msg}}
+  </ion-card>
+  <!-- <div style="text-align: end;">
+    <button style="    height: 32px;
+    border-radius: 6px;
+    width: 77px;" ion-button color="danger" (click)="clear()"><ion-icon name="trash"></ion-icon>Clear</button>
+
+  </div> -->
+
+   <div *ngIf="item_type == 'tag'">
+     <!-- <ion-row *ngIf="tagData.image != ''">
+      <ion-col offset-4 col-4 align="center">
+        <img src="{{tagData.image}}" imageViewer="{{tagData.image}}" onerror="this.onerror=null;this.src='assets/no-img.png';">
+      </ion-col>
+     </ion-row> -->
+     <ion-row>
+      <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">    -->
+         <!-- <ion-item no-padding>  -->
+            <!-- <ion-label color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+            <ion-input type="text" [(ngModel)]="tagData['tag_code']"></ion-input>
+            <button item-right ion-button margin-top color="light" (click)="getTagData(tagData['tag_code'])"><ion-icon name="ios-search"></ion-icon></button> -->
+            <!-- <ion-label style="margin-bottom: 5px;" color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+            <div class="row">
+              <div class="col" col-3 style="margin: auto;" >
+                <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" id="one1" type="text"   [(ngModel)]="tagData['tag_code1']" onKeyPress="if(this.value.length==7) return false;" (ngModelChange)="append()" >
+
+                </div>
+                <div class="col" col-1 style="margin: auto;font-weight: bold;">
+                  <hr>
+                  </div>
+
+                <div class="col" col-6 style="margin: auto;" >
+                  <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" id="two1" type="number"    [(ngModel)]="tagData['tag_code2']" onKeyPress="if(this.value.length==5) return false;" (ngModelChange)="append()" >
+
+                </div>
+                <div class="col" style="margin: auto;" col-2>
+                  <button style="" item-right ion-button  color="light" (click)="getTagData(tagData['tag_code'])"><ion-icon name="ios-search"></ion-icon></button>
+
+                </div>
+            </div> -->
+            <!-- </ion-item> -->
+      <!-- </ion-col> -->
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col" *ngIf="ret_settings.collections_required == 1">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Collection</ion-label>
+          <ion-input type="text" [(ngModel)]="tagData['collection_name']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Product</ion-label>
+           <ion-input type="text" [(ngModel)]="tagData['product_name']" readonly></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Order No</ion-label>
+           <ion-input type="text" [(ngModel)]="tagData['order_no']" readonly></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Purity</ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['purname']" readonly></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Size</ion-label>
+           <ion-input type="text" [(ngModel)]="tagData['size']" readonly></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Pieces</ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['piece']" [readonly]="!tagData['is_partial'] || tagData['is_partial'] == 0"></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item  no-lines>
+           <ion-label color="label-color" stacked>Partly Sale <span class="required">*</span></ion-label>
+           <ion-checkbox [ngModel]="tagData.is_partial == 1" (ionChange)="partlySale()"></ion-checkbox>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Gross Wgt(g) <span class="required">*</span></ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['gross_wt']" (ionChange)="calcSaleValue()" [readonly]="!tagData['is_partial'] || tagData['is_partial'] == 0"></ion-input>
+         </ion-item>
+         <p align="right" *ngIf="tagData['is_partial']" class="input-err">{{tagData['actual_gross_wt']}}</p>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+          <ion-label color="label-color" stacked>Less Wgt(g)</ion-label>
+          <ion-input type="number"   [(ngModel)]="tagData['less_wt']" (ngModelChange)="checkingtagless_wt()" readonly></ion-input>
+         </ion-item>
+         <p align="right" *ngIf="tagData['is_partial']" class="input-err">{{tagData['actual_less_wt']}}</p>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Net Wgt(g) <span class="required">*</span></ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['net_wt']" readonly></ion-input>
+         </ion-item>
+         <p align="right" *ngIf="tagData['is_partial']" class="input-err">{{tagData['actual_net_wt']}}</p>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Wast %</ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['retail_max_wastage_percent']" (ngModelChange)="checkingtagretail_max_wastage_percent()"></ion-input>
+         </ion-item>
+         <p align="right"  class="input-err">Min :{{tagData['checkwas']}}%</p>
+
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Wast Wgt(g)</ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['wast_wgt']" readonly></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-item *ngIf="empData['emp_setting']['allow_manual_rate'] == '1' ">
+        <ion-label style="" color="label-color" stacked>Manual Rate</ion-label>
+        <ion-toggle [(ngModel)]="mr" ></ion-toggle>
+      </ion-item>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Rate(₹)</ion-label>
+          <ion-input type="number"   [readonly]="!mr" [(ngModel)]="tagData['rate_per']" (ngModelChange)="calculatecus()"></ion-input>
+        </ion-item>
+     </ion-col>
+     <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+      <ion-item no-padding>
+        <ion-label color="label-color" stacked>MC Type</ion-label>
+        <ion-select interface="popover" [(ngModel)]="tagData['mc_type']" placeholder="MC Type" (ionChange)="calcSaleValue()">
+          <ion-option [value]="1">Piece</ion-option>
+          <ion-option [value]="2">Gram</ion-option>
+        </ion-select>
+      </ion-item>
+     </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>MC Value(₹)</ion-label>
+           <ion-input type="number" [(ngModel)]="tagData['mc_value']" 
+             
+              (ionChange)="forceMinValue()"
+           ></ion-input>
+         </ion-item>
+         <p align="right"  class="input-err">Min :{{tagData['mc_min']}}</p>
+
+      </ion-col>
+      <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Charges Amount(₹)</ion-label>
+          <ion-input type="number"   [(ngModel)]="tagData['charge_value']" readonly></ion-input>
+        </ion-item>
+     </ion-col> -->
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Taxable Amount(₹)</ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['taxable']" readonly></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>GST(₹)</ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['tax_price']" readonly></ion-input>
+         </ion-item>
+      </ion-col>
+      <ion-col col-12 col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Amount(₹)</ion-label>
+           <ion-input type="number"   [(ngModel)]="tagData['sales_value']" readonly></ion-input>
+         </ion-item>
+       </ion-col>
+     </ion-row>
+   </div>
+   <div *ngIf="item_type == 'non_tag'">
+     <ion-row *ngIf="nonback == false">
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+        <ion-item no-padding>
+        <ion-label color="label-color" stacked>Section<span class="required"> *</span></ion-label>
+        <!-- <ion-select [(ngModel)]="ntData['id_section']" placeholder="Section" (ngModelChange)="openMasSearch_nonTag('Section')">
+        <ion-option *ngFor="let c of nontag_sections" [value]="c.id_section">{{c.section_name}}</ion-option>
+        </ion-select> -->
+          <ion-input  type="text" [(ngModel)]="ntData['section_name']" [readonly] (click)="openMasSearch_nonTag('Section')"></ion-input>
+            <button item-right ion-button clear color="dark" class="no-padding no-margin" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+
+        </ion-item>
+        </ion-col>
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col" *ngIf="ret_settings.collections_required == 1">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Collection <span class="required"> *</span></ion-label>
+            <ion-select [(ngModel)]="ntData['collection']" placeholder="Collection" (ionChange)="collectionSelected(ntData['collection'])">
+              <ion-option *ngFor="let c of nonTagStock.collections" [value]="c.id_collection">{{c.collection_name}}</ion-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Product <span class="required"> *</span></ion-label>
+            <!-- <ion-select *ngIf="ret_settings.subproduct_required == 0" [(ngModel)]="ntData['pro_id']" placeholder="Product" (ngModelChange)="openMasSearch_nonTag('Product')">
+              <ion-option *ngFor="let p of products" [value]="p.pro_id">{{p.product_name}}</ion-option>
+            </ion-select> -->
+          <ion-input *ngIf="ret_settings.subproduct_required == 0" type="text" [(ngModel)]="ntData['product_name']" [readonly] (click)="openMasSearch_nonTag('Product')"></ion-input>
+
+
+            <ion-input *ngIf="ret_settings.subproduct_required == 1" type="text" [(ngModel)]="ntData['product_name']" readonly (click)="openMasSearch('Product')"></ion-input>
+            <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Product')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <!-- {{designs | json}} -->
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Design <span class="required"> *</span></ion-label>
+         
+           <!-- <ion-select [(ngModel)]="ntData['design']" placeholder="Design" (ngModelChange)="openMasSearch_nonTag('Design')">
+             <ion-option *ngFor="let d of designs" [value]="d">{{d.design_name}}</ion-option>
+           </ion-select> -->
+
+          <ion-input  type="text" [(ngModel)]="ntData['design_name']"  [readonly] (click)="openMasSearch_nonTag('Design')"></ion-input>
+            <button item-right ion-button clear color="dark" class="no-padding no-margin" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+
+
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>            
+            <ion-label color="label-color" stacked>Sub Design <span class="required"> *</span></ion-label>
+
+          <ion-input  type="text" [(ngModel)]="ntData['sub_design_name']" [readonly] (click)="openMasSearch_nonTag('subDesign')"></ion-input>
+            <button item-right ion-button clear color="dark" class="no-padding no-margin" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+
+
+            <!-- <ion-select [(ngModel)]="ntData['sub_design']" placeholder="Sub Design" (ngModelChange)="openMasSearch_nonTag('subDesign')">
+              <ion-option *ngFor="let d of sub_designs" [value]="d">{{d.sub_design_name}}</ion-option>
+            </ion-select> -->
+            <!-- <ion-input  type="text" [(ngModel)]="ntData['sub_design_name']" [readonly] (click)="ntsubdesign()"></ion-input>
+            <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="ntsubdesign()" ><ion-icon name="arrow-dropdown"></ion-icon></button> -->
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Purity</ion-label>
+            <ion-input  type="text" [(ngModel)]="ntData['purname']" [readonly] (click)="opennon()"></ion-input>
+            <button item-right ion-button clear color="dark" class="no-padding no-margin" (click)="opennon()" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+          </ion-item>
+        </ion-col>
+         <!-- <ion-item no-padding>
+           <ion-label color="label-color" stacked>Purity</ion-label>
+           <ion-select [(ngModel)]="ntData['purity']" placeholder="Purity">
+             <ion-option *ngFor="let purity of purities" [value]="purity">{{purity}}</ion-option>
+           </ion-select>
+         </ion-item> -->
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+          <ion-label color="label-color" stacked> <span class="required">Available Gross Wgt(g)</span></ion-label>
+          <ion-input type="number"   [(ngModel)]="selectedNTStock['AVgross_wt']" disabled></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Gross Wgt(g) <span class="required">*</span></ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['gross_wt']" (ionChange)="non_gross()"></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Less Wgt(g)</ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['less_wt']" (ionChange)="checkingnonless_wt()"></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Net Wgt(g) <span class="required">*</span></ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['net_wt']" readonly></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Wast %</ion-label>
+            <ion-input type="number"   [(ngModel)]="ntData['retail_max_wastage_percent']" (ionChange)="checkingnonretail_max_wastage_percent()"></ion-input>
+          </ion-item>
+            <p align="right"  class="input-err">Min :{{ntData['checkwas']}}%</p>
+
+         </ion-col>
+         <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Wast Wgt(g)</ion-label>
+            <ion-input type="number"   [(ngModel)]="ntData['wast_wgt']" (ionChange)="checkingnonwast_wgt('wastage_wt')"></ion-input>
+          </ion-item>
+         </ion-col>
+    
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col" style="text-align: end;">
+          <button [disabled]="ntData['net_wt'] == '' || ntData?.design?.design_no == '' ||  ntData['gross_wt'] == '' ||  ntData?.design?.design_no == undefined ||  ntData['net_wt'] == undefined ||  ntData['gross_wt'] == undefined" *ngIf="nonback == false" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="nnext(true)" >Next<ion-icon name="arrow-forward"></ion-icon></button>
+      </ion-col>
+        </ion-row>
+        <ion-row *ngIf="nonback == true">
+          <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Size</ion-label>
+            <ion-input type="number" (keyup)="onKeyUp($event)"   [(ngModel)]="ntData['size']"></ion-input>
+          </ion-item>
+         </ion-col>
+         <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+           <ion-label color="label-color" stacked> <span class="required">Available Pieces</span></ion-label>
+           <ion-input type="number"   [(ngModel)]="selectedNTStock['AVpieces']" disabled></ion-input>
+          </ion-item>
+         </ion-col>
+         <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Pieces</ion-label>
+            <ion-input type="number" (ionChange)="non_pcs()"  [(ngModel)]="ntData['piece']" [value]=1></ion-input>
+          </ion-item>
+         </ion-col>
+         <ion-item *ngIf="empData['emp_setting']['allow_manual_rate'] == '1' ">
+          <ion-label style="" color="label-color" stacked>Manual Rate</ion-label>
+          <ion-toggle   [(ngModel)]="mr" ></ion-toggle>
+        </ion-item>
+         <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Rate(₹)</ion-label>
+            <ion-input [readonly]="!mr" type="number"   [(ngModel)]="ntData['rate_per']" (ngModelChange)="calculatecus()"></ion-input>
+          </ion-item>
+       </ion-col>
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>MC Type</ion-label>
+           <ion-select interface="popover" [(ngModel)]="ntData['mc_type']" placeholder="MC Type" (ionChange)="calcSaleValue()">
+             <ion-option [value]="1">Piece</ion-option>
+             <ion-option [value]="2"  [selected]="true">Gram</ion-option>
+           </ion-select>
+         </ion-item>
+        </ion-col>
+        <ng-template [ngIf] ="show_mc">
+          <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked><span class="required">Minimum MC Value</span></ion-label>
+              <ion-input type="number"   [(ngModel)]="ntData['mc_min']" disabled></ion-input>
+            </ion-item>
+           </ion-col>
+        </ng-template>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>MC Value</ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['mc_value']" (ionChange)="calcSaleValue()"></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Total MC(₹)</ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['making_charge']" readonly></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Taxable Amount(₹)</ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['taxable']" [readonly]="ntData['calculation_based_on'] != 3" (ngModelChange)="calcSaleValue()"></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>GST(₹)</ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['tax_price']" readonly></ion-input>
+         </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+         <ion-item no-padding>
+           <ion-label color="label-color" stacked>Amount(₹)</ion-label>
+           <ion-input type="number"   [(ngModel)]="ntData['sales_value']" readonly></ion-input>
+         </ion-item>
+        </ion-col>
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <button *ngIf="nonback == true" item-left ion-button clear color="dark" class="no-padding no-margin" (click)="nback(false)" ><ion-icon name="arrow-back"></ion-icon>Back</button>
+      </ion-col>
+     </ion-row>
+   </div>
+   <!-- ./ Non Tag -->
+
+   <!-- Home Bill -->
+   <div *ngIf="item_type == 'home_bill'">
+    <ion-row *ngIf="homeback == false">
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-lines>
+            <ion-label color="label-color" stacked>Is Partly Sold</ion-label>
+            <ion-checkbox [(ngModel)]="hbData['is_partly_sold']" (ionChange)="hbIsPartlySold(hbData['is_partly_sold'])"></ion-checkbox>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col"  *ngIf="hbData['is_partly_sold'] == 1">
+
+<!-- <ion-row>
+  <ion-col col-8>
+    <ion-label *ngIf=" checkold != true" style="" color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+    <ion-label *ngIf="checkold == true" style="" color="label-color" stacked>Old Tag Code <span class="required">*</span></ion-label>
+  </ion-col>
+
+  <ion-col col-4>
+    <ion-toggle [(ngModel)]="checkold"></ion-toggle>
+  </ion-col>
+</ion-row>
+ -->
+
+<ion-row >
+  <ion-col col-8  class="custom-2col" style="padding-top: 0px !important;">
+    <ion-item>
+      <ion-label *ngIf=" checkold != true" style="" color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+      <ion-label *ngIf="checkold == true" style="" color="label-color" stacked>Old Tag Code <span class="required">*</span></ion-label>
+      <ion-toggle [(ngModel)]="checkold"></ion-toggle>
+    </ion-item>
+    </ion-col>
+</ion-row>
+
+        <!-- <ion-label color="label-color" stacked>Tag Code <span class="required">*</span></ion-label> -->
+
+        <div class="row">
+          <div class="col" col-3 style="margin: auto;" >
+            <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" id="one2" type="text"  [(ngModel)]="hbData['tag_code1']"  (ngModelChange)="append()" >
+
+            </div>
+            <div class="col" col-1 style="margin: auto;font-weight: bold;">
+              <hr>
+            </div>
+
+            <div class="col" col-6 style="margin: auto;" >
+              <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" id="two2" type="text"  [(ngModel)]="hbData['tag_code2']"  (ngModelChange)="append()" >
+
+            </div>
+            <div class="col" style="margin: auto;" col-2>
+              <button style="" item-right ion-button  color="light" (tap)="getHomeStockByTag(hbData['tag_code'])"><ion-icon name="ios-search"></ion-icon></button>
+
+            </div>
+        </div>
+          <!-- </ion-item> -->
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col" *ngIf="ret_settings.collections_required == 1">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Collection <span class="required"> *</span></ion-label>
+          <ion-select [(ngModel)]="hbData['collection']" placeholder="Collection" *ngIf="hbData['is_partly_sold'] == 0">
+            <ion-option *ngFor="let c of collections" [value]="c.id_collection">{{c.collection_name}}</ion-option>
+          </ion-select>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 1" type="text" [(ngModel)]="hbData['collection']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+
+<!-- krishna -->
+
+<!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+  <ion-item no-padding>
+  <ion-label color="label-color" stacked>Section</ion-label>
+  <ion-select [(ngModel)]="hbData['section']" placeholder="Section" (ionChange)="HbSelected(hbData['section'])">
+  <ion-option *ngFor="let c of homebill_sections" [value]="c">{{c.section_name}}</ion-option>
+  </ion-select>
+  </ion-item>
+  </ion-col> -->
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Product</ion-label>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 1" type="text" [(ngModel)]="hbData['product_name']" readonly></ion-input>
+          <ion-input *ngIf="hbData['is_partly_sold'] ==0" type="text" [(ngModel)]="hbData['product_name']" [readonly] (click)="openMasSearch('Product')"></ion-input>
+          <button *ngIf="hbData['is_partly_sold'] == 0" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Product')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Design</ion-label>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 1" type="text" [(ngModel)]="hbData['design_name']" readonly></ion-input>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 0" type="text" [(ngModel)]="hbData['design_name']" [readonly] (click)="openMasSearch('Design')"></ion-input>
+          <button *ngIf="hbData['is_partly_sold'] == 0" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Design')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Sub Design</ion-label>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 1" type="text" [(ngModel)]="hbData['sub_design_name']" readonly></ion-input>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 0" type="text" [(ngModel)]="hbData['sub_design_name']" [readonly] (click)="openMasSearch('subDesign')"></ion-input>
+          <button *ngIf="hbData['is_partly_sold'] == 0" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('subDesign')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+      </ion-col>
+
+           <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Purity <span class="required">*</span></ion-label>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 1" type="text" [(ngModel)]="hbData['purname']" readonly></ion-input>
+          <ion-input *ngIf="hbData['is_partly_sold'] == 0" type="text" [(ngModel)]="hbData['purname']" [readonly] (click)="openMasSearch('Purity')"></ion-input>
+          <button *ngIf="hbData['is_partly_sold'] == 0" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Purity')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Gross Wgt(g) <span class="required">*</span></ion-label>
+          <ion-input type="number" [readonly]="hbData['calculation_based_on'] == 3"  [(ngModel)]="hbData['gross_wt']"  (ionChange)="hbgross()"></ion-input>
+          <p class="input-err">Stock :{{hbData.stock_gross_wt}}</p>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Less Wgt(g)</ion-label>
+          <ion-input type="number"[readonly]="hbData['calculation_based_on'] == 3"   [(ngModel)]="hbData['less_wt']" (ionChange)="calcSaleValue()" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Net Wgt(g) <span class="required">*</span></ion-label>
+          <ion-input type="number" [readonly]="hbData['calculation_based_on'] == 3"  [(ngModel)]="hbData['net_wt']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+
+ 
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Size</ion-label>
+          <ion-input type="number" (keyup)="onKeyUp($event)" [(ngModel)]="hbData['size']" [readonly]="hbData['is_partly_sold'] == 1"></ion-input>
+        </ion-item>
+      </ion-col>
+
+
+      <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Other Charges</ion-label>
+          <ion-select  [(ngModel)]="hbData['id_charge']" (ngModelChange)="checkcode()"  placeholder="Charges" >
+              <ion-option *ngFor="let b of hbData['allcharges']" [value]="b['id_charge']">{{b['code_charge']}}</ion-option>
+          </ion-select>
+      </ion-item>
+      </ion-col> -->
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col" style="text-align: end;">
+          <button [disabled]="!isFormInvalid"  *ngIf="homeback == false" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="next(true)" >Next<ion-icon name="arrow-forward"></ion-icon></button>
+      </ion-col>
+      <!-- [disabled]="isFormInvalid"  -->
+     </ion-row>
+
+      <ion-row *ngIf="homeback == true">
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Pieces</ion-label>
+            <ion-input type="number" (keyup)="onKeyUp($event)"   [(ngModel)]="hbData['piece']" [value]=1 [readonly]="hbData['is_partly_sold'] == 1"></ion-input>
+          </ion-item>
+        </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Wast %</ion-label>
+          <ion-input type="number" [readonly]="hbData['calculation_based_on'] == 3"   [(ngModel)]="hbData['retail_max_wastage_percent']"  (ngModelChange)="calcSaleValue('wast')" [readonly]="hbData['is_partly_sold'] == 1"></ion-input>
+        </ion-item>
+            <p align="right"  class="input-err">Min :{{hbData['checkwas']}}%</p>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Wast Wgt(g)</ion-label>
+          <ion-input type="number" [readonly]="hbData['calculation_based_on'] == 3"   [(ngModel)]="hbData['wast_wgt']" (ngModelChange)="calcSaleValue('wastage_wt')"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-item *ngIf="empData['emp_setting']['allow_manual_rate'] == '1' ">
+        <ion-label style="" color="label-color" stacked>Manual Rate</ion-label>
+        <ion-toggle  [(ngModel)]="mr" ></ion-toggle>
+      </ion-item>
+      <ion-item no-padding>
+        <ion-label color="label-color" stacked>Rate(₹)</ion-label>
+        <ion-input [readonly]="!mr || hbData['calculation_based_on'] == 3" type="number"   [(ngModel)]="hbData['rate_per']"  (ngModelChange)="calculatecus()"></ion-input>
+      </ion-item>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>MC Type</ion-label>
+          <ion-select interface="popover" [(ngModel)]="hbData['mc_type']" placeholder="MC Type" (ionChange)="calcSaleValue()" >
+            <ion-option [value]=1>Piece</ion-option>
+            <ion-option [value]=2>Gram</ion-option>
+            <ion-option [value]=3>Percentage</ion-option>
+
+          </ion-select>
+          <!-- <ion-input *ngIf="hbData['is_partly_sold']" type="text" [(ngModel)]="hbData['mc_type']" readonly></ion-input> -->
+        </ion-item>
+      </ion-col>
+      <ng-template [ngIf] ="show_home">
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked><span class="required">Minimum MC Value</span></ion-label>
+            <ion-input type="number"   [(ngModel)]="hbData['mc_min']" disabled></ion-input>
+          </ion-item>
+         </ion-col>
+      </ng-template>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>MC Value</ion-label>
+          <ion-input type="number"   [(ngModel)]="hbData['mc_value']" (ionChange)="calcSaleValue()" [readonly]="hbData['calculation_based_on'] == 3"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Total MC(₹)</ion-label>
+          <ion-input type="number"   [(ngModel)]="hbData['making_charge']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Taxable Amount(₹)</ion-label>
+          <ion-input type="number"   [(ngModel)]="hbData['taxable']" (ionChange)="calcSaleValue('taxable')"  [readonly]="hbData['calculation_based_on'] != 3"></ion-input>
+        </ion-item>
+
+        
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>GST(₹)</ion-label>
+          <ion-input type="number"   [(ngModel)]="hbData['tax_price']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Amount(₹)</ion-label>
+          <ion-input type="number"   [(ngModel)]="hbData['sales_value']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <button *ngIf="homeback == true" item-left ion-button clear color="dark" class="no-padding no-margin" (click)="back(false)" ><ion-icon name="arrow-back"></ion-icon>Back</button>
+      </ion-col>
+    </ion-row>
+  </div>
+   <!-- Home Bill -->
+   <!-- Old Metal -->
+   <div *ngIf="item_type == 'old_metal'">
+    <ion-row *ngIf="oldback == false">
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Metal<span class="required"> *</span></ion-label>
+          <ion-select interface="popover" [(ngModel)]="omData['id_category']" (ngModelChange)="calcOldmetalValue('id_category')" placeholder="Metal">
+            <ion-option *ngFor="let m of oldMetalCat" [value]="m.id_category">{{m.cat_name}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Metal Type<span class="required"> *</span></ion-label>
+          <ion-select interface="popover" [(ngModel)]="omData['id_old_metal_type']" (ngModelChange)="calcOldmetalValue('id_old_metal_type')" placeholder="Type">
+            <ion-option *ngFor="let c of metalCatTypes" [value]="c.id_metal_type">{{c.metal_type}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Metal Type<span class="required"> *</span></ion-label>
+          <ion-select [(ngModel)]="omData['id_old_metal_type']" (ngModelChange)="calcOldmetalValue('id_old_metal_type')" placeholder="Type">
+            <ion-option *ngFor="let c of oldrates" [value]="c.id_metal">{{c.metal}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col> -->
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Metal Category Type<span class="required"> *</span></ion-label>
+          <ion-select [(ngModel)]="omData['id_old_metal_cat_type']" (ngModelChange)="calcOldmetalValue('id_old_metal_cat_type')" placeholder="Type">
+            <ion-option *ngFor="let c of oldcategory" [value]="c.id_old_metal_cat">{{c.old_metal_cat}}</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Purity <span class="required"> *</span></ion-label>
+          <ion-input type="number"  [readonly]="purity_show"   [(ngModel)]="omData['purity']" (ngModelChange)="purcheck()"  max="10"></ion-input>
+        </ion-item>
+
+        <!-- <ion-item no-padding>
+          <ion-label color="label-color" stacked>Product</ion-label>
+          <ion-input  type="text" [(ngModel)]="omData['old_metal_prod_name']" [readonly] (click)="oldsubdesign()"></ion-input>
+          <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="oldsubdesign()" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item> -->
+
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Pcs</ion-label>
+          <ion-input type="number" (keyup)="onKeyUp($event)"   [(ngModel)]="omData['old_pcs']" ></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Gross Wgt(g) <span class="required">*</span></ion-label>
+          <ion-input type="number"   [(ngModel)]="omData['gross_wt']" (ngModelChange)="calcOldmetalValue('gross_wt')"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Dust Wgt(g)</ion-label>
+          <ion-input type="number"   [(ngModel)]="omData['dust_wt']" (ngModelChange)="checkingdust_wt('dust_wt')"></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Stone Wgt(g)</ion-label>
+          <ion-input type="number"   [(ngModel)]="omData['stone_wt']" (ngModelChange)="checkingstone_wt('stone_wt')" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+
+
+
+
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col" style="text-align: end;">
+        <button [disabled]="omData['id_category'] == '' ||  omData['id_old_metal_type'] == '' ||  omData['id_old_metal_cat_type'] == '' ||  omData['purity'] == '' || omData['purity'] < 10 ||  omData['gross_wt'] == '' || omData['id_category'] == undefined ||  omData['id_old_metal_type'] == undefined ||  omData['id_old_metal_cat_type'] == undefined ||  omData['purity'] == undefined ||  omData['gross_wt'] == undefined" *ngIf="oldback == false" item-right ion-button clear color="dark" class="no-padding no-margin" (click)="oldnext(true)" >Next<ion-icon name="arrow-forward"></ion-icon></button>
+    </ion-col>
+    </ion-row>
+    <ion-row *ngIf="oldback == true">
+
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Wast %</ion-label>
+          <ion-input type="number"   [(ngModel)]="omData['wastage']" (ngModelChange)="checkingwastage('wastage')"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Wast Wgt(g)</ion-label>
+          <ion-input type="number"   [(ngModel)]="omData['wastage_wt']" (ngModelChange)="checkingwastage_wt('wastage_wt')"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Net Wgt(g) <span class="required">*</span></ion-label>
+          <ion-input type="number"   [(ngModel)]="omData['net_wt']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-item >
+        <ion-label style="" color="label-color" stacked>Manual Rate</ion-label>
+        <ion-toggle   [(ngModel)]="mr" ></ion-toggle>
+      </ion-item>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Rate(₹) <span class="required">*</span></ion-label>
+          <ion-input type="number"   [readonly]="!mr" [(ngModel)]="omData['rate']" (ngModelChange)="calcOldmetalValue('rate')"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Exchange Value(%) <span class="required">*</span></ion-label>
+          <ion-input type="number" [(ngModel)]="omData['touch']" (ngModelChange)="calcOldmetalValue('touch')"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Amount(₹)</ion-label>
+          <ion-input type="number"   [(ngModel)]="omData['amount']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Purpose <span class="required"> * </span></ion-label>
+          <ion-select interface="popover" [(ngModel)]="omData['id_purpose']" (ionChange)="calcOldmetalValue('id_purpose')" placeholder="Purpose" >
+            <ion-option [value]="1">Cash</ion-option>
+            <ion-option [value]="2">Exchange</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Remarks </ion-label>
+          <ion-input type="text" [(ngModel)]="omData['remark']"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <button *ngIf="oldback == true" item-left ion-button clear color="dark" class="no-padding no-margin" (click)="oback(false)" ><ion-icon name="arrow-back"></ion-icon>Back</button>
+    </ion-col>
+    </ion-row>
+  </div>
+   <!-- Old Metal -->
+   <div margin-top *ngIf="item_type == 'tag'">
+    <ion-row>
+      <ion-col style="margin: auto" col-8>
+         <h5>Other Metal Detail</h5>
+      </ion-col>
+      <ion-col col-4>
+        <div float-right>
+           <!--  <button *ngIf="other.length == 0" ion-button icon-start outline small color="dark" (click)="addother()">
+              <ion-icon name="ios-add"></ion-icon>
+              Add
+            </button> -->
+            <button *ngIf="other.length != 0" ion-button icon-start outline small color="dark" (click)="addother()">
+              <ion-icon name="edit"></ion-icon>
+              Details
+            </button>
+        </div>
+      </ion-col>
+    </ion-row>
+    </div>
+
+    <div margin-top *ngIf="item_type == 'home_bill' ">
+      <div class="row">
+
+          <div  class="col" style="margin: auto" col-8>
+            <h5>Other Charges</h5>
+          </div>
+          <div class="col" style="margin: auto" col-4>
+            <div float-right>
+              <button *ngIf="charges?.length == 0" ion-button icon-start outline small color="dark" (click)="addcharge()">
+                <ion-icon name="ios-add"></ion-icon>
+                Add
+              </button>
+              <button *ngIf="charges?.length != 0" ion-button icon-start outline small color="dark" (click)="addcharge()">
+                <ion-icon name="edit"></ion-icon>
+                Update
+              </button>
+          </div>
+          </div>
+        </div>
+        </div>
+  <div margin-top *ngIf="item_type == 'non_tag' ||  (item_type == 'home_bill' && hbData['calculation_based_on'] != 3) || item_type == 'old_metal' || (item_type == 'tag' && tagData['calculation_based_on'] != 3)">
+    <ion-row>
+      <ion-col col-8>
+         <h5>Stone Detail</h5>
+      </ion-col>
+      <ion-col col-4>
+        <div float-right>
+            <button *ngIf="stone_details.length == 0" ion-button icon-start outline small color="dark" (click)="addStone()">
+              <ion-icon name="ios-add"></ion-icon>
+              Add
+            </button>
+            <button *ngIf="stone_details.length != 0" ion-button icon-start outline small color="dark" (click)="addStone()">
+              <ion-icon name="edit"></ion-icon>
+              Update
+            </button>
+        </div>
+      </ion-col>
+    </ion-row>
+    <!-- <ion-card class="errorMsg" padding *ngIf="stnErrMsg">
+        {{stnErrMsg}}
+    </ion-card> -->
+    <!-- <ion-list >
+      <div *ngFor="let st of stone_details; let i=index"  style="font-size:smaller">
+        <ion-row>
+          <ion-col col-3>
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Stone <span class="required"> *</span></ion-label>
+              <ion-select [(ngModel)]="st['stone_id']" placeholder="Stone" >
+                <ion-option *ngFor="let s of stones" [value]="s.stone_id">{{s.stone_name}}</ion-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col col-2>
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Pieces</ion-label>
+              <ion-input type="number"   [(ngModel)]="st['stone_pcs']" [value] = "1"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-3>
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Weight(g) <span class="required"> *</span></ion-label>
+              <ion-input type="number"   [(ngModel)]="st['stone_wt']" [value] = "0" (ionChange) = "calcOldmetalValue('stone')"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-3>
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Price(₹) <span class="required"> *</span></ion-label>
+              <ion-input type="number"   [(ngModel)]="st['stone_price']" [value] = "0" (ionChange) = "calcOldmetalValue('stone')"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-1>
+              <button margin-top ion-button small color="danger" outline (click)="deleteStone(i)"><ion-icon name="trash"></ion-icon></button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-list> -->
+  </div>
+
+
+
+
+</ion-content>
+<ion-footer>
+    <ion-row *ngIf="action == 'add'">
+      <ion-col col-6>
+        <button ion-button icon-start full color="primary" [disabled]="metal_error_msg != '' " (click)="addItem('S')">Save</button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button icon-start full color="secondary" [disabled]="metal_error_msg != '' " (click)="addItem('SN')">Save & New</button>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="action == 'edit'">
+      <ion-col col-12>
+        <button ion-button icon-start full color="primary" [disabled]="terrorMsg != '' || metal_error_msg != ''" (click)="updateItem('S')">Update</button>
+      </ion-col>
+    </ion-row>
+</ion-footer>

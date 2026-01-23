@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Choose Stone
+    </ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-searchbar [(ngModel)]="input" placeholder="Search Stone" (ionChange)="search()"></ion-searchbar>
+    <ion-list>
+        <ion-item *ngFor="let data of details" (click)="selected(data)">
+             {{data['stone_name']}} 
+        </ion-item>
+    </ion-list>
+</ion-content>

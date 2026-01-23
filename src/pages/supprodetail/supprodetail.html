@@ -1,0 +1,987 @@
+<!-- <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY">
+</iframe> -->
+<ion-header style="background: #000"> <ion-navbar>
+  <button ion-button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Product Details
+    <!-- <span *ngIf="item.is_stock_avail==1 " class="instock">Instock</span>
+    <span *ngIf="item.is_stock_avail==0 "  class="outofstock">Out of stock</span> -->
+    <ion-icon [ngClass] = "productItems1.length > 0 ? 'co' : 'noco' " style="margin-top:-3px !important;font-size:1.4em !important;float: right;" name="heart-outline" (click)="addWishlistw(productdet)"></ion-icon>
+
+  </ion-title> </ion-navbar>
+  <ion-row>
+
+    <ion-col align="center" style="    background: white !important;">
+      <!-- <div>
+        <span *ngIf="productdet.Status == 'OPEN'"  style="float:right;"><ion-badge color="secondary">Stock Available {{productdet.BranchName}}</ion-badge></span>
+        <span *ngIf="productdet.Status != 'OPEN'"  style="float:right;"><ion-badge color="danger">Out of Stock</ion-badge></span>
+
+      </div> -->
+      <!-- <div style="margin-top: 22px;">
+
+      <img *ngIf="productdet.TagImage != null" class="proimage" [ngStyle]="{height: calc+'px','min-height.px' : 100}" src='{{productdet.TagImage}}'
+    imageViewer='{{productdet.TagImage}}' onerror="this.src='assets/no-img.png'" />
+    <img *ngIf="productdet.TagImage == null" class="proimage" [ngStyle]="{height: calc+'px','min-height.px' : 100}" src='assets/no-img.png'
+    imageViewer='assets/no-img.png' onerror="this.src='assets/no-img.png'" />
+    </div> -->
+    <!-- </iframe> -->
+    <ion-slides style="margin-top: 22px;" (ionSlideWillChange)="slide()"  *ngIf="slidess && slidess.length" #slides [ngClass]="animateClass"   zoom ='true' speed='500' initialSlide='0'>
+      <ion-slide (click)="openurl(slide)" *ngFor="let slide of slidess;let in = index">
+        <img *ngIf="slideimg != null" [src]="slideimg" class="slide-image" imageViewer='{{slideimg}}' [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'"/>
+        <img *ngIf="slideimg == null" src='assets/no-img.png'  class="slide-image" imageViewer='assets/no-img.png' [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'"/>
+      </ion-slide>
+    </ion-slides>
+    </ion-col>
+  </ion-row>
+</ion-header>
+  <ion-content (ionScroll)="scrolling($event)">
+    <div style="margin-bottom: 200px !important;">
+
+    <!-- <div style="margin: 5px;height: 17px">
+      <span  style="float:right;"><ion-badge color="secondary">Stock Available {{productdet.BranchName}}</ion-badge></span>
+      </div>
+
+  <ion-row>
+    <ion-col align="center">
+      <img *ngIf="productdet.TagImage != null" class="proimage" src='{{productdet.TagImage}}'
+    imageViewer='{{productdet.TagImage}}' onerror="this.src='assets/no-img.png'" />
+    <img *ngIf="productdet.TagImage == null" class="proimage" src='assets/no-img.png'
+    imageViewer='assets/no-img.png' onerror="this.src='assets/no-img.png'" />
+    </ion-col>
+  </ion-row> -->
+
+  <hr>
+  <ion-scroll scrollX="true" style="height:70px" > <ion-row nowrap>
+  <ion-col *ngFor="let img of productdet['img_details'];let in = index" col-2 style="padding: 5px;" align="center"
+    >
+     <ion-card (click)="setimg(img['image_name'],in)" style="margin: 0px 0px 0px 0px;box-shadow: none;">
+  <img style="margin: auto;object-fit: cover !important;" src='{{img.image_name}}' onerror="this.src='assets/no-img.png'" width="60px" height="60px" imageCache/>
+
+  </ion-card>
+
+  </ion-col> </ion-row> </ion-scroll>
+  <hr>
+
+    <hr>
+  <div>
+
+    <span>
+      <h5>&nbsp;{{productdet.sub_design_name}}</h5>
+    </span>
+  </div>
+  <!-- <div>
+
+    <span>
+      <h5>&nbsp;₹ {{price(productdet.Rate)}}</h5>
+    </span>
+  </div> -->
+  <hr>
+
+<div [ngClass]="showdiamond.length == 0 && showstone.length == 0  ? 'bot':'' ">
+  <h6 style="text-align: center;
+  margin-bottom: 20px;">Metal Information</h6>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col col-6 no-padding>
+    <button ion-button clear small>Metal </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.MetalName}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col col-6 no-padding>
+    <button ion-button clear small>Product Name </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.ProductName}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col col-6 no-padding>
+    <button ion-button clear small>Sub Product Name </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.sub_design_name}}
+  </ion-col>
+</ion-row>
+
+<ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Tag No </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.TagNo}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Pcs  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.Pieces}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Gross Wt (Gms) </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{fixprice(productdet['GrossWt'])}} g
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Net Wt (Gms)  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{fixprice(productdet['NetWt'])}} g
+
+  </ion-col>
+  </ion-row>
+
+
+<ion-row style="border: 1px solid #f2f1f1" no-padding *ngIf="supplier !=true">
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Metal Rate</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    ₹ {{productdet['rate_per']}}
+  </ion-col>
+  </ion-row>
+
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Purity </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+       {{productdet['Purity']}}
+    </ion-col>
+    </ion-row>
+
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Wastage %</button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{productdet['retail_max_wastage_percent']}} %
+    </ion-col>
+    </ion-row>
+
+    <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+      <ion-col no-padding col-6>
+        <button ion-button clear small>Wastage Wgt</button>
+      </ion-col>
+      <ion-col no-padding style="margin:auto" col-1>
+          :
+      </ion-col>
+      <ion-col no-padding style="margin:auto" col-5>
+        {{productdet['wast_wgt']}} g
+      </ion-col>
+      </ion-row>
+
+      <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+        <ion-col no-padding col-6>
+          <button ion-button clear small>Total Stone Amount</button>
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-1>
+            :
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-5>
+          ₹ {{productdet['stone_price']}} 
+        </ion-col>
+        </ion-row>
+
+      <ion-row style="border: 1px solid #f2f1f1" no-padding *ngIf="supplier !=true">
+
+        <ion-col no-padding col-6>
+          <button ion-button clear small>GST </button>
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-1>
+            :
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-5>
+          ₹ {{productdet.tax_price}}
+        </ion-col>
+        </ion-row>
+
+        <ion-row style="border: 1px solid #f2f1f1" no-padding  >
+
+          <ion-col no-padding col-6>
+            <button ion-button clear small>MC value / <span *ngIf="productdet['mc_type']==1" >PCS</span><span *ngIf="productdet['mc_type']==2" >GM</span></button>
+          </ion-col>
+          <ion-col no-padding style="margin:auto" col-1>
+              :
+          </ion-col>
+          <ion-col no-padding style="margin:auto" col-5>
+            ₹ {{productdet['mc_value']}}
+          </ion-col>
+          </ion-row>
+
+
+          <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+          <ion-col no-padding col-6>
+            <button ion-button clear small>Counter</button>
+          </ion-col>
+          <ion-col no-padding style="margin:auto" col-1>
+              :
+          </ion-col>
+          <ion-col no-padding style="margin:auto" col-5>
+            {{productdet.section_name}}
+          </ion-col>
+          </ion-row>
+          <ion-row style="border: 1px solid #f2f1f1" no-padding *ngIf="supplier !=true">
+
+          <ion-col no-padding col-6>
+            <button ion-button clear small>HUID</button>
+          </ion-col>
+          <ion-col no-padding style="margin:auto" col-1>
+              :
+          </ion-col>
+          <ion-col no-padding style="margin:auto" col-5>
+            {{productdet.hu_id}}
+          </ion-col>
+          </ion-row>
+<!-- <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Tag No </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.TagNo}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Pcs  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.Pieces}}
+  </ion-col>
+  </ion-row> -->
+  <!-- <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Gross Wt (Gms) </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{fixprice(productdet['GrossWt'])}} g
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Net Wt (Gms)  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{fixprice(productdet['NetWt'])}} g
+
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Purity  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.Purity}}
+  </ion-col>
+  </ion-row> -->
+</div>
+
+
+<div [ngClass]="showdiamond.length == 0 ? 'bot':'' " *ngIf="showstone.length > 0">
+  <h6 style="text-align: center;
+  margin-bottom: 20px;">Stone Information</h6>
+    <ion-card style="width: 95% !important;">
+      <ion-row>
+      
+        <ion-col col-6>
+          <ion-row style="text-align: center;">
+            <ion-col class="tot-amt">
+            Tot.Stn.Amt 
+            </ion-col>
+            </ion-row>
+            <ion-row style="text-align: center;">
+              <ion-col class="tot-amt">
+                ₹ {{totalvalue}}
+              </ion-col>
+            </ion-row>
+          
+        </ion-col>
+        <ion-col col-6 >
+          <ion-row>
+            <ion-col class="tot-amt">
+              C.Stn.Wgt : {{totalgram}} Gm
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="tot-amt">
+              Dia.Wgt : {{totalct}} Ct
+            </ion-col>
+          </ion-row>
+       
+        </ion-col>
+        <!-- <ion-col col-3 style="font-weight: bold;font-size: 15px !important;">
+        </ion-col> -->
+      </ion-row>
+    </ion-card>
+  <ion-row *ngFor="let s of showstone" no-padding style="border-bottom-style: solid;
+  border-bottom-color: #ebc298;
+  border-width: revert;">
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Type</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.stone_type_name}}
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Stone Name</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.stone_name}}
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Pcs  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.stone_pcs}}
+  </ion-col>
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Weight({{s.uom_short_code}}) </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{fixprice(s['stone_wt'])}} {{s.uom_short_code}}
+
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Rate  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    ₹ {{price(s.rate)}}
+  </ion-col>
+  </ion-row>
+</div>
+
+<!-- Other Metal Info -->
+
+<div [ngClass]="showdiamond.length == 0 ? 'bot':'' " *ngIf="othermetals.length > 0">
+  <h6 style="text-align: center;
+  margin-bottom: 20px;">Other Metal Information</h6>
+   <ion-row *ngFor="let s of othermetals" no-padding>
+
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Metal Name</button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.metal_name}}
+    </ion-col>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Purity  </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.tag_other_itm_pur_name}}
+    </ion-col>
+    <ion-col no-padding col-6>
+      <button ion-button clear small>NWT ({{s.uom_short_code}}) </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.tag_other_itm_grs_weight}} {{s.uom_short_code}}
+
+    </ion-col>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>VA (%) </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.tag_other_itm_wastage}} 
+
+    </ion-col>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>MC Value </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.tag_other_total_mc}} 
+
+    </ion-col>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Amount </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      ₹ {{s.tag_other_itm_amount}} 
+
+    </ion-col>
+</ion-row>
+
+</div>
+
+<div style="margin-bottom: 50px;" *ngIf="showdiamond.length > 0">
+  <h6  style="text-align: center;
+  margin-bottom: 20px;">Diamond Information</h6>
+  <ion-row *ngFor="let s of showdiamond;let i = index;"  style="margin-bottom: 15px;" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Type</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.ProductName}}
+  </ion-col>
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Stone Name</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.sub_design_name}}
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Pcs  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.Pieces}}
+  </ion-col>
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Weight({{s.uom_short_code}}) </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{fixprice(s['Weight'])}} {{s.uom_short_code}}
+
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Rate  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    ₹ {{price(s.Rate)}}
+  </ion-col>
+
+
+    <!-- <h6  style="text-align: center;
+    margin-bottom: 20px;">Diamond Information</h6> -->
+    <ion-col  style="margin-top: 15px;" *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Cut  </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Cut}}
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Color </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Color}}
+    </ion-col>
+
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Shape  </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Shape}}
+    </ion-col>
+
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Clarity  </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Clarity}}
+    </ion-col>
+  </ion-row>
+</div>
+
+<ion-card *ngIf="productdet.hasOwnProperty('weight')" no-margin >
+  <ion-card-header (click)="toggle('customize')" no-padding>
+    <div class="theme-title-blk" no-margin>
+        Customize Product
+        <!-- <ion-icon *ngIf="!showCustomize" name="add-circle" float-right></ion-icon>
+        <ion-icon *ngIf="showCustomize" name="remove-circle" float-right></ion-icon>  -->
+    </div>
+  </ion-card-header>
+  <ion-card-content  no-padding>
+    <ion-row padding >
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Employee <span class="required"> *</span></ion-label>
+          <ion-input type="text" [(ngModel)]="productdet['empname']" (click)="openEmpModal()"  placeholder="-- Choose Employee --"></ion-input>
+        </ion-item>
+         <!-- <span float-right [ngClass]="productdet.weight >= productdet['from_weight'] && productdet.weight <= productdet['to_weight'] ?  'input-msg' : 'input-error-msg' "><span *ngIf="productdet.from_weight > 0">Min. {{productdet.from_weight}} g </span><span *ngIf="productdet.to_weight > 0">Max. {{productdet.to_weight}} g</span></span> -->
+      </ion-col>
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col"  >
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Balance Type</ion-label>
+          <ion-select [(ngModel)]="productdet['balance_type']" (ionChange)="radio_option(productdet['balance_type'])"  placeholder="-- Choose --">
+            <ion-option  [value]="2">Cash Balance</ion-option>
+            <ion-option  [value]="1">Metal Balance</ion-option>
+          </ion-select>
+        </ion-item>
+    </ion-col>
+
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col"  >
+      <ion-item no-padding>
+        <ion-label color="label-color" stacked>Rate Type</ion-label>
+        <ion-select [(ngModel)]="productdet['rate_type']" (ionChange)="radio_option(productdet['rate_type'])"  placeholder="-- Choose --">
+          <ion-option  [value]="1">Order Rate(Fixed)</ion-option>
+          <ion-option  [value]="2">Delivery Rate(Un Fixed)</ion-option>
+        </ion-select>
+      </ion-item>
+  </ion-col>
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="productdet.weights?.length > 0 && supplier ==true " > 
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Weight</ion-label>
+          <ion-select [(ngModel)]="productdet.id_weight" (ngModelChange)=checkwgstock(productdet.id_weight)  placeholder="-- Choose --">
+            <ion-option *ngFor="let s of productdet.weights" [value]="s.id_weight">{{s['weight_description']}}</ion-option>
+          </ion-select>
+        </ion-item>
+    </ion-col>
+
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="productdet.sizes?.length > 0 && supplier ==true" >
+      <ion-item no-padding>
+        <ion-label color="label-color" stacked>Size</ion-label>
+        <ion-select [(ngModel)]="productdet.id_size" (ngModelChange)=checkstock(productdet.id_size) placeholder="-- Choose --">
+          <ion-option *ngFor="let s of productdet.sizes" [value]="s.id_size">{{s.value}} {{s.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+  </ion-col> 
+
+
+        <ion-col col-12 class="custom-2col" *ngIf="productdet.purities?.length > 0" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Purity  <span class="required"> *</span></ion-label>
+          </ion-item>
+          <ion-scroll style="    white-space: nowrap !important;" class="purity-scroll-blk" scrollX="true">
+            <ion-chip #chip1 *ngFor="let pur of productdet.purities" color="light" [ngClass]="productdet['id_purity'] == pur['id_purity'] ? 'selected' : 'unselected'" (click)="setPurity(pur.id_purity,pur.purity,pur)" style="margin-left: 5%;">
+              <ion-label>{{pur.purity}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="productdet['id_purity'] == pur['id_purity']"></ion-icon>
+            </ion-chip>
+          </ion-scroll>
+        </ion-col>
+
+
+<!-- commented by krishna -->
+
+
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Weight <span class="required"> *</span></ion-label>
+            <ion-input type="number" placeholder="Enter weight in grams" [(ngModel)]="productdet.weight"  (ngModelChange)="calculate()"> </ion-input>
+          </ion-item>
+           <span float-right [ngClass]="productdet.weight >= productdet['from_weight'] && productdet.weight <= productdet['to_weight'] ?  'input-msg' : 'input-error-msg' "><span *ngIf="productdet.from_weight > 0">Min. {{productdet.from_weight}} g </span><span *ngIf="productdet.to_weight > 0">Max. {{productdet.to_weight}} g</span></span>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Pieces *</ion-label>
+            <ion-input type="number" placeholder="Pieces" [(ngModel)]="productdet.pcs" > </ion-input>
+            <span float-right ></span>
+          </ion-item>
+        </ion-col>
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="productdet.sizes?.length > 0 && supplier == false" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Size</ion-label>
+            <ion-select [(ngModel)]="productdet.size" placeholder="-- Choose --">
+              <ion-option *ngFor="let s of productdet.sizes" [value]="s.id_size">{{s.value}} {{s.name}}</ion-option>
+            </ion-select>
+          </ion-item>
+      </ion-col> 
+
+<!--         <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="&& supplier == false" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Size *</ion-label>
+            <ion-input type="number" placeholder="Size" [(ngModel)]="productdet.size" > </ion-input>
+            <span float-right ></span>
+          </ion-item>
+        </ion-col> -->
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>MC Type</ion-label>
+            <ion-select interface="popover" [(ngModel)]="productdet['mc_type']"  placeholder="MC Type" (ngModelChange)="calculate()">
+              <ion-option [value]="1">Piece</ion-option>
+              <ion-option [value]="2">Gram</ion-option>
+            </ion-select>
+          </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>MC Value</ion-label>
+          <ion-input type="number" placeholder="MC Value" [(ngModel)]="productdet['mc_value']" > </ion-input>
+          <span float-right ></span>
+        </ion-item>
+      </ion-col>
+
+      <ion-col *ngIf="productdet['display_va'] == '1'" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Wastage %</ion-label>
+          <ion-input type="number" placeholder="Wastage" [(ngModel)]="productdet['retail_max_wastage_percent']" (ngModelChange)="calculate()"> </ion-input>
+          <span float-right ></span>
+        </ion-item>
+      </ion-col>
+
+      <ion-col *ngIf="productdet['display_va'] == '1'"  col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Wastage Wgt(g)</ion-label>
+          <ion-input type="number" placeholder="Wastage" [(ngModel)]="productdet['wast_wgt']" (ngModelChange)="calculate('wastage_wt')"> </ion-input>
+          <span float-right ></span>
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Less Weight <span class="required"> *</span></ion-label>
+          <ion-input type="number" placeholder="Less weight in grams" [(ngModel)]="productdet.less_wt" readonly> </ion-input>
+        </ion-item>
+         <!-- <span float-right [ngClass]="productdet.weight >= productdet['from_weight'] && productdet.weight <= productdet['to_weight'] ?  'input-msg' : 'input-error-msg' "><span *ngIf="productdet.from_weight > 0">Min. {{productdet.from_weight}} g </span><span *ngIf="productdet.to_weight > 0">Max. {{productdet.to_weight}} g</span></span> -->
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Net Weight <span class="required"> *</span></ion-label>
+          <ion-input type="number" placeholder="Net weight in grams" [(ngModel)]="productdet.net_wt" readonly> </ion-input>
+        </ion-item>
+         <!-- <span float-right [ngClass]="productdet.weight >= productdet['from_weight'] && productdet.weight <= productdet['to_weight'] ?  'input-msg' : 'input-error-msg' "><span *ngIf="productdet.from_weight > 0">Min. {{productdet.from_weight}} g </span><span *ngIf="productdet.to_weight > 0">Max. {{productdet.to_weight}} g</span></span> -->
+      </ion-col>
+
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Rate(₹)</ion-label>
+          <ion-input type="number" [(ngModel)]="productdet['rate_per']" (ngModelChange)="calculatecus()"></ion-input>
+        </ion-item>
+     </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Taxable Amount(₹)</ion-label>
+          <ion-input type="number" [(ngModel)]="productdet['taxable']" readonly></ion-input>
+        </ion-item>
+     </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+      <ion-item no-padding>
+        <ion-label color="label-color" stacked>GST(₹)</ion-label>
+        <ion-input type="number" [(ngModel)]="productdet['tax_price']" readonly></ion-input>
+      </ion-item>
+   </ion-col>
+     <ion-col col-12 col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Amount(₹)</ion-label>
+          <ion-input type="number" [(ngModel)]="productdet['sales_value']" readonly></ion-input>
+        </ion-item>
+      </ion-col>
+	 <!--   <ion-col  col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Other Charges</ion-label>
+          <ion-select  [(ngModel)]="productdet['id_charge']" (ngModelChange)="checkcode()"  placeholder="Charges" >
+              <ion-option *ngFor="let b of productdet['allcharges']" [value]="b['id_charge']">{{b['code_charge']}}</ion-option>
+          </ion-select>
+      </ion-item>
+      </ion-col> -->
+	      <ion-col *ngIf="productdet['display_duration'] == '1'" col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Smith Due Date  *</ion-label>
+            <!-- <ion-input type="number" readonly="true" class="ion_datetime" placeholder="Select Date" displayFormat="DD-MM-YYYY" [(ngModel)]="productdet.due_date" (focusin)="show()"> </ion-input> -->
+            <!-- <ion-input readonly='true' type="number"  placeholder="No of Days"  [(ngModel)]="productdet.smith_due_date"> </ion-input> -->
+            <ion-datetime  placeholder="Select Date" displayFormat="MM/DD/YYYY" [(ngModel)]="productdet.smith_due_date"></ion-datetime>
+
+            <span float-right ></span>
+          </ion-item>
+        </ion-col>
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Due Date *</ion-label>
+            <!-- <ion-input type="number" readonly="true" class="ion_datetime" placeholder="Select Date" displayFormat="DD-MM-YYYY" [(ngModel)]="productdet.due_date" (focusin)="show()"> </ion-input> -->
+            <!-- <ion-input type="number"  placeholder="No of Days"  [(ngModel)]="productdet.due_date"> </ion-input> -->
+            <ion-datetime placeholder="Select Date" displayFormat="DD/MM/YYYY" min="{{minDate}}"  [yearValues]="yearValues" [(ngModel)]="productdet.due_date" ></ion-datetime>
+
+            <span float-right ></span>
+          </ion-item>
+        </ion-col>
+
+
+
+        <!-- <ion-col col-12 class="custom-2col" *ngIf="item.stones?.length > 0">
+          <ion-item no-padding>
+              <ion-label color="label-color" stacked>Stones</ion-label>
+            </ion-item>
+          <ion-card class="errorMsg" padding *ngIf="stnErrMsg">
+              {{stnErrMsg}}
+          </ion-card>
+          <ion-list text-center>
+            <ion-row  style="background: #b1abab;color: white;">
+              <ion-col col-4>Stone</ion-col>
+              <ion-col col-4>Pcs</ion-col>
+              <ion-col col-4>Weight</ion-col>
+            </ion-row>
+            <div *ngFor="let st of item.stones; let i=index" class="text-small">
+              <ion-row>
+                <ion-col col-1>
+                  <ion-checkbox  [(ngModel)]="st.selected" (ionChange)=stoneChaned(st.stone_id,i)></ion-checkbox>
+                </ion-col>
+                <ion-col col-4 class="text-small">
+                  {{st.stone_name}}
+                </ion-col>
+                <ion-col col-3>
+                  <ion-item>
+                    <ion-input type="number" [value] = "st.stone_pcs" [disabled]="!st.selected"></ion-input>
+                  </ion-item>
+                </ion-col>
+                <ion-col col-4>
+                  <ion-item>
+                    <ion-input type="number" [value] = "st.stone_wt" [disabled]="!st.selected"></ion-input>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </div>
+          </ion-list>
+        </ion-col>  -->
+
+        <ion-col col-12 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Description</ion-label>
+            <ion-textarea [(ngModel)]="productdet.sample_details" placeholder="Enter your description" rows="3"></ion-textarea>
+          </ion-item>
+        </ion-col>
+<ion-col col-12 style="margin-top: 10px;margin-bottom: 10px;">
+          <div class="row">
+
+          <div  class="col" style="margin: auto" col-4 no-padding>
+            <h5>Other Charges</h5>
+          </div>
+          <div class="col" style="margin: auto" no-padding>
+            <div float-right>
+              <button *ngIf="charges.length == 0" ion-button icon-start outline small color="dark" (click)="addcharge()">
+                <ion-icon name="ios-add"></ion-icon>
+                Add
+              </button>
+              <button *ngIf="charges.length != 0" ion-button icon-start outline small color="dark" (click)="addcharge()">
+                <ion-icon name="edit"></ion-icon>
+                Update
+              </button>
+          </div>
+          </div>
+        </div>
+       </ion-col>
+        <!-- <ion-row> -->
+          <ion-col col-12 style="margin-top: 10px;margin-bottom: 10px;">
+            <div class="row">
+
+            <div  class="col" style="margin: auto" col-4 no-padding>
+              <h5>Stone Detail</h5>
+            </div>
+            <div class="col" style="margin: auto" no-padding>
+              <div float-right>
+                <button *ngIf="stone_details.length == 0" ion-button icon-start outline small color="dark" (click)="addStone()">
+                  <ion-icon name="ios-add"></ion-icon>
+                  Add
+                </button>
+                <button *ngIf="stone_details.length != 0" ion-button icon-start outline small color="dark" (click)="addStone()">
+                  <ion-icon name="edit"></ion-icon>
+                  Update
+                </button>
+            </div>
+            </div>
+          </div>
+         </ion-col>
+        <!-- </ion-row> -->
+
+        <ion-col col-12 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Upload Sample</ion-label>
+            <button *ngIf="targetPath?.length <= 10" ion-button outline small color="dark" type="button" item-right icon-left (click)="presentActionSheet()">
+                <ion-icon name="camera"></ion-icon>
+                Choose Image
+            </button>
+          </ion-item>
+          <ion-grid>
+            <ion-row *ngIf="targetPaths.length > 0">
+              <ion-col col-6 *ngFor="let targetPath of targetPaths; let id = index">
+                <ion-card class="block">
+                  <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon> <img (click)="open(targetPath)" [src]="targetPath" *ngIf="targetPath" />
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+
+        <ion-col col-12 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Upload Sample</ion-label>
+            <button *ngIf="targetPath?.length <= 10" ion-button outline small color="dark" type="button" item-right icon-left (click)="presentActionSheetvideo()">
+                <ion-icon name="videocam"></ion-icon>
+                Choose Video
+            </button>
+          </ion-item>
+          <ion-grid>
+            <ion-row *ngIf="vidtargetPaths.length > 0">
+              <ion-col col-6 *ngFor="let targetPath of vidtargetPaths; let id = index">
+                <ion-card class="block" style="text-align: center">
+                  <ion-icon name="trash" class="deleteIcon" (click)="deletevideo(id)"></ion-icon>
+                  <video height="140" controls>
+                    <source [src]='targetPath' type="video/mp4">
+                  </video>
+                </ion-card>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+
+
+    </ion-row>
+  </ion-card-content>
+</ion-card>
+
+</div>
+
+  </ion-content>
+
+  <ion-footer style="bottom: 83px !important;">
+    <div *ngIf="show == true"  style="text-align: center;    margin-top: 5px;">
+      Upload Progress :
+    </div>
+    <div *ngIf="show == true" class="progress-outer">
+      <div class="progress-inner" [style.width]="progress + '%'">
+          {{progress}}%
+      </div>
+    </div>
+    <ion-row>
+      <ion-col col-6>
+        <button style="border-radius: 5px;" ion-button  icon-start full class="theme-btn" (click)="addWishlistw(productdet)">Add to Wishlist</button>
+      </ion-col>
+      <ion-col col-6>
+        <button style="border-radius: 5px;" ion-button  icon-start full class="theme-btn" (click)="proceedToWishlist()">Add to Cart</button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+

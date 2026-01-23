@@ -1,0 +1,35 @@
+ion-app.md{ // For QR scanner 
+  background: none transparent !important;
+  background-color: none !important;
+}
+page-stock-entry  {
+    .vip{
+      color: darkorange;
+    }
+    ion-item-sliding{
+      border: 1px solid #dcdcdc !important;
+    }
+    .border-right{
+      border-right: 1px solid #dcdcdc !important;
+    }
+    // For QR scanner 
+    .qr-scanner-open { 
+      display: none !important;
+      height: 70px !important;
+      --overflow: hidden !important;
+      //style="background: none transparent;"
+    } 
+    .esti-notes{
+      margin-top: 4% !important;
+      color: gray !important;
+      letter-spacing: 0.25px !important;
+    }
+    .summary-img-icon{
+      height: 19px;
+      width: 19px;
+    }
+    // .content-md {
+    //     color: #000;
+    //     background-color: #fff;
+    // }    
+}

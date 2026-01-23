@@ -1,0 +1,535 @@
+<!-- <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY">
+</iframe> -->
+<ion-header style="background: #000"> <ion-navbar>
+  <button ion-button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Create Order
+    <!-- <span *ngIf="item.is_stock_avail==1 " class="instock">Instock</span>
+    <span *ngIf="item.is_stock_avail==0 "  class="outofstock">Out of stock</span> -->
+    <!-- <div [ngStyle]="{'width.px': 30,'height.px': 30,'border-radius.px':50,'background':productdet.colorcode,'position':'absolute','right.px':55,'top.px':-6}"></div>-->
+ <!-- <div [ngStyle]="{'width.px': 30,'height.px': 30,'color':productdet.colorcode,'position':'absolute','right.px':55,'top.px':-6}">
+				<ion-icon *ngIf="productdet.colorcode != '' "  style="font-size:1.6em !important" name="bookmark"></ion-icon>
+			  </div>
+    <ion-icon [ngClass] = "productItems1.length > 0 ? 'co' : 'noco' " style="margin-top:-4px !important;font-size:1.4em !important;float: right;" name="heart" (click)="addWishlistw(productdet)"></ion-icon> -->
+
+  </ion-title> </ion-navbar>
+  <!-- <ion-row *ngIf="productdet.hasOwnProperty('weight')">
+
+    <ion-col align="center" style="    background: white !important;">
+      <div>
+        <span *ngIf="productdet.Status == 'OPEN'"  style="float:right;"><ion-badge color="secondary">Stock Available {{productdet.BranchName}}</ion-badge></span>
+        <span *ngIf="productdet.Status != 'OPEN'"  style="float:right;"><ion-badge color="danger">Out of Stock</ion-badge></span>
+
+      </div> -->
+      <!-- <div style="margin-top: 22px;">
+
+      <img *ngIf="productdet.TagImage != null" class="proimage" [ngStyle]="{height: calc+'px','min-height.px' : 100}" src='{{productdet.TagImage}}'
+    imageViewer='{{productdet.TagImage}}' onerror="this.src='assets/no-img.png'" />
+    <img *ngIf="productdet.TagImage == null" class="proimage" [ngStyle]="{height: calc+'px','min-height.px' : 100}" src='assets/no-img.png'
+    imageViewer='assets/no-img.png' onerror="this.src='assets/no-img.png'" />
+    </div> -->
+    <!-- <ion-slides style="margin-top: 22px;" (ionSlideWillChange)="slide()"  *ngIf="slidess && slidess.length" #slides [ngClass]="animateClass"   zoom ='true' speed='500' initialSlide='0'>
+      <ion-slide (click)="openurl(slide)" *ngFor="let slide of slidess;let in = index">
+        <img *ngIf="slideimg != null" [src]="slideimg" class="slide-image" imageViewer='{{slideimg}}' [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'"/>
+        <img *ngIf="slideimg == null" src='assets/no-img.png'  class="slide-image" imageViewer='assets/no-img.png' [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'"/>
+
+      </ion-slide>
+    </ion-slides> -->
+    <!-- </iframe> -->
+    <!-- </ion-col>
+  </ion-row> -->
+</ion-header>
+  <ion-content (ionScroll)="scrolling($event)">
+    <div style="margin-bottom: 200px !important;">
+
+    <ion-row padding *ngIf="nonback == true">
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+        <ion-item no-padding>
+        <ion-label color="label-color" stacked>Order Type</ion-label>
+        <ion-select [(ngModel)]="order_type" placeholder="Order Type" (ionChange)="change($event)"> <!-- (ionChange)="change($event)" skn no need it -->
+        <ion-option [value]="1" selected>Customized Order</ion-option>
+        <ion-option [value]="2">Tag Reserve</ion-option>     <!--  skn no need it -->
+        </ion-select>
+        </ion-item>
+        </ion-col>
+
+  <ion-col col-7  class="custom-2col" style="padding-top: 0px !important;" *ngIf="order_type == 2" >
+
+    <ion-item *ngIf="showtagres == true">
+      <ion-label *ngIf="showtagres == true && checkold != true" style="" color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+      <ion-label *ngIf="showtagres == true && checkold == true" style="" color="label-color" stacked>Old Tag Code <span class="required">*</span></ion-label>
+
+      <ion-toggle [(ngModel)]="checkold"></ion-toggle>
+    </ion-item>
+    </ion-col>
+
+
+
+    <div class="row" *ngIf="order_type == 2 && nonback == true" >
+      <div class="col" col-3 style="margin: auto;" >
+        <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text" id="one" [(ngModel)]="tagData['tag_code1']"  (keyup)="append($event)" ><!--   -->
+
+        </div>
+        <div class="col" col-1 style="margin: auto;font-weight: bold;">
+          <hr>
+          </div>
+
+        <div class="col" col-6 style="margin: auto;" >
+          <input  style="    border: 1px solid lightgray;height: 40px;width: -webkit-fill-available;" type="text"  id="two" [(ngModel)]="tagData['tag_code2']"   (keyup)="append($event)" ><!--  -->
+
+        </div>
+        <div class="col" style="margin: auto;" col-2>
+          <button style="" item-right ion-button  color="light" (click)="getTagByID(tagData['tag_code'])"><ion-icon name="ios-search"></ion-icon></button>
+
+        </div>
+    </div>
+
+     <!-- *ngIf="order_type == 1" -->
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Category</ion-label>
+          <ion-input  type="text" [(ngModel)]="productdet['category_name']" [readonly]="true" (click)="openMasSearch('category')"></ion-input>
+          <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('category')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Product</ion-label>
+          <ion-input  type="text" [(ngModel)]="productdet['product_name']" [readonly]="true" (click)="openMasSearch('Product')"></ion-input>
+          <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Product')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+
+        </ion-item>
+      </ion-col>
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Design</ion-label>
+          <ion-input  type="text" [(ngModel)]="productdet['design_name']" [readonly]="true" (click)="openMasSearch('Design')"></ion-input>
+          <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Design')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+
+        </ion-item>
+      </ion-col>
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Sub Design</ion-label>
+          <ion-input  type="text" [(ngModel)]="productdet['sub_design_name']" [readonly]="true" (click)="openMasSearch('subDesign')" ></ion-input>
+          <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('subDesign')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+
+        </ion-item>
+      </ion-col>
+
+
+          <div class="theme-title-blk" no-margin >
+              Customize Product
+              <!-- <ion-icon *ngIf="!showCustomize" name="add-circle" float-right></ion-icon>
+              <ion-icon *ngIf="showCustomize" name="remove-circle" float-right></ion-icon>  -->
+          </div>
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Employee <span class="required"> *</span></ion-label>
+          <ion-input type="text" [(ngModel)]="productdet['empname']" (click)="openEmpModal()" placeholder="-- Choose Employee --"></ion-input>
+        </ion-item>
+         <!-- <span float-right [ngClass]="productdet.weight >= productdet['from_weight'] && productdet.weight <= productdet['to_weight'] ?  'input-msg' : 'input-error-msg' "><span *ngIf="productdet.from_weight > 0">Min. {{productdet.from_weight}} g </span><span *ngIf="productdet.to_weight > 0">Max. {{productdet.to_weight}} g</span></span> -->
+      </ion-col>
+
+
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col"  >
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Balance Type</ion-label>
+          <ion-select [(ngModel)]="productdet['balance_type']" (ionChange)="radio_option(productdet['balance_type'])"  placeholder="-- Choose --">
+            <ion-option  [value]="2">Cash Balance</ion-option>
+            <ion-option  [value]="1">Metal Balance</ion-option>
+          </ion-select>
+        </ion-item>
+    </ion-col>
+
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col"  >
+      <ion-item no-padding>
+        <ion-label color="label-color" stacked>Rate Type</ion-label>
+        <ion-select [(ngModel)]="productdet['rate_type']" (ionChange)="radio_option(productdet['rate_type'])"  placeholder="-- Choose --">
+          <ion-option  [value]="1">Delivery Rate(Un Fixed)</ion-option>
+          <ion-option  [value]="2">Order Rate(Fixed)</ion-option>
+        </ion-select>
+      </ion-item>
+  </ion-col>
+
+  <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col" style="text-align: end;">
+    <button [disabled]="productdet['sub_design_name'] == '' ||  productdet['design_name'] == '' ||  productdet['product_name'] == '' || productdet['category_name'] == ''"  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="nnext(true)" >Next<ion-icon name="arrow-forward"></ion-icon></button>
+</ion-col>
+
+</ion-row>
+        <!-- <ion-col col-12 class="custom-2col" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Purity  <span class="required"> *</span></ion-label>
+          </ion-item>
+          <ion-scroll style=" white-space: nowrap !important;" class="purity-scroll-blk" scrollX="true">
+            <ion-chip #chip1 *ngFor="let pur of productdet.purities" color="light" [ngClass]="productdet['id_purity'] == pur['id_purity'] ? 'selected' : 'unselected'" (click)="setPurity(pur.id_purity,pur.purity,pur)" style="margin-left: 5%;">
+              <ion-label>{{pur.purity}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="productdet['id_purity'] == pur['id_purity']"></ion-icon>
+            </ion-chip>
+          </ion-scroll>
+        </ion-col>
+		<ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Weight</ion-label>
+            <ion-select [(ngModel)]="productdet.id_weight" (ngModelChange)=checkwgstock(productdet.id_weight)  placeholder="-- Choose --">
+              <ion-option *ngFor="let s of productdet.weights" [value]="s.id_weight">{{s['weight_description']}}</ion-option>
+            </ion-select>
+          </ion-item>
+      </ion-col> -->
+        <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Weight <span class="required"> *</span></ion-label>
+            <ion-input type="number" placeholder="Enter weight in grams" [(ngModel)]="productdet.weight" (ngModelChange)="calculate()"> </ion-input>
+          </ion-item>
+           <span float-right [ngClass]="productdet.weight >= productdet['from_weight'] && productdet.weight <= productdet['to_weight'] ?  'input-msg' : 'input-error-msg' "><span *ngIf="productdet.from_weight > 0">Min. {{productdet.from_weight}} g </span><span *ngIf="productdet.to_weight > 0">Max. {{productdet.to_weight}} g</span></span>
+        </ion-col> -->
+
+
+       <ion-row padding *ngIf="nonback1 == true"  >
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+           <ion-item no-padding><ion-label color="label-color" stacked>Gross Wgt(g) <span class="required">*</span></ion-label>
+            <ion-input type="number"[(ngModel)]="productdet['gross_wt']"  (ngModelChange)="calcSaleValue()"></ion-input>
+             <p class="input-err">Stock :{{productdet.stock_gross_wt}}</p> </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+         <ion-item no-padding><ion-label color="label-color" stacked>Less Wgt(g)</ion-label>
+          <ion-input type="number"[(ngModel)]="productdet['less_wt']" (ngModelChange)="calcSaleValue()" readonly></ion-input>
+        </ion-item>
+       </ion-col>
+          <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+            <ion-item no-padding><ion-label color="label-color" stacked>Net Wgt(g) <span class="required">*</span></ion-label>
+              <ion-input type="number"[(ngModel)]="productdet['net_wt']" readonly></ion-input>
+            </ion-item>
+           </ion-col>
+              <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col"> <ion-item no-padding>
+                <ion-label color="label-color" stacked>Purity</ion-label>
+                 <ion-select  placeholder="Purity" [(ngModel)]="productdet['purity']" (ionChange)="get_purity(productdet['purity'])" >
+                   <ion-option *ngFor="let pur of Purities" [value]="pur" >{{pur.purity}}</ion-option>
+                  </ion-select>
+              </ion-item>
+              </ion-col> -->
+              <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+                <ion-item no-padding>
+                  <ion-label color="label-color" stacked>Purity <span class="required">*</span></ion-label>
+                  <!-- <ion-input  type="text" [(ngModel)]="productdet['purname']" readonly></ion-input> -->
+                  <ion-input  type="text" [(ngModel)]="productdet['purname']" [readonly] (click)="openMasSearch('Purity')"></ion-input>
+                  <button  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openMasSearch('Purity')" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+                </ion-item>
+              </ion-col>
+
+         <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+           <ion-item no-padding>
+             <ion-label color="label-color" stacked>Wast %</ion-label>
+             <ion-input type="number"  [readonly]="productdet['calculation_based_on'] == 3"   [(ngModel)]="productdet['retail_max_wastage_percent']" (ngModelChange)="calcSaleValue('wast')"></ion-input>
+           </ion-item>
+          </ion-col>
+          <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+           <ion-item no-padding>
+             <ion-label color="label-color" stacked>Wast Wgt(g)</ion-label>
+             <ion-input type="number"   [(ngModel)]="productdet['wast_wgt']" (ngModelChange)="calcSaleValue('wastage_wt')"></ion-input>
+           </ion-item>
+          </ion-col>
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Pieces <span class="required"> *</span></ion-label>
+            <ion-input type="number" placeholder="Pieces" [(ngModel)]="productdet['pcs']" > </ion-input>
+            <span float-right ></span>
+          </ion-item>
+        </ion-col>
+<!-- 
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="productdet.sizes?.length > 0" >
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Size</ion-label>
+            <ion-select [(ngModel)]="productdet.id_size" (ngModelChange)=checkstock(productdet.id_size) placeholder="-- Choose --">
+              <ion-option *ngFor="let s of productdet.sizes" [value]="s.id_size">{{s.value}} {{s.name}}</ion-option>
+            </ion-select>
+          </ion-item>
+      </ion-col>  -->
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Size </ion-label>
+            <ion-select [(ngModel)]="productdet['id_size']" (ngModelChange)=checkstock(productdet.id_size) placeholder="-- Choose --">
+              <ion-option *ngFor="let s of sizes" [value]="s.id_size">{{s.value}} {{s.name}}</ion-option>
+            </ion-select>
+          </ion-item>
+          <!-- <ion-item no-padding>
+            <ion-label color="label-color" stacked>Size *</ion-label>
+            <ion-input type="number" placeholder="Size" [(ngModel)]="productdet['size']" > </ion-input>
+            <span float-right ></span>
+          </ion-item> -->
+        </ion-col>
+
+        <ion-item *ngIf="empData['emp_setting']['allow_manual_rate'] == '1' ">
+          <ion-label style="" color="label-color" stacked>Manual Rate</ion-label>
+          <ion-toggle  [(ngModel)]="mr" ></ion-toggle>
+        </ion-item>
+
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Rate(₹)</ion-label>
+          <ion-input [readonly]="!mr" type="number"   [(ngModel)]="productdet['rate_per']" (ngModelChange)="calculatecus()"></ion-input>
+        </ion-item>
+
+        <ion-col  col-6  class="custom-2col">
+          <button  item-left ion-button clear color="dark" class="no-padding no-margin" (click)="nback(true)" ><ion-icon name="arrow-back"></ion-icon>Back</button>
+      </ion-col>
+
+        <ion-col  col-6  class="custom-2col" style="text-align: end;">
+          <button [disabled]="productdet['gross_wt'] == undefined  ||  productdet['net_wt'] == undefined  || productdet['pcs'] == undefined"  item-right ion-button clear color="dark" class="no-padding no-margin" (click)="nxt(true)" >Next<ion-icon name="arrow-forward"></ion-icon></button>
+      </ion-col>
+    </ion-row>
+
+
+        <ion-row padding *ngIf="nonback2 == true" >
+          <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>MC Type</ion-label>
+              <ion-select interface="popover" [(ngModel)]="productdet['mc_type']" placeholder="MC Type" (ngModelChange)="calcSaleValue()" *ngIf="!productdet['is_partly_sold']">
+                <ion-option [value]="1">Piece</ion-option>
+                <ion-option [value]="2">Gram</ion-option>
+                <ion-option [value]="3">Percentage</ion-option>
+
+              </ion-select>
+              <!-- <ion-input *ngIf="productdet['is_partly_sold']" type="text" [(ngModel)]="productdet['mc_type']" readonly></ion-input> -->
+            </ion-item>
+          </ion-col>
+
+
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>MC Value</ion-label>
+            <ion-input type="number"   [(ngModel)]="productdet['mc_value']" (ngModelChange)="calcSaleValue()" [readonly]="productdet['is_partly_sold'] || productdet['calculation_based_on'] == 3"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Total MC(₹)</ion-label>
+            <ion-input type="number"   [(ngModel)]="productdet['making_charge']" readonly></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Taxable Amount(₹)</ion-label>
+            <ion-input type="number"   [(ngModel)]="productdet['taxable']" (ngModelChange)="calcSaleValue()" [readonly]="productdet['calculation_based_on'] != 3"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>GST(₹)</ion-label>
+            <ion-input type="number"   [(ngModel)]="productdet['tax_price']" readonly></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Amount(₹)</ion-label>
+            <ion-input type="number"   [(ngModel)]="productdet['sales_value']" readonly></ion-input>
+          </ion-item>
+        </ion-col>
+
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Due Date <span class="required"> *</span></ion-label>
+              <!-- <ion-input type="number" readonly="true" class="ion_datetime" placeholder="Select Date" displayFormat="DD-MM-YYYY" [(ngModel)]="productdet.due_date" (focusin)="show()"> </ion-input> -->
+              <!-- <ion-input type="number"  placeholder="No of Days"  [(ngModel)]="productdet.due_date"> </ion-input> -->
+              <ion-datetime placeholder="Select Date" displayFormat="DD/MM/YYYY" min="{{minDate}}"  [yearValues]="yearValues" [(ngModel)]="productdet.due_date" ></ion-datetime>
+  <!--
+              <ion-datetime placeholder="Select Date" displayFormat="MM/DD/YYYY" [(ngModel)]="productdet.due_date"></ion-datetime> -->
+
+              <span float-right ></span>
+            </ion-item>
+          </ion-col>
+      <!--  <ion-col  col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+          <ion-item no-padding>
+            <ion-label color="label-color" stacked>Other Charges</ion-label>
+            <ion-select  [(ngModel)]="productdet['id_charge']" (ngModelChange)="checkcode()"  placeholder="Charges" >
+                <ion-option *ngFor="let b of productdet['allcharges']" [value]="b['id_charge']">{{b['code_charge']}}</ion-option>
+            </ion-select>
+        </ion-item>
+        </ion-col> -->
+          <!-- <ion-col col-12 class="custom-2col" *ngIf="productdet.stones?.length > 0">
+            <ion-item no-padding>
+                <ion-label color="label-color" stacked>Stones</ion-label>
+              </ion-item>
+
+            <ion-list text-center>
+              <ion-row  style="background: #b1abab;color: white;">
+                <ion-col col-4>Stone</ion-col>
+                <ion-col col-4>Pcs</ion-col>
+                <ion-col col-4>Weight</ion-col>
+              </ion-row>
+              <div *ngFor="let st of productdet.stones; let i=index" class="text-small">
+                <ion-row>
+                  <ion-col col-1>
+                    <ion-checkbox  [(ngModel)]="st.selected" (ionChange)=stoneChaned(st.stone_id,i)></ion-checkbox>
+                  </ion-col>
+                  <ion-col col-4 class="text-small">
+                    {{st.stone_name}}
+                  </ion-col>
+                  <ion-col col-3>
+                    <ion-item>
+                      <ion-input type="number" [value] = "st.stone_pcs" [disabled]="!st.selected"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col col-4>
+                    <ion-item>
+                      <ion-input type="number" [value] = "st.stone_wt" [disabled]="!st.selected"></ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </div>
+            </ion-list>
+          </ion-col>  -->
+
+          <ion-col col-12 class="custom-2col">
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Description <span class="required"> *</span></ion-label>
+              <ion-textarea [(ngModel)]="productdet.sample_details" placeholder="Enter your description" rows="3"     (ngModelChange)="productdet.sample_details = productdet.sample_details?.trim()"></ion-textarea>
+            </ion-item>
+          </ion-col>
+
+       <ion-col col-12>
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Other Charges</ion-label>
+          <button *ngIf="charges.length == 0" ion-button  outline small color="dark" item-right icon-left (click)="addcharge()">
+            <ion-icon name="ios-add"></ion-icon>
+            Add
+          </button>
+          <button *ngIf="charges.length != 0" ion-button item-right icon-left outline small color="dark" (click)="addcharge()">
+            <ion-icon name="edit"></ion-icon>
+            Update
+          </button>
+        </ion-item>
+       </ion-col>
+
+       <ion-col col-12>
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Stone Detail</ion-label>
+          <button *ngIf="stone_details.length == 0" ion-button item-right icon-left outline small color="dark" (click)="addStone()">
+            <ion-icon name="ios-add"></ion-icon>
+            Add
+          </button>
+          <button *ngIf="stone_details.length != 0" ion-button item-right icon-left outline small color="dark" (click)="addStone()">
+            <ion-icon name="edit"></ion-icon>
+            Update
+          </button>
+        </ion-item>
+       </ion-col>
+
+  <!-- <ion-col col-12 style="margin-top: 10px;margin-bottom: 10px;">
+            <div class="row">
+
+            <div  class="col" style="margin: auto" col-4 no-padding>
+              <h5>Other Charges</h5>
+            </div>
+            <div class="col" style="margin: auto" no-padding>
+              <div float-right>
+                <button *ngIf="charges.length == 0" ion-button icon-start outline small color="dark" (click)="addcharge()">
+                  <ion-icon name="ios-add"></ion-icon>
+                  Add
+                </button>
+                <button *ngIf="charges.length != 0" ion-button icon-start outline small color="dark" (click)="addcharge()">
+                  <ion-icon name="edit"></ion-icon>
+                  Update
+                </button>
+            </div>
+            </div>
+          </div>
+         </ion-col> -->
+
+   <!--        <ion-col col-12 style="margin-top: 10px;margin-bottom: 10px;">
+            <div class="row">
+
+            <div  class="col" style="margin: auto" col-4 no-padding>
+              <h5>Stone Detail</h5>
+            </div>
+            <div class="col" style="margin: auto" no-padding>
+              <div float-right>
+                <button *ngIf="stone_details.length == 0" ion-button icon-start outline small color="dark" (click)="addStone()">
+                  <ion-icon name="ios-add"></ion-icon>
+                  Add
+                </button>
+                <button *ngIf="stone_details.length != 0" ion-button icon-start outline small color="dark" (click)="addStone()">
+                  <ion-icon name="edit"></ion-icon>
+                  Update
+                </button>
+            </div>
+            </div>
+          </div>
+         </ion-col> -->
+
+          <ion-col col-12 class="custom-2col">
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Upload Sample</ion-label>
+              <button *ngIf="targetPath?.length <= 10" ion-button outline small color="dark" type="button" item-right icon-left (click)="presentActionSheet()">
+                  <ion-icon name="camera"></ion-icon>
+                  Choose Image
+              </button>
+            </ion-item>
+            <ion-grid>
+              <ion-row *ngIf="targetPaths.length > 0">
+                <ion-col col-6 *ngFor="let targetPath of targetPaths; let id = index">
+                  <ion-card class="block">
+                    <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon> <img [src]="targetPath" *ngIf="targetPath" />
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+
+          <ion-col col-12 class="custom-2col">
+            <ion-item no-padding>
+              <ion-label color="label-color" stacked>Upload Sample</ion-label>
+              <button *ngIf="targetPath?.length <= 10" ion-button outline small color="dark" type="button" item-right icon-left (click)="presentActionSheetvideo()">
+                  <ion-icon name="videocam"></ion-icon>
+                  Choose Video
+              </button>
+            </ion-item>
+            <ion-grid>
+              <ion-row *ngIf="vidtargetPaths.length > 0">
+                <ion-col col-6 *ngFor="let targetPath of vidtargetPaths; let id = index">
+                  <ion-card class="block" style="text-align: center">
+                    <ion-icon name="trash" class="deleteIcon" (click)="deletevideo(id)"></ion-icon>
+                    <video height="140" controls>
+                      <source [src]='targetPath' type="video/mp4">
+                    </video>
+                  </ion-card>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-col>
+          <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">
+            <button  item-left ion-button clear color="dark" class="no-padding no-margin" (click)="nxtback(true)" ><ion-icon name="arrow-back"></ion-icon>Back</button>
+        </ion-col>
+        </ion-row>
+
+
+
+
+</div>
+
+  </ion-content>
+
+  <ion-footer style="bottom: 83px !important;">
+    <div *ngIf="show == true"  style="text-align: center;    margin-top: 5px;">
+      Upload Progress :
+    </div>
+    <div *ngIf="show == true" class="progress-outer">
+      <div class="progress-inner" [style.width]="progress + '%'">
+          {{progress}}%
+      </div>
+    </div>
+    <ion-row>
+      <!-- <ion-col col-6>
+        <button [disabled]="productdet.Status != 'OPEN'" style="border-radius: 5px;" ion-button  icon-start full class="theme-btn" (click)="createEsti()">Create Estimation</button>
+      </ion-col> -->
+      <ion-col col-12>
+        <button style="border-radius: 5px;"   [disabled]="!canAddToCart() || !metal_error_msg"  ion-button  icon-start full class="theme-btn" (click)="proceedToWishlist()">Add to Cart</button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
+

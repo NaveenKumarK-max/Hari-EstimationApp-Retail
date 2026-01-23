@@ -1,0 +1,157 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title style="text-align: center !important;
+    margin-right: 15% !important;"><img class="header-logo" src='assets/header.svg'/></ion-title>
+  </ion-navbar>
+</ion-header>
+
+<!-- Estimation Create Block  -->
+  <ion-content>  <!-- [ngClass]="{'qr-scanner-open' : scannerOn }"  -->
+    <ion-grid padding> 
+          <ion-row>
+            <ion-col text-wrap>
+				<ion-item no-padding>
+				  <ion-label color="label-color" stacked>Stock Code <span class="required">*</span></ion-label>
+				  <ion-input type="text" [(ngModel)]="stock['stock_code']" required></ion-input>
+				</ion-item>
+			</ion-col>
+          </ion-row> 
+          <ion-row>
+            <ion-col no-padding text-wrap col-12>
+              <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon> Tags  <ion-badge color="light" float-right></ion-badge></div>
+            </ion-col>
+            <!-- <ion-col text-wrap>
+              <span float-right>
+                  <button ion-button icon-start outline small color="secondary" (click)="openItemAddModal('tag','','add')">
+                    <ion-icon name="ios-add"></ion-icon> ADD
+                  </button>
+                  <button ion-button icon-start outline small color="dark" (click)="openQRScanner('tag')">
+                    <ion-icon name="ios-qr-scanner"></ion-icon> SCAN
+                  </button>
+              </span>
+            </ion-col> -->
+          </ion-row>
+		  <ion-row>
+			<ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">   
+				<ion-item no-padding> 
+					<ion-label color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+					<ion-input type="text" [(ngModel)]="tag_code"></ion-input> 
+					<button item-right ion-button margin-top color="light" (click)="getTagData(tag_code)"><ion-icon name="ios-search"></ion-icon></button>
+				</ion-item>
+			</ion-col>
+		  </ion-row>
+          <ion-card class="errorMsg" padding *ngIf="tagErrorMsg">
+            {{tagErrorMsg}}
+          </ion-card>
+          <ion-card class="msg" padding *ngIf="tagMsg">
+            {{tagMsg}}
+          </ion-card>
+          <ion-list>
+            <ion-item-sliding margin-top #tags *ngFor="let t of tags;let i of index;">
+              <ion-item class="no-padding">
+                <ion-row> 
+                  <ion-col text-wrap col class="theme-color-secondary">
+                    {{t.tag_code}} 
+                  </ion-col>
+                  <ion-col text-wrap col-9 col-md-2 class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 1" style="font-size: 11px !important;">
+                    <span *ngIf="t.collection_name != null">{{t.collection_name}} <b> | </b> </span>
+                    {{t.product_name}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 0">
+                    {{t.product_name}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Purity </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.purname}} 
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Pcs </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.piece}} 
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Size </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.size}} 
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Gross wgt </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.gross_wt}} 
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Less wgt </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.less_wt}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Net Wgt </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.net_wt}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Wast ({{t.retail_max_wastage_percent}} %)  </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.wast_wgt}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">MC </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.making_charge | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Taxable </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.taxable | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Tax </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{t.tax_price | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Amount </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <b>{{t.sales_value | number:'1.2-2' }}</b>
+                  </ion-col>
+                  <ion-col text-wrap col-4 col-md-3 class="custom-2col" *ngIf="t.image != ''">
+                    <img src="{{t.image}}" imageViewer="{{t.image}}" >
+                  </ion-col>
+                </ion-row>
+              </ion-item>
+              <ion-item-options side="right">
+                <button ion-button *ngIf="esti_type != 'summary'" color="primary" (click)="openItemAddModal('tag',i,'edit')"><ion-icon name="create"></ion-icon></button>
+                <button ion-button color="danger" (click)="deleteItem('tag',i)"><ion-icon name="trash"></ion-icon></button>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list> 
+		 
+      <br/>
+      <br/>
+      <br/>
+    </ion-grid> 
+  </ion-content>
+  <ion-footer *ngIf="page_type == 'create'">
+    <ion-fab left bottom *ngIf="!scannerOn"> 
+      <button ion-fab mini color="primary" (click)="openEstiBasicDetailModal()"><ion-icon name="person"></ion-icon></button>
+    </ion-fab>
+    <button ion-button *ngIf="!scannerOn && esti_type == 'summary'" icon-start full class="theme-btn" (click)="createEsti()">Save</button>
+    <button *ngIf="scannerOn" ion-button icon-start full class="warning" (click)="closeScanner()">Close Scanner</button>  
+  </ion-footer>  
+<!-- ./Estimation Create Block  -->
+ 

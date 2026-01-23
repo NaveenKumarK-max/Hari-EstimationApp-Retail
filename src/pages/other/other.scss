@@ -1,0 +1,77 @@
+page-other {
+    .select-md {
+        padding: 9px 8px 13px 12px !important;
+   
+    
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+    .select-text {
+        margin-top: 3px !important;
+    }
+    .select-md .select-icon{
+        margin-top: 1px !important;
+    }
+
+//
+
+.stone-card {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.label-row ion-col {
+  font-weight: 600;
+  font-size: 13px;
+  color: #555;
+  padding: 4px 0;
+  text-align: center;
+}
+
+.value-row ion-col {
+  font-weight: 700;
+  font-size: 15px;
+  color: #000;
+  padding: 6px 0;
+  text-align: center;
+}
+
+ion-card {
+  background: #ffffff;
+}
+
+
+.footer-box {
+  padding: 8px 0;
+  border-top: 2px solid #dcdcdc;
+}
+
+.footer-label-row {
+  background: #f4f4f4;
+}
+
+.footer-label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+.footer-value-row {
+  margin-top: 4px;
+}
+
+.footer-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.total-amt {
+  color: #0078ff;   // blue to highlight
+}
+
+
+
+}

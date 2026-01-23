@@ -1,0 +1,173 @@
+<!-- <ion-header> <ion-navbar>
+  <button ion-button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Order Status -->
+    <!-- <ion-icon  name="md-funnel" (click)="filter()" style="color:black !important;float: right;font-size:1.4em !important" ></ion-icon> -->
+
+  <!-- </ion-title> </ion-navbar>
+ </ion-header> -->
+ <ion-header>
+  <ion-navbar  hideBackButton="true">
+    <ion-row>
+      <ion-col col-4>
+        <ion-icon style="font-size: 22px;margin-left: 15px;"  (click)="redirect()" name="md-arrow-back"></ion-icon>
+      </ion-col>
+      <ion-col col-8 style="margin: auto;">
+        <ion-title>Order Status
+    <ion-icon   name='md-refresh-circle' (click)="refresh()" style="color:black !important;float: right;font-size:28px !important" ></ion-icon>
+  
+          <!-- <ion-icon  name="md-funnel" (click)="filter()" style="color:black !important;float: right;font-size:1.4em !important" ></ion-icon> -->
+        </ion-title>
+      </ion-col>
+    </ion-row>
+  </ion-navbar>
+  <!-- <ion-navbar *ngIf="view_type == 2" >
+  <button (click)="redirect()" ion-button  menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Order Status
+    <ion-icon   name='md-refresh-circle' (click)="refresh()" style="color:black !important;float: right;font-size:28px !important" ></ion-icon>
+
+
+
+  </ion-title>
+ </ion-navbar> -->
+ </ion-header>
+
+  <ion-content>
+    <!-- <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content> -->
+
+    <ion-row>
+      <ion-col col-12 class="ser_key">
+      <ion-item no-padding >
+        <ion-label color="label-color" stacked>Order No<span class="required"> *</span></ion-label>
+        <ion-input type="text" [(ngModel)]="filterValue"   (ionChange)="order_filter_empty($event)"></ion-input>
+        <button ion-button outline small color="dark" type="button" item-right (click)="filterNumbers()"> Search </button>
+    </ion-item>
+  </ion-col>
+    </ion-row>
+
+
+   <ion-row>
+          <ion-col style="text-align: -webkit-center !important;">
+        <ion-label color="label-color" stacked>From Date</ion-label>
+            <ion-input style="text-align: center !important;color: #000 !important;font-weight: bold;border: none !important;width: 75% !important;height:90% !important;font-size: 12px !important;border-radius: 4px !important;" readonly="true" class="ion_datetime"
+              [(ngModel)]="from" displayFormat="DD-MM-YYYY" (focusin)="fromdate()"></ion-input>
+          </ion-col>
+          <ion-col style="text-align: -webkit-center !important;">
+        <ion-label color="label-color" stacked>To Date</ion-label>
+            <ion-input style="text-align: center !important; color: #000 !important;font-weight: bold;border: none !important;width: 75% !important;height:90% !important;font-size: 12px !important;border-radius: 4px !important;" readonly="true" class="ion_datetime"
+              [(ngModel)]="to" displayFormat="DD-MM-YYYY" (focusin)="todate()"></ion-input>
+          </ion-col>
+        </ion-row> 
+
+
+    <br>
+
+
+    <ion-row>
+      <ion-col col-4>
+        <ion-item >
+          <!-- <ion-label class="font-s" *ngIf="!select_branch">{{placeholderLabel_branch}}</ion-label> -->
+          <ion-select interface="popover" style="max-width: 100%;" [(ngModel)]="select_branch" placeholder=" Select Branch" (ionChange)="handleFilter('branch')">
+            <ion-option  *ngFor="let data of branch" [value]="data">{{data.name}}</ion-option>
+
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      <ion-col col-4 style="left: 5px;">  
+          <ion-item>  
+            <ion-input type="text" [(ngModel)]="select_emp" placeholder="Select Employee" (tap)="openEmpModal()"  readonly> 
+            </ion-input> 
+          </ion-item> 
+      </ion-col>
+
+<ion-col col-4>
+  <ion-item >
+    <!-- <ion-label class="font-s">Order</ion-label> -->
+    <ion-select interface="popover" style="max-width: 100%;" [(ngModel)]="select_order" placeholder="Select Order" (ionChange)="handleFilter('status')">
+      <ion-option *ngFor="let data of order"  [value]="data">{{data.order_status}}</ion-option>
+
+    </ion-select>
+  </ion-item>
+</ion-col>
+
+</ion-row>
+
+   <p *ngIf="whole.length == 0" class="empty">No result found</p>
+<br>
+    <ion-card
+       *ngFor=" let order of whole ;let i=index ">
+    <ion-item> <ion-badge color="light">{{order.tag_code}}</ion-badge></ion-item>
+    <div>
+      <ion-badge [ngStyle]="{'background':order.color,'float':'right'}" >{{order.order_status}}</ion-badge>
+    </div>
+
+    <ion-item>
+      <ion-avatar item-left>
+  <!-- <img *ngIf="order['image_details'].length > 0" style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="{{order['image_details'][0]}}" imageViewer="{{order['image_details'][0]}}"  onerror="this.src='assets/no-img.png'" imageCache/> -->
+      <img  style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="{{order['default_image']}}" imageViewer="{{order['default_image']}}"  onerror="this.src='assets/no-img.png'" imageCache/>
+
+      </ion-avatar>
+     
+      <ion-row  no-padding> <ion-col style="max-width:37% !important;margin-bottom: 5px;">
+        <h3 style="font-weight: bold;">Branch</h3>
+        </ion-col>
+        <ion-col style="max-width:3% !important;margin: auto;">
+          :
+          </ion-col>
+          <ion-col style="max-width:60% !important;margin: auto;overflow: scroll;">
+            <ion-badge style="background: linear-gradient(to right,#000000 0%,#000000 75%,#000000 100%);overflow: scroll;">{{order.branch_name}}</ion-badge>
+          </ion-col>
+       </ion-row>
+       <ion-row  no-padding> <ion-col style="max-width:37% !important">
+        <h3 style="font-weight: bold;">Order Type</h3>
+        </ion-col>
+        <ion-col style="max-width:3% !important;margin: auto;">
+          :
+          </ion-col>
+          <ion-col style="max-width:60% !important;margin: auto;">
+            {{order.order_type}}
+            </ion-col>
+       </ion-row>
+       <ion-row  no-padding> <ion-col style="max-width:37% !important">
+        <h3 style="font-weight: bold;">Order No</h3>
+        </ion-col>
+        <ion-col style="max-width:3% !important;margin: auto;">
+          :
+          </ion-col>
+          <ion-col style="max-width:60% !important;margin: auto;">
+            {{order.order_no}}<span (click)="openModal(order)" style="float: right;color:
+           #000000">View more>></span>
+            </ion-col>
+       </ion-row>
+
+    </ion-item>
+    </ion-card>
+
+
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+<!-- </ion-refresher-content>
+</ion-refresher> -->
+
+  </ion-content>
+
+  <ion-footer style="bottom: 70px !important;">
+  <ion-toolbar>
+    <ion-title text-center>
+      Showing 1 to {{ whole.length }} of entries
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>
+
+
+
+
+
+
+

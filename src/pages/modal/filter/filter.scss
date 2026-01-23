@@ -1,0 +1,17 @@
+filter {
+	background:white;
+	ion-col{
+		border-right: 1px solid #eee;
+	}
+	ion-item,.scroll-content{
+		padding:0px !important ;
+		font-size:12px !important;
+	}
+	ion-label{
+	    margin:2px !important ;
+	}
+	ion-checkbox{
+	  margin:2px !important ;
+	}
+}
+

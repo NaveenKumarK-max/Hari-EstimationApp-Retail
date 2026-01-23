@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Estimation Basic Detail
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="dismiss()">
+          <ion-icon item-right name="ios-close-outline"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card class="errorMsg" padding *ngIf="errorMsg">
+    {{errorMsg}}
+  </ion-card>
+  <ion-card class="msg" padding *ngIf="msg">
+    {{msg}}
+  </ion-card>
+  <p align="center">Fill below details to create estimation</p>
+  <ion-row  *ngIf="askBranch == 1">
+    <ion-col text-wrap col-12>
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Branch <span class="required">*</span></ion-label>
+          <ion-select [(ngModel)]="esti['id_branch']">
+            <ion-option *ngFor="let b of branches" [value]="b.id_branch">{{b.name}}</ion-option>
+          </ion-select>
+          <ion-icon style="margin-top: 10px !important;" name="arrow-dropdown"></ion-icon>
+        </ion-item>
+    </ion-col>
+  </ion-row> 
+  <ion-row>    
+    <ion-col text-wrap col-12>
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Employee <span class="required">*</span></ion-label>
+          <ion-input type="text" [(ngModel)]="esti['emp_name']" (tap)="openEmpModal()" readonly></ion-input>
+          <button item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openEmpModal()" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+        </ion-item>
+    </ion-col>
+  </ion-row> 
+  <ion-row>
+    <ion-col text-wrap col-12>
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Estimation For <span class="required">*</span></ion-label>
+          <ion-select [(ngModel)]="esti['esti_for']" [interface]="popover">
+            <ion-option [value]="1" selected>Customer</ion-option>
+            <!-- <ion-option [value]="2">Branch Transfer</ion-option> -->
+          </ion-select> 
+        </ion-item>
+    </ion-col>
+  </ion-row>  
+  <ion-row>
+    <ion-col text-wrap col-12>
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>
+            Customer <span class="required">*</span> 
+            <span *ngIf="selectedCusData.is_vip == 1" class="vip">
+              <ion-icon name="star" class="vip">V I P</ion-icon> 
+            </span>
+            <span *ngIf="selectedCusData.accounts > 0" color="secondary">
+              <ion-icon name="checkmark-circle"  color="secondary">Chit</ion-icon> 
+            </span>
+          </ion-label>
+          <ion-input type="text" [(ngModel)]="esti['customer']" (tap)="openQuickCus()" readonly></ion-input>
+          <button item-right ion-button clear color="dark" class="no-padding no-margin" (click)="openQuickCus()" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+          {{village_name}}
+        </ion-item>
+    </ion-col>
+  </ion-row> 
+</ion-content>
+
+<ion-footer *ngIf="this.esti['cus_id'] != '' && this.esti['id_employee'] != '' && this.esti['id_employee'] != '' ">
+  <button ion-button icon-start full class="theme-btn" (click)="proceed()">Proceed</button>
+</ion-footer>

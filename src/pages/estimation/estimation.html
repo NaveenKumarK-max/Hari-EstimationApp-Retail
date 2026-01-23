@@ -1,0 +1,946 @@
+<ion-header>
+  <ion-navbar>
+
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <!-- Metal Rate Grid -->
+    <ion-grid class="rate-header">
+      <ion-row class="label-row">
+        <ion-col>Gold 22KT/G</ion-col>
+        <ion-col>Gold 18KT/G</ion-col>
+        <ion-col>Silver/G</ion-col>
+        <ion-col>Platinum/G</ion-col>
+      </ion-row>
+
+      <ion-row class="value-row" *ngIf="metalRate">
+        <ion-col>{{ metalRate.goldrate_22ct | indianCurrency:2 }}</ion-col>
+        <ion-col>{{ metalRate.goldrate_18ct | indianCurrency:2 }}</ion-col>
+        <ion-col>{{ metalRate.silverrate_1gm | indianCurrency:2 }}</ion-col>
+        <ion-col>{{ metalRate.platinum_1g | indianCurrency:2 }}</ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </ion-navbar>
+
+  <!-- Segment BELOW navbar (best UI & responsive) -->
+  <ion-segment class="esti-segment" *ngIf="page_type == 'create'" [(ngModel)]="esti_type" mode="ios" scrollable (ionChange)="estiTypeChanged($event)">
+    <ion-segment-button value="tag"> Tag </ion-segment-button>
+    <ion-segment-button value="non_tag"> Non-Tag </ion-segment-button>
+    <ion-segment-button value="home_bill"> Home Bill</ion-segment-button>
+    <ion-segment-button value="old_metal" [disabled]="oldMetalCat?.length == 0"> Old Metal </ion-segment-button>
+    <ion-segment-button value="summary">Summary</ion-segment-button>
+  </ion-segment>
+
+</ion-header>
+
+<!-- Estimation Create Block  -->
+  <ion-content  *ngIf="page_type == 'create'">
+
+    <ion-grid style="padding: 6px !important;margin-bottom: 100px;">
+
+      <span *ngIf="esti_type == 'summary'">
+        <h5 style="text-align: center;" margin>Summary</h5>
+        <div *ngIf="esti['customer'] != ''" style="text-align: center;font-weight: bold;">
+          Customer : {{esti['customer']}}<br>
+         </div>
+        <ion-row text-center>
+          <ion-col text-wrap col-sm-6 col-md-6 col-lg-6 col-xl-6>
+              <h5>{{tot_sale_wgt | number:'1.3-3' }} g</h5>
+              Sale weight
+              <br/>
+              <h5><span [innerHTML]="settings.curr_symb_html"></span> {{tot_sale_rate | number:'1.2-2' }}</h5>
+              Sale Amount
+          </ion-col>
+          <ion-col text-wrap col-sm-6 col-md-6 col-lg-6 col-xl-6>
+              <h5>{{tot_purch_wgt | number:'1.3-3' }} g</h5>
+              Purchase Weight<br/>
+              <h5><span [innerHTML]="settings.curr_symb_html"></span> {{tot_purch_rate | number:'1.2-2' }}</h5>
+              Purchase Amount
+          </ion-col>
+        </ion-row>
+        <h5 *ngIf="advance != 0" text-center>Advance Amount : <span [innerHTML]="settings.curr_symb_html"></span> {{advance | number:'1.2-2' }}</h5>
+        <h5 text-center>Estimation Amount : <span [innerHTML]="settings.curr_symb_html"></span> {{total_esti_value | number:'1.2-2' }}</h5>
+      </span>
+
+      <div [ngSwitch]="esti_type">
+        <div class="tag-card" *ngIf="esti_type == 'tag' && show == true">
+<ion-row class="tag-single-row">
+
+  <!-- Toggle -->
+  <ion-col col-2 class="center-col">
+    <ion-toggle [(ngModel)]="checkold"></ion-toggle>
+  </ion-col>
+
+  <!-- Single Tag Input -->
+  <ion-col col-8>
+    <ion-item class="tag-box no-border soft-bg compact-item">
+      <ion-input type="text" placeholder="{{ checkold ? 'Old Tag Code' : 'New Tag Code' }}" [(ngModel)]="tagData['tag_code']" (keyup)="append($event)">
+      </ion-input>
+    </ion-item>
+  </ion-col>
+
+  <!-- Search -->
+  <ion-col col-2 class="search-col">
+    <button ion-button icon-only small class="search-btn"
+            (click)="getTagByID(tagData['tag_code'])">
+      <ion-icon name="search"></ion-icon>
+    </button>
+  </ion-col>
+
+</ion-row>
+
+      </div>
+
+
+<ion-list *ngIf="esti_type == 'tag' && show == true && showr == true && esti['tag']?.length > 0" style="display: flex !important;margin: 0px 6px 6px !important;"  [(ngModel)]="tagData['taged']"  radio-group>
+      <div style="display: flex;margin-left: 10px;">
+    <ion-radio style="margin: auto;" value="1" [disabled]="true"></ion-radio>
+    <ion-label style="color: black !important;">Order Rate.</ion-label>
+   
+  </div>
+  <div style="display: flex;">
+    <ion-radio style="margin: auto;" value="2" [disabled]="true"></ion-radio>
+    <ion-label style="color: black !important;">Current Rate.</ion-label>
+  </div>
+</ion-list>
+
+
+<!--           <ion-list *ngIf="(esti_type == 'summary' && togtype == 'tag')|| esti_type == 'tag'">
+            <ion-item-sliding margin-top #tags *ngFor="let t of esti['tag'];let i = index;" id=''>
+              <ion-item no-padding style="border-bottom:2px solid #eee !important;">
+                <div style="text-align: end;font-weight: bold;">
+                  {{t['emp_name']}}
+                </div>
+                <ion-avatar item-start>
+                    <img src="{{t.image}}" imageViewer="{{t.image}}" onerror="this.onerror=null;this.src='assets/no-img.png';">
+                </ion-avatar>
+                <ion-row>
+                  <ion-col style="margin:auto" no-padding text-wrap col-6 class="theme-color-secondary">
+                    <p style="margin-left: 5px;" *ngIf="checkold != true" >{{t.tag_code}} </p>
+                    <p style="margin-left: 5px;" *ngIf="checkold == true" >{{t.old_tag_id}} </p>
+                    <div [ngStyle]="{'width.px': 20,'height.px': 20,'border-radius.px':50,'background':t.colorcode,'position':'absolute','left.px':92,'top.px':-2}"></div>
+
+                  </ion-col>
+                  <ion-col no-padding text-wrap col-6 align="right">
+                    <button ion-button small style="font-size: xx-small;background-color:#1A2A53 !important;"  (click)="chooseemp(i)"><ion-icon  name="person-add"></ion-icon></button>
+
+                    <button ion-button small style="font-size: xx-small;" [ngClass]="t['is_partial'] == '0' ? 'one':'two'"  (click)="colorchange(i)"><ion-icon  name="checkmark-circle"></ion-icon></button>
+                    <button ion-button small style="font-size: xx-small;"  (click)="openItemAddModal('tag',t,'edit')"><ion-icon name="create"></ion-icon></button>
+
+                    <button ion-button small style="font-size: xx-small;" color="danger" (click)="deleteItem('tag',i)"><ion-icon name="trash"></ion-icon></button>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col no-padding text-wrap col-12 col-md-12 class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 1" style="font-size: 11px !important;padding-left: 5px !important;">
+                    <span *ngIf="t.collection_name != null">{{t.collection_name}} <b> | </b> </span>
+                    {{t.parent_prods_name}}
+                  </ion-col>
+                  <ion-col no-padding text-wrap col-12 col-md-12 class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 0" style="padding-left: 5px !important;">
+                    {{t.product_name}} | {{t.design_name}}
+                  </ion-col>
+                </ion-row>
+              </ion-item>
+
+<ion-item no-padding>
+  <ion-row>
+    
+    <ion-col col-6 class="left-table">
+      <ion-row>
+
+                <ion-col col-5 class="label">Product</ion-col>
+        <ion-col col-7 class="value">{{t.product_name}}</ion-col>
+        <ion-col col-5 class="label">Dsgn/Model</ion-col>
+        <ion-col col-7 class="value">{{t.design_name}}</ion-col>
+            <ion-col col-6 class="label">Pcs</ion-col>
+    <ion-col col-6 class="value">
+      <span *ngIf="t['is_partial'] == '0'">{{ t.piece }}</span>
+      <input *ngIf="t['is_partial'] == '1'" class="value-input" type="number" min="1" pattern="[1-9][0-9]*" inputmode="numeric" (keypress)="validateKey($event)" [(ngModel)]="t.piece" />
+    </ion-col>
+
+  
+    <ion-col col-6 class="label">Gr. Wt (g)</ion-col>
+
+    <ion-col col-6 class="value">
+      <span *ngIf="t['is_partial'] == '0'"> {{t.gross_wt}}  </span>
+        <input class="value-input" *ngIf="t['is_partial'] == '1'" type="number" [(ngModel)]="t['gross_wt']" (ngModelChange)="calcSaleValue(i)"/>
+    </ion-col>
+
+    
+    <ion-col col-6 class="label">St. Wt (g)</ion-col>
+    <ion-col col-6 class="value">
+      <span *ngIf="t['is_partial'] == '0'"> {{t.less_wt}}  </span>
+      <input class="value-input" type="number" *ngIf="t['is_partial'] == '1'" [(ngModel)]="t.less_wt" (ngModelChange)="checking(i)" readonly />
+    </ion-col>
+
+
+    
+    <ion-col  col-6 class="label">Nt. Wt (g)</ion-col>
+    <ion-col  col-6 class="value">
+      <span *ngIf="t['is_partial'] == '0'"> {{t.net_wt}}  </span>
+      <input class="value-input" type="number" *ngIf="t['is_partial'] == '1'" [(ngModel)]="t.net_wt" (ngModelChange)="calcSaleValue(i)" readonly />
+    </ion-col>
+
+         <ion-col col-6 class="label">Rate</ion-col>
+        <ion-col col-6 class="value">{{t.rate_per | number:'1.2-2'}}</ion-col>
+                <ion-col col-6 class="label">VA</ion-col>
+        <ion-col col-6 class="value">{{t.retail_max_wastage_percent}}%</ion-col>
+
+        <ion-col col-6 class="label">Purity</ion-col>
+        <ion-col col-6 class="value">{{t.purname}}</ion-col>
+
+        <ion-col col-6 class="label">Section</ion-col>
+        <ion-col col-6 class="value">{{t.section_name}}</ion-col>
+
+      </ion-row>
+    </ion-col>
+
+   
+    <ion-col col-6 class="right-table">
+      <ion-row>
+        <ion-col col-6 class="label">Metal Value</ion-col>
+        <ion-col col-6 class="value">{{t.net_wt * t.rate_per | number:'1.2-2'}}</ion-col>
+
+        <ion-col col-6 class="label">MC Value </ion-col>
+        <ion-col col-6 class="value">{{t.mc_value | number:'1.2-2'}} <span *ngIf="t.mc_type == 1">/P</span> <span *ngIf="t.mc_type == 2">/G</span></ion-col>
+
+        <ion-col col-6 class="label">Tot. MC</ion-col>
+        <ion-col col-6 class="value">{{t.making_charge | number:'1.2-2'}}</ion-col>
+
+        <ion-col col-6 class="label">St. Chg</ion-col>
+        <ion-col col-6 class="value">{{t.stone_price | number:'1.2-2'}}</ion-col>
+
+        <ion-col col-6 class="label">Txble Amt</ion-col>
+        <ion-col col-6 class="value">{{t.taxable | number:'1.2-2'}}</ion-col>
+
+        <ion-col col-6 class="label">GST</ion-col>
+        <ion-col col-6 class="value">{{t.tax_price | number:'1.2-2'}}</ion-col>
+
+        <ion-col col-6 class="label">Total Amt</ion-col>
+        <ion-col col-6 class="value">{{ t.sales_value | currency:'INR':true:'1.2-2' }}</ion-col>
+
+      </ion-row>
+    </ion-col>
+
+  </ion-row>
+</ion-item>
+
+            </ion-item-sliding>
+          </ion-list> -->
+       
+<span *ngIf="esti_type == 'tag' && esti['tag']?.length > 0 " margin-top>
+  <ion-row class="bill-header">
+    <ion-col size="3" class="left">Desc</ion-col>
+    <ion-col size="1" class="center" style="text-align: center !important;">Pcs</ion-col>
+    <ion-col size="2" class="center">Gwt</ion-col>
+    <ion-col size="2" class="center">Nwt</ion-col>
+    <ion-col size="2" class="right">Rate</ion-col>
+    <ion-col size="1" class="right">VA/MC</ion-col>
+    <ion-col size="3" class="right" style="text-align: center !important;">Amount</ion-col>
+  </ion-row>
+
+  <ng-container *ngFor="let t of esti['tag']; let i = index">
+
+    <ion-row class="item-name-row">
+      <ion-col size="8" class="prod-name">{{ t.product_name }}</ion-col>
+
+      <ion-col size="4" class="right btn-set" style="text-align: end !important;">
+        <button ion-button small (click)="chooseemp(i)" class="btn-icon navy">
+          <ion-icon name="person-add"></ion-icon>
+        </button>
+        <button [disabled]="t['calculation_based_on'] == '3' || t['calculation_based_on'] == '4'" ion-button small color="primary" class="btn-icon" 
+                (click)="openItemAddModal('tag', t, 'edit')">
+          <ion-icon name="create"></ion-icon>
+        </button>
+        <button ion-button small color="danger" class="btn-icon"
+                (click)="deleteItem('tag', i)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+
+    <ion-row class="item-row">
+      <ion-col size="3" class="left"></ion-col>
+      <ion-col size="1" class="center" style="text-align: center !important;">{{ t.piece }}</ion-col>
+      <ion-col size="2" class="center">{{ t.gross_wt }}</ion-col>
+      <ion-col size="2" class="center" style="text-align: center !important;">{{ t.net_wt }}</ion-col>
+      <ion-col size="2" class="right"  style="text-align: center !important;">{{ t.rate_per }}</ion-col>
+      <!-- <ion-col size="1" class="right">{{ t.retail_max_wastage_percent > 0 ? t.retail_max_wastage_percent : t.mc_value }}</ion-col> -->
+       <ion-col size="1" class="right">
+
+  <ng-container *ngIf="t.retail_max_wastage_percent > 0; else showMC" style="text-align: center !important;">
+    {{ t.retail_max_wastage_percent | number:'1.2-2' }}
+  </ng-container>
+
+  <ng-template #showMC style="text-align: center !important;">
+    {{ t.mc_value | indianCurrency:2  }}
+  </ng-template>
+
+</ion-col>
+
+      <ion-col size="3" class="right amount" style="text-align: end !important;overflow: clip !important;">{{ (t.taxable - t.stone_price - t.other_metal_total_price) | indianCurrency:2 }}</ion-col>
+    </ion-row>
+
+    <ion-row *ngFor="let s of t.stone_details" class="stone-row">
+      <ion-col size="3" class="left stone-name">{{ s.stone_name }}</ion-col>
+      <ion-col size="1" class="center" style="text-align: center !important;">{{ s.pieces }}</ion-col>
+      <ion-col size="2"></ion-col>
+      <ion-col size="2" class="center">{{ s.wt }}</ion-col>
+      <ion-col size="2" class="right">{{ s.rate_per_gram }}</ion-col>
+      <ion-col size="1"></ion-col>
+      <ion-col size="3" class="right stone-amt" style="text-align: end !important;overflow: clip !important;">{{s.amount | indianCurrency:2}}</ion-col>
+    </ion-row>
+
+    
+    <ion-row *ngFor="let other of t.othermetal_details" class="stone-row">
+      <ion-col size="3" class="left stone-name">{{ other.metal_name }}</ion-col>
+      <ion-col size="1" class="center" style="text-align: center !important;">{{ other.tag_other_itm_pcs }}</ion-col>
+      <ion-col size="2"></ion-col>
+      <ion-col size="2" class="center">{{ other.tag_other_itm_grs_weight }}</ion-col>
+      <ion-col size="2" class="right">{{ other.tag_other_itm_rate }}</ion-col>
+      <ion-col size="1"> 
+         <ng-container *ngIf="other.tag_other_itm_wastage > 0; else showMC" style="text-align: center !important;">
+    {{ other.tag_other_itm_wastage | number:'1.2-2' }}
+  </ng-container>
+
+  <ng-template #showMC style="text-align: center !important;">
+    {{ other.tag_other_itm_mc | indianCurrency:2  }}
+  </ng-template>
+  </ion-col>
+        
+  <!--       {{ other.tag_other_itm_wastage }}</ion-col> -->
+      <ion-col size="3" class="right stone-amt" style="text-align: end !important;overflow: clip !important;">{{other.tag_other_itm_amount | indianCurrency:2}}</ion-col>
+    </ion-row>
+
+    <div class="divider"></div>
+
+  </ng-container>
+
+  <ion-row class="total-row">
+    <ion-col size="3" style="font-weight: bold !important;">Total</ion-col>
+    <ion-col size="1" class="center" style="text-align: center !important;">{{ totalPieces }}</ion-col>
+    <ion-col size="2" class="center" style="text-align: center  !important;">{{ totalGwt | number:'1.3-3' }}</ion-col>
+    <ion-col size="2" class="center"  style="text-align: center  !important;">{{ totalNwt | number:'1.3-3'}}</ion-col>
+    <ion-col size="2"></ion-col>
+    <ion-col size="1"></ion-col>
+    <ion-col size="3" class="right total-blue"  style="text-align: end  !important;">{{ totalTaxable | indianCurrency:2 }}</ion-col>
+  </ion-row>
+
+  <ion-row class="summary-row">
+    <ion-col col-8 class="right" style="text-align: end;">Taxable Value</ion-col>
+    <ion-col col-4 class="right" style="text-align: end;">{{ totalTaxable | indianCurrency:2 }}</ion-col>
+  </ion-row>
+
+  <ion-row class="summary-row">
+    <ion-col col-8 style="text-align: end;">GST</ion-col>
+    <ion-col col-4 class="right" style="text-align: end;">{{ totalGST | indianCurrency:2 }}</ion-col>
+  </ion-row>
+
+  <ion-row class="summary-row">
+    <ion-col col-8 style="text-align: end;">Invoice Value</ion-col>
+    <ion-col col-4 class="right" style="text-align: end;">{{ invoiceValue | indianCurrency:2 }}</ion-col>
+  </ion-row>
+
+  <ion-row class="summary-row net">
+    <ion-col col-8 style="text-align: end;">Net Total</ion-col>
+    <ion-col col-4 class="right" style="text-align: end;">{{ netTotal | indianCurrency:2 }}</ion-col>
+  </ion-row>
+   <div class="divider"></div>
+
+     <ion-row class="summary-row net">
+    <ion-col style="text-align: left;font-weight: bold !important;">Other Informations</ion-col>
+  </ion-row>
+ <!--   <div class="divider"></div> -->
+    <ion-row class="summary-row net">
+    <ion-col col-7 >Total Stone Weight / Value</ion-col>
+    <ion-col col-5 class="right" style="text-align: end;">{{ totalStoneWt | number:'1.3-3' }} / {{ totalStoneAmount | indianCurrency:2 }}</ion-col>
+  </ion-row>
+
+      <ion-row class="summary-row net" style="border: none !important;">
+    <ion-col col-7 >Total Diamond Carat / Value</ion-col>
+    <ion-col col-5 class="right" style="text-align: end;">{{ totalDiaWt | number:'1.3-3' }} / {{ totalDiaAmount | indianCurrency:2 }}</ion-col>
+  </ion-row>
+
+        <ion-row class="summary-row net" style="border: none !important;">
+    <ion-col col-7>Total Sales Amount </ion-col>
+    <ion-col col-5 class="right" style="text-align: end;">{{ totalTaxable | indianCurrency:2 }} </ion-col>
+  </ion-row>
+      <ion-row class="summary-row net" style="border: none !important;">
+    <ion-col col-7>Total Sales Incl. GST </ion-col>
+    <ion-col col-5 class="right" style="text-align: end;">{{ netTotal | indianCurrency:2 }} </ion-col>
+  </ion-row>
+          <ion-row class="summary-row net" style="border: none !important;">
+    <ion-col col-7>Total Sales Gwt / Nwt </ion-col>
+    <ion-col col-5 class="right" style="text-align: end;">{{ totalGwt | number:'1.3-3' }} / {{totalNwt | number:'1.2-3'}}</ion-col>
+  </ion-row>
+
+
+</span>
+
+
+        <!-- Row 4 : Non Tag-->
+        <span *ngIf="esti_type == 'summary' || esti_type == 'non_tag'" margin-top> <!-- <span *ngIf="esti['is_non_tag']" margin-top> -->
+          <ion-row *ngIf="esti_type == 'summary' && esti['non_tag']?.length > 0">
+            <ion-col no-padding text-wrap col-12 >
+              <div (click)="tog('non_tag')" class="theme-title-blk"> <ion-icon name="ribbon"></ion-icon> Non-Tag Items <ion-badge color="light" float-right>{{esti['non_tag']?.length}}</ion-badge></div>
+            </ion-col>
+            <ion-col text-wrap *ngIf="esti_type == 'non_tag'">
+              <!-- <span float-left class="esti-notes">
+                Add Non-Tag Items
+              </span> -->
+              <!-- <span float-right>
+                  <button ion-button icon-start outline small color="secondary" (click)="openItemAddModal('non_tag','','add')">
+                    <ion-icon name="ios-add"></ion-icon> ADD
+                  </button>
+              </span> -->
+            </ion-col>
+          </ion-row>
+          <ion-card class="errorMsg" padding *ngIf="ntErrorMsg">
+            {{ntErrorMsg}}
+          </ion-card>
+          <ion-card class="msg" padding *ngIf="ntMsg">
+            {{ntMsg}}
+          </ion-card>
+          <ion-list *ngIf="(esti_type == 'summary' && togtype == 'non_tag')|| esti_type == 'non_tag'">
+
+          <!-- <ion-list *ngIf="esti['non_tag'].length > 0"> -->
+            <ion-item-sliding margin-top #tags *ngFor="let nt of esti['non_tag'];let i = index;">
+              <ion-item class="no-padding">
+                <div style="text-align: end;font-weight: bold;">
+                  {{nt['emp_name']}}
+                </div>
+                <div style="text-align: end;">
+                  <button ion-button small style="font-size: xx-small;background-color:#1A2A53 !important;"  (click)="chooseemp(i)"><ion-icon  name="person-add"></ion-icon></button>
+
+                  <button ion-button small style="font-size: xx-small;"  (click)="openItemAddModal('non_tag',nt,'edit')"><ion-icon name="create"></ion-icon></button>
+
+                  <button ion-button color="danger" (click)="deleteItem('non_tag',i)"><ion-icon name="trash"></ion-icon></button>
+
+                </div>
+                <ion-row>
+                  <ion-col text-wrap col-12 col-md-12 class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 1" style="font-size: 11px !important;">
+                    <span *ngIf="nt.collection_name != null">{{nt.collection_name}} <b> | </b> </span>
+                    {{nt.product_name}} <b> | </b>
+                    {{nt.design_name}}
+                  </ion-col>
+                  <ion-col text-wrap col-6 col-md-2 class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 0">
+                    <span class="text-small">{{nt.product_name}}</span>
+                  </ion-col>
+                  <ion-col text-wrap col-6 col-md-2 class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 0">
+                    <span class="text-small">{{nt.design_name}}</span>
+                  </ion-col>
+                  <ion-col style="margin: auto;" text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Metal Rate </p>
+                  </ion-col>
+                  <ion-col style="margin: auto;" text-wrap col-3 col-md-2 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> {{nt.rate_per | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-6 col-md-4 class="custom-2col">
+
+                    <!-- <div style="text-align: end;">
+                      <button ion-button small style="font-size: xx-small;"  (click)="openItemAddModal('non_tag',nt,'edit')"><ion-icon name="create"></ion-icon></button>
+
+                      <button small style="font-size: xx-small;" ion-button color="danger" (click)="deleteItem('non_tag',i)"><ion-icon name="trash"></ion-icon></button>
+
+                    </div> -->
+                    </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Purity </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{nt.purname}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Pcs </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{nt.piece}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Size </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{nt.size}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Gross wgt </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{nt.gross_wt}} g
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Less Weight </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{nt.less_wt}} g
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Net Weight </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{nt.net_wt}} g
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Wast ({{nt.retail_max_wastage_percent}} %)  </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    {{nt.wast_wgt}} g
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Total MC </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> {{nt.making_charge | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Taxable Amount </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> {{nt.taxable | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">GST </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> {{nt.tax_price | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">Amount </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> <b>{{nt.sales_value | number:'1.2-2' }}</b>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">section</p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <b>{{nt.section_name}}</b>
+                  </ion-col>
+
+
+                </ion-row>
+              </ion-item>
+              <ion-item-options side="right">
+                <button ion-button *ngIf="esti_type != 'summary'" color="primary" (click)="openItemAddModal('non_tag',nt,'edit')"><ion-icon name="create"></ion-icon></button>
+                <button ion-button color="danger" (click)="deleteItem('non_tag',i)"><ion-icon name="trash"></ion-icon></button>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </span>
+        <!-- ./Row 4 Non-Tag -->
+
+        <!-- Row 5 : Home Bill -->
+        <span *ngIf="esti_type == 'summary' || esti_type == 'home_bill'" margin-top> 
+          <ion-row *ngIf="esti_type == 'summary' && esti['home_bill']?.length > 0">
+            <ion-col no-padding text-wrap col-12 >
+              <div (click)="tog('home_bill')" class="theme-title-blk"> <ion-icon name="home"></ion-icon> Home Bill Items <ion-badge color="light" float-right>{{esti['home_bill']?.length}}</ion-badge></div>
+            </ion-col>
+            <ion-col text-wrap *ngIf="esti_type == 'home_bill'">
+            </ion-col>
+          </ion-row>
+
+          <ion-list *ngIf="(esti_type == 'summary' && togtype == 'home_bill')|| esti_type == 'home_bill'">
+            <ion-item-sliding margin-top #tags *ngFor="let hb of esti['home_bill'];let i = index;">
+              <ion-item class="no-padding">
+                <div style="text-align: end;font-weight: bold;">
+                  {{hb['emp_name']}}
+                </div>
+                <ion-row>
+                  <ion-col text-wrap col-3  class="custom-2col">
+                    {{hb.tag_code}}
+                  </ion-col>
+                  <ion-col text-wrap col-12  class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 1" style="font-size: 11px !important;">
+                    <span *ngIf="hb.collection_name != null">{{hb.collection_name}} <b> | </b> </span>
+                    {{hb.product_name}} <b> | </b>
+                    {{hb.design_name}}
+                  </ion-col>
+                  <ion-col text-wrap col-4  class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 0">
+                    {{hb.product_name}}
+                  </ion-col>
+                  <ion-col text-wrap col-4  class="custom-2col theme-color-secondary" *ngIf="ret_settings['subproduct_required'] == 0">
+                    {{hb.design_name}}
+                  </ion-col>
+                  </ion-row>
+                  <ion-row>
+
+                    <ion-col style="margin: auto;" text-wrap col-3  class="custom-2col">
+                      <p class="text-small">Metal Rate </p>
+                    </ion-col>
+                    <ion-col style="margin: auto;" text-wrap col-3  class="custom-2col">
+                      <span [innerHTML]="settings.curr_symb_html"></span> {{hb.rate_per | number:'1.2-2' }}
+                    </ion-col>
+
+                    <ion-col text-wrap col-6  class="custom-2col">
+
+                      <div style="text-align: end;">
+                        <button ion-button small style="font-size: xx-small;background-color:#1A2A53 !important;"  (click)="chooseemp(i)"><ion-icon  name="person-add"></ion-icon></button>
+
+                        <button ion-button small style="font-size: xx-small;"  (click)="openItemAddModal('home_bill',hb,'edit')"><ion-icon name="create"></ion-icon></button>
+
+                        <button ion-button small style="font-size: xx-small;" color="danger" (click)="deleteItem('home_bill',i)"><ion-icon name="trash"></ion-icon></button>
+
+                      </div>
+                      </ion-col>
+
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Purity </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    {{hb.purname}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Pcs </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    {{hb.piece}}
+                  </ion-col>
+                  </ion-row>
+                  <ion-row>
+
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Size </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    {{hb.size}}
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Gross wgt </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    {{hb.gross_wt}} g
+                  </ion-col>
+                  </ion-row>
+                  <ion-row>
+
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Less Weight </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    {{hb.less_wt}} g
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Net Weight </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    {{hb.net_wt}} g
+                  </ion-col>
+                  </ion-row>
+                  <ion-row>
+
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Wast ({{hb.retail_max_wastage_percehb}} %)  </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    {{hb.wast_wgt}} g
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Total MC </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> {{hb.making_charge | number:'1.2-2' }}
+                  </ion-col>
+                  </ion-row>
+                  <ion-row>
+
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Taxable Amount </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> {{hb.taxable | number:'1.2-2' }}
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">GST </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> {{hb.tax_price | number:'1.2-2' }}
+                  </ion-col>
+                  </ion-row>
+                  <ion-row>
+
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <p class="text-small">Amount </p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 class="custom-2col">
+                    <span [innerHTML]="settings.curr_symb_html"></span> <b>{{hb.sales_value | number:'1.2-2' }}</b>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                    <p class="text-small">section</p>
+                  </ion-col>
+                  <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                   <b *ngIf="hb.section">{{hb.section.section_name}}</b>
+                  </ion-col>
+
+                  </ion-row>
+              </ion-item>
+              <ion-item-options side="right">
+                <button ion-button *ngIf="esti_type != 'summary'" color="primary" (click)="openItemAddModal('home_bill',hb,'edit')"><ion-icon name="create"></ion-icon></button>
+                <button ion-button color="danger" (click)="deleteItem('home_bill',i)"><ion-icon name="trash"></ion-icon></button>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </span>
+        <!-- ./Row 5 Home Bill -->
+
+        <!-- Row 6 : Old Gold -->
+        <span *ngIf="esti_type == 'summary' || esti_type == 'old_metal'" margin-top> <!-- <span *ngIf="esti['is_old_metal']" margin-top> -->
+          <ion-row  *ngIf="esti_type == 'summary' && esti['old_metal']?.length > 0">
+            <ion-col no-padding text-wrap col-12 >
+              <div (click)="tog('old_metal')" class="theme-title-blk"> <img class="summary-img-icon" src='assets/icon/old_metal_white.svg' /> Old Metal Items <ion-badge color="light" float-right>{{esti['old_metal']?.length}}</ion-badge></div>
+            </ion-col>
+            <ion-col text-wrap *ngIf="esti_type == 'old_metal'">
+              <!-- <span float-left class="esti-notes">
+                Add Old Metal Items
+              </span> -->
+              <!-- <span float-right>
+                  <button ion-button icon-start outline small color="secondary" (click)="openItemAddModal('old_metal','','add')">
+                    <ion-icon name="ios-add"></ion-icon> ADD
+                  </button>
+              </span> -->
+            </ion-col>
+          </ion-row>
+          <!-- <ion-card class="errorMsg" padding *ngIf="omErrorMsg">
+            {{omErrorMsg}}
+          </ion-card>
+          <ion-card class="msg" padding *ngIf="omMsg">
+            {{omMsg}}
+          </ion-card> -->
+          <ion-list  *ngIf="(esti_type == 'summary' && togtype == 'old_metal')|| esti_type == 'old_metal'">
+            <ion-item-sliding margin-top #tags *ngFor="let om of esti['old_metal'];let i = index;">
+              <ion-item class="no-padding">
+                <div style="text-align: end;font-weight: bold;">
+                  {{om['emp_name']}}
+                </div>
+                  <ion-row>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col" >
+                        <p class="text-small">Metal  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        {{om.category}}
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Purpose  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        {{om.purpose}}
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Gross wgt  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        {{om.gross_wt}} g
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Dust wgt  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        {{om.dust_wt}} g
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Stone wgt  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        {{om.stone_wt}} g
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Wast ({{om.wastage}} %)   </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        {{om.wastage_wt}} g
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Net Weight  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        {{om.net_wt}} g
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Rate  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <span [innerHTML]="settings.curr_symb_html"></span> {{om.rate}}
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <p class="text-small">Amount  </p>
+                      </ion-col>
+                      <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+                        <span [innerHTML]="settings.curr_symb_html"></span> <b>{{om.amount | number:'1.2-2' }} </b>
+                      </ion-col>
+                      <ion-col text-wrap col-6 col-md-4 class="custom-2col">
+
+                      <div style="text-align: end;">
+                        <button ion-button small style="font-size: xx-small;background-color:#1A2A53 !important;"  (click)="chooseemp(i)"><ion-icon  name="person-add"></ion-icon></button>
+
+                        <button ion-button small style="font-size: xx-small;"  (click)="openItemAddModal('old_metal',om,'edit')"><ion-icon name="create"></ion-icon></button>
+
+                        <button ion-button small style="font-size: xx-small;" color="danger" (click)="deleteItem('old_metal',i)"><ion-icon name="trash"></ion-icon></button>
+
+                      </div>
+                      </ion-col>
+                  </ion-row>
+              </ion-item>
+              <ion-item-options side="right">
+                <button ion-button *ngIf="esti_type != 'summary'" color="primary" (click)="openItemAddModal('old_metal',om,'edit')"><ion-icon name="create"></ion-icon></button>
+                <button ion-button color="danger" (click)="deleteItem('old_metal',i)"><ion-icon name="trash"></ion-icon></button>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-list>
+        </span>
+        <!-- ./Row 6 Old Gold -->
+        </div>
+
+    </ion-grid>
+    <br/>
+      <br/>
+      <br/>
+  </ion-content>
+  <ion-footer style="text-align: center;bottom: 80px !important;" *ngIf="page_type == 'create'">
+    <ion-fab left bottom *ngIf="!scannerOn">
+      <button ion-fab mini color="primary" (click)="openEstiBasicDetailModal()"><ion-icon name="person"></ion-icon></button>
+    </ion-fab>
+    <ion-fab left bottom style="margin-left: 47px;" *ngIf="!scannerOn  && esti_type == 'summary'">
+      <button ion-fab mini color="primary" (click)="opengift()"><ion-icon name="bookmark"></ion-icon></button>
+    </ion-fab>
+    <ion-fab left bottom style="margin-left: 47px;"  *ngIf="!scannerOn && esti_type != 'summary' && esti_type != 'tag' ">
+      <button ion-fab mini color="primary" (click)="openItemAddModal(esti_type,'','add')"><ion-icon name="ios-add"></ion-icon></button>
+    </ion-fab>
+    <ion-fab left bottom style="margin-left: 47px;"  *ngIf="!scannerOn && esti_type != 'summary' && esti_type == 'tag' ">
+      <button ion-fab mini color="primary" (click)="check()"><ion-icon name="ios-add"></ion-icon></button>
+    </ion-fab>
+    <!-- <img class="ani" style=" " (click)="showreward()" *ngIf="!scannerOn && esti_type != 'summary'" src="assets/giphy.gif"> -->
+
+<!--  vinsmera no neesed of scan button
+    
+<ion-fab center bottom style="left: 47% !important;" *ngIf="!scannerOn && esti_type != 'summary'">
+
+      <button *ngIf="checkold != true && esti_type == 'tag'" ion-fab mini color="primary" style="    width: 95px !important;
+      border-radius: 10px !important;
+      background:#1A2A53 !important;" (click)="openQRScanner('tag')"><ion-icon name="ios-qr-scanner"></ion-icon>SCAN</button>
+        <button *ngIf="checkold == true && esti_type == 'tag'" ion-fab mini color="primary" style="    width: 105px !important;
+        border-radius: 10px !important;
+        background:#1A2A53 !important;" (click)="openQRScanner('tag')"><ion-icon name="ios-qr-scanner"></ion-icon>OLD SCAN</button>
+  </ion-fab> -->
+
+    <button style="width: 45% !important;" ion-button *ngIf="!scannerOn && esti_type == 'summary'" icon-start  class="theme-btn" (click)="createEstiprint()">Print</button>
+
+    <button style="width: 45% !important;" ion-button *ngIf="!scannerOn && esti_type == 'summary'" icon-start  class="theme-btn" (click)="createEsti()">Save</button>
+    <!-- <button *ngIf="scannerOn" ion-button icon-start full class="warning" (click)="closeScanner()">Close Scanner</button>   -->
+  </ion-footer>
+<!-- ./Estimation Create Block  -->
+
+
+<!-- Estimation Print  Block-->
+  <ion-content *ngIf="page_type == 'print'">
+    <div style="margin-bottom: 100px;">
+
+    <!-- <ion-row>
+      <ion-col>
+        <div class="esti-notes" text-center margin>Enter Estimation No. to re-print estimation</div>
+      </ion-col>
+    </ion-row> -->
+    <div class="row">
+      <div class="col" col-3>
+
+      </div>
+      <div class="col" col-9>
+        <ion-item no-padding>
+          <ion-label color="label-color" stacked>Estimation No<span class="required"> *</span></ion-label>
+          <ion-input type="text" [(ngModel)]="estiDetail['esti_no']" (keyup)="texto1($event)"></ion-input>
+          <button ion-button outline small color="dark" type="button" item-right (click)="getEstiByEstiNo('')"> Search </button>
+      </ion-item>
+      </div>
+    </div>
+
+
+
+    <ion-row>
+      <ion-col no-padding text-wrap col-12>
+        <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon> Estimation List  <ion-badge color="light" float-right></ion-badge></div>
+      </ion-col>
+      </ion-row>
+    <ion-row style="    margin-top: 10px;
+    border: 1px solid lightgrey;" *ngFor="let l of list">
+
+      <ion-col>
+        <div class="row">
+        <div class="col" style="    padding: 5px;font-weight: bold;">{{l['firstname']}}
+          <!-- <ion-icon (click)="edit(l['cus_id'])" name="ios-create" style="float: right;"></ion-icon> -->
+        </div>
+        <div  class="col" style="    padding: 5px;"> ₹ {{l['total_cost']}}
+          <!-- <ion-icon style="float: right;" (click)="print(l)" name="print"></ion-icon> -->
+
+        </div>
+        <!-- <div style="    padding: 5px;font-weight: bold;">{{l['totwt']}} Grms
+        </div> -->
+      </div>
+      <div class="row">
+        <div  class="col" style="    padding: 5px;">{{l['mobile']}}</div>
+
+      <div class="col"  style="    padding: 5px;">{{l['totwt']}} grms
+      </div>
+    </div>
+        <!-- <div style="    padding: 5px;">
+          <ion-badge style="background: linear-gradient(to right,#1A2A53 0%,#1A2A53 75%,#1A2A53 100%);" *ngIf="l['has_converted_order'] == 0">Open</ion-badge>
+          <ion-badge  style="background: green;" *ngIf="l['has_converted_order'] == 1">Billed</ion-badge>
+
+        </div> -->
+
+      </ion-col>
+      <!-- <ion-col (click)="getEstiByEstiNo(l['esti_no'])" col-3 style="background-color:#1A2A53 !important;text-align: center;">
+        <div style="color: white;font-weight: bold;margin-top:25px">Esti.No</div>
+      <div style="color: white;">{{l['esti_no']}}</div>
+      </ion-col> -->
+
+      <!-- <ion-col  col-4 style="background-color:#1A2A53 !important;text-align: center;">
+        <div class="row">
+          <div class="col" style="border: 1px solid white;    margin-top: 10px;" col-8 (click)="getEstiByEstiNo(l['esti_no'])">
+            <ion-icon style="" (click)="print(l)" name="eye"></ion-icon>
+
+            <div style="color: white;font-weight: bold;">Esti.No</div>
+            <div style="color: white;">{{l['esti_no']}}</div>
+            </div>
+            <div class="col" col-4 style="margin: auto;">
+              <ion-icon style="float: right;font-size: 1.5em !important;margin-top: 15px;" (click)="print(l)" name="print"></ion-icon>
+
+            </div>
+
+        </div>
+
+      </ion-col> -->
+
+      <ion-col  col-4 style="background-color:#1A2A53 !important;text-align: center;">
+        <div class="row">
+          <div class="col" style="border: 1px solid white;        margin-top: 5px;
+          margin-bottom: 5px;" col-8 (click)="getEstiByEstiNo(l['esti_no'])">
+
+            <!-- <div style="color: white;font-weight: bold;">Esti.No</div> -->
+            <div class="row">
+            <div class="col" col-7 *ngIf="l['has_converted_order'] == 0" style="color: white;font-size: 16px !important;    white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;">{{l['esti_no']}}</div>
+            <div class="col" col-7 *ngIf="l['has_converted_order'] == 1" style="color: green;font-size: 16px !important;    white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;">{{l['esti_no']}}</div>
+
+            <div class="col" col-5>
+              <ion-icon style="margin: auto;color: white;"  name="eye"></ion-icon>
+
+            </div>
+          </div>
+            </div>
+            <!-- <div class="col" col-4 style="margin: auto;">
+              <ion-icon style=""  name="eye"></ion-icon>
+
+            </div> -->
+            <div class="col" col-4 >
+              <ion-icon style="float: right;font-size: 1.5em !important;margin-top: 10px;color: white;" (click)="print(l)" name="print"></ion-icon>
+              <ion-icon *ngIf="l['is_billed'] == 0" style="float: right;font-size: 1.5em !important;margin-top: 15px;color: white;" (click)="edittag(l)" name="create"></ion-icon>
+
+            </div>
+
+        </div>
+
+      </ion-col>
+    </ion-row>
+    </div>
+  </ion-content>

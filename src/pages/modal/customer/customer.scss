@@ -1,0 +1,24 @@
+page-customer {
+    .scroll-content {
+        /* bottom:50px !important; */
+        padding: 15px !important;
+    }
+    .termsfont {
+        font-size: small !important;
+        font-weight: normal !important;
+        text-align: justify;
+        list-style-type: square;
+    }
+    .col {
+        font-size: 13px !important;
+    }
+    .searchbar-md .searchbar-input{
+        color: #141414 !important;
+        background-color: white !important;
+    }
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        
+        color: #141414 !important;
+
+    }
+}

@@ -1,0 +1,654 @@
+<!--
+  Generated template for the StatusViewPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header> <ion-navbar>
+    <ion-title>
+      <!-- <ion-icon (click)="back()" name="arrow-back" ></ion-icon> -->
+      <button ion-button menuToggle><ion-icon name="menu"></ion-icon></button>
+
+      Order Status
+
+
+    </ion-title> </ion-navbar>
+
+  <ion-row>
+
+    <ion-col align="center" style="background: white !important;">
+      <ion-slides style="margin-top: 22px;" (ionSlideWillChange)="slide()" *ngIf="slidess && slidess.length" #slides
+        [ngClass]="animateClass" zoom='true' speed='500' initialSlide='0'>
+        <ion-slide (click)="openurl(slide)" *ngFor="let slide of slidess;let in = index">
+          <img *ngIf="slideimg != null" [src]="slideimg" class="slide-image" imageViewer='{{slideimg}}'
+            [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'" />
+          <img *ngIf="slideimg == null" src='assets/no-img.png' class="slide-image" imageViewer='assets/no-img.png'
+            [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'" />
+        </ion-slide>
+      </ion-slides>
+    </ion-col>
+  </ion-row>
+
+</ion-header>
+
+<ion-content style="height: 88vh;" (ionScroll)="scrolling($event)" padding>
+  <div style="margin-bottom: 200px !important;">
+
+    <hr *ngIf="receivedData['image_details'].length > 0">
+    <ion-scroll scrollX="true" style="height:70px" *ngIf="receivedData['image_details'].length > 0"> <ion-row nowrap style="padding: 0px !important;">
+        <ion-col *ngFor="let img of receivedData['image_details'];let in = index" col-2 style="padding: 5px;"
+          align="center">
+          <ion-card (click)="setimg(img['image'],in)" style="margin: 0px 0px 0px 0px;box-shadow: none;width: 100%;">
+            <img style="margin: auto;object-fit: cover !important;" src='{{img.image}}'
+              onerror="this.src='assets/no-img.png'" width="60px" height="60px" imageCache />
+
+          </ion-card>
+
+        </ion-col> </ion-row> </ion-scroll>
+    <hr *ngIf="receivedData['image_details'].length > 0">
+
+
+    <!--   <ion-card > -->
+
+
+    <!-- <ion-item> -->
+    <!-- <ion-avatar item-left>
+<img *ngIf="receivedData['img_arr'].length > 0" style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="{{receivedData['img_arr'][0]}}" imageViewer="{{receivedData['img_arr'][0]}}"  onerror="this.src='assets/no-img.png'" imageCache/>
+ <img *ngIf="receivedData['img_arr'].length == 0" style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="assets/no-img.png" imageViewer="assets/no-img.png"  onerror="this.src='assets/no-img.png'" imageCache/>
+
+ </ion-avatar> -->
+    <!-- <h3>
+   <p>
+     Tag Id :
+     <ion-badge style="background: linear-gradient(to right,#000000 0%,#000000 75%,#000000 100%);">{{receivedData.tag_id}}</ion-badge>
+   </p>
+   <p >Customer : {{receivedData.firstname}} <span (tap)="open(i)" style="float: right;color:
+  #000000">{{receivedData.tog}}>></span></p>
+     <p >Mobile : {{receivedData.mobile}}</p>
+
+ </h3> -->
+
+    <ion-card>
+      <ion-card-content>
+        <ion-row text-center>
+          <ion-col>
+            <h3 style="font-weight: bold;"> Customer Info</h3>
+          </ion-col>
+        </ion-row>
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Branch Name</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            <ion-badge
+              style="background: linear-gradient(to right,#000000 0%,#000000 75%,#000000 100%);">{{receivedData.branch_name}}</ion-badge>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Customer</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.cus_name}}
+          </ion-col>
+        </ion-row>
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Mobile</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.mobile}}
+          </ion-col>
+        </ion-row>
+
+        <br>
+        <ion-row text-center>
+          <ion-col>
+            <h3 style="font-weight: bold;"> Order Information</h3>
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Order Type</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.order_type}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Order Date</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.order_date}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Order No</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.order_no}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Customer Due Date</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.cus_due_date}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Advance Amount</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            ₹ {{receivedData.advance_amount}}
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Adjusted Amount</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            ₹ {{receivedData.advance_adj_amount}}
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Balance Amount</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            ₹ {{balance}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Purchase No</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.pur_no}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Purchase Status</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.order_status}}
+          </ion-col>
+        </ion-row>
+
+        <!-- <ion-row no-padding>
+          <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Karigar Due Date</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.smith_due_date}}
+          </ion-col>
+        </ion-row> -->
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Tag No</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.tag_code}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Bill No</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.sales_ref_no}}
+          </ion-col>
+        </ion-row>
+
+           <!-- <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Sale Ref No</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.sales_ref_no}}
+          </ion-col>
+        </ion-row> -->
+
+
+        <br>
+        <ion-row text-center>
+          <ion-col>
+            <h3 style="font-weight: bold;"> Product Information</h3>
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Status</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.order_status}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Product</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.product_name}}
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Design</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.design_name}}
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Sub Design</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.sub_design_name}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Pcs</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.totalitems}}
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Gross Wt </h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.weight}} Gm
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Less Wt</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.less_wt}}
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Net Wt </h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.net_wt}} Gm
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Wastage</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.wast_percent}} %
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">MC value / <span *ngIf="receivedData.mc_type == 1" >PCS</span><span *ngIf="receivedData.mc_type == 2" >Gm</span> </h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.mc}}
+          </ion-col>
+        </ion-row>
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+          <h3 style="font-weight: bold;">Total MC </h3>
+        </ion-col>
+        <ion-col col-1 style="max-width:3% !important;margin: auto;">
+          :
+        </ion-col>
+        <ion-col col-5 style="max-width:60% !important;margin: auto;">
+          ₹ {{receivedData.total_mc}}
+        </ion-col>
+      </ion-row>
+
+      <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+        <h3 style="font-weight: bold;">Total Stone Amount </h3>
+      </ion-col>
+      <ion-col col-1 style="max-width:3% !important;margin: auto;">
+        :
+      </ion-col>
+      <ion-col col-5 style="max-width:60% !important;margin: auto;">
+        ₹ {{receivedData.stn_amt}}
+      </ion-col>
+    </ion-row>
+
+
+
+        <!-- <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Karigar</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.karigar_name}}
+          </ion-col>
+        </ion-row> -->
+
+
+
+
+        <ion-row no-padding> <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Delivered Date</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;">
+            {{receivedData.delivered_date}}
+          </ion-col>
+        </ion-row>
+
+
+
+
+
+
+
+        <!--    <ion-row  no-padding> <ion-col col-6 style="max-width:37% !important">
+     <h3 style="font-weight: bold;">Image</h3>
+     </ion-col>
+     <ion-col col-1 style="max-width:3% !important;margin: auto;">
+       :
+       </ion-col>
+       <ion-col *ngIf="receivedData.image_details.length == 0" col-5 style="max-width:60% !important;margin: auto;">
+         nill
+         </ion-col>
+       <ion-col *ngIf="receivedData.image_details.length != 0" col-5 style="max-width:60% !important;margin: auto;">
+         {{receivedData.image_details[0]}}
+         </ion-col>
+    </ion-row> -->
+
+        <ion-row no-padding>
+          <ion-col col-6 style="max-width:37% !important">
+            <h3 style="font-weight: bold;">Remarks</h3>
+          </ion-col>
+          <ion-col col-1 style="max-width:3% !important;margin: auto;">
+            :
+          </ion-col>
+          <ion-col col-5 style="max-width:60% !important;margin: auto;" >
+            {{description}}
+          </ion-col>
+        </ion-row>
+
+        <!--     <ion-row  no-padding>
+       <ion-col col-6 style="max-width:37% !important;margin: auto;">
+      <h3 style="font-weight: bold;">Remarks</h3>
+      </ion-col>
+      <ion-col col-1 style="max-width:3% !important;margin: auto;">
+        :
+        </ion-col>
+        <ion-col col-5 style="max-width:60% !important;margin-top: 17px;">
+          {{receivedData.description}}
+          </ion-col>
+     </ion-row> -->
+
+
+
+        <br>
+        <ion-row text-center *ngIf="receivedData['stonedetail'].length > 0">
+          <ion-col>
+            <h3 style="font-weight: bold;"> Stone Information</h3>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="receivedData['stonedetail'].length > 0" style="padding: 5px;">
+          <ion-col  style="font-size: 15px !important;">
+            
+              Tot.Stn.Amt : <span style="font-weight: bold;"> ₹ {{totalstonevalue}} </span>
+                     </ion-col>
+          <ion-col  style="font-size: 15px !important;">
+           
+              C.Stn.Wgt :  <span style="font-weight: bold;">{{totalgram}} Gm </span>
+                     </ion-col>
+                
+        </ion-row>
+
+<!--         <ion-card *ngIf="receivedData['stonedetail'].length > 0">
+          <ion-row>
+            <ion-col col-6 style="font-weight: bold;font-size: 15px !important;">
+              Tot.Stn.Amt :  ₹ {{totalstonevalue}}
+            </ion-col>
+            <ion-col col-6 style="font-weight: bold;font-size: 15px !important;">
+              C.Stn.Wgt : {{totalgram}} Gm
+            </ion-col>
+            <ion-col col-3>
+              CT : {{totalct}}
+            </ion-col>
+          </ion-row>
+        </ion-card> -->
+
+
+        <ion-card *ngFor="let s of receivedData['stonedetail'];let i = index">
+          <ion-row>
+            <ion-col col-5>
+              <ion-row> Name : {{s.stone_name}} </ion-row>
+            </ion-col>
+            <ion-col col-5 style="display: inherit;margin: auto;"><span style="font-size: 14px !important;"> Weight :
+                {{fixprice(s['wt'])}} {{s.uom_short_code}}</span>
+              </ion-col>
+            <ion-col col-2 style="margin: auto;text-align: end;">
+              <ion-icon (click)="tog(i)" *ngIf="!s.toggle" name="arrow-dropdown"></ion-icon>
+              <ion-icon (click)="tog(i)" *ngIf="s.toggle" name="arrow-dropup"></ion-icon>
+            </ion-col>
+          </ion-row>
+          <ion-card-content *ngIf="s['toggle']">
+            <ion-row>
+              <ion-col> Amount </ion-col>
+              <ion-col style="font-weight: bold !important;"> ₹ {{price(s.amount)}} </ion-col>
+              <ion-col> Pcs </ion-col>
+              <ion-col style="font-weight: bold !important;"> {{s.pieces}} </ion-col>
+            </ion-row>
+            <ion-row *ngIf="s.stone_type_name !=null && s.stone_type_name !=''">
+              <ion-col col-3> Type </ion-col>
+              <ion-col col-3 style="font-weight: bold !important;">{{s.stone_type_name}} </ion-col>
+
+              <ion-col col-3> Rate Per ({{s.uom_short_code}}) </ion-col>
+              <ion-col col-3 style="font-weight: bold !important;">{{s.rate_per_gram}}  </ion-col>
+
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-row text-center *ngIf="receivedData['diadetail'].length > 0">
+          <ion-col>
+            <h3 style="font-weight: bold;"> Diamond Information</h3>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngIf="receivedData['diadetail'].length > 0" style="padding: 5px;">
+          <ion-col  style="font-size: 15px !important;">
+                          Tot.Stn.Amt : <span style="font-weight: bold;"> ₹ {{totaldiavalue}} </span>
+                     </ion-col>
+                 
+          <ion-col  style="font-size: 15px !important;">
+        
+            Dia.Wgt : <span style="font-weight: bold;">{{totalct}} Ct</span>
+                     </ion-col>
+        </ion-row>
+
+<!--         <ion-card *ngIf="receivedData['diadetail'].length > 0">
+          <ion-row>
+            <ion-col col-6 style="font-weight: bold;font-size: 15px !important;">
+             Tot.Stn.Amt :  ₹ {{totaldiavalue}}
+            </ion-col>
+            <ion-col col-3 style="font-weight: bold;font-size: 15px !important;">
+              Dia. : {{totalgram}}
+            </ion-col>
+            <ion-col col-6 style="font-weight: bold;font-size: 15px !important;">
+              Dia.Wgt : {{totalct}} CT
+            </ion-col>
+          </ion-row>
+        </ion-card> -->
+
+       <ion-card *ngFor="let s of receivedData['diadetail'];let i = index">
+          <ion-row>
+            <ion-col col-5>
+              <ion-row> Name : {{s.stone_name}} </ion-row>
+            </ion-col>
+            <ion-col col-5 style="display: inherit;margin: auto;">
+              <span style="font-size: 14px !important;"> Weight : {{fixprice(s['wt'])}} {{s.uom_short_code}}</span>
+            </ion-col>
+            <ion-col col-2 style="margin: auto;text-align: end;">
+              <ion-icon (click)="diamond_tog(i)" *ngIf="!s.toggle" name="arrow-dropdown"></ion-icon>
+              <ion-icon (click)="diamond_tog(i)" *ngIf="s.toggle" name="arrow-dropup"></ion-icon>
+            </ion-col>
+          </ion-row>
+          <ion-card-content *ngIf="s['toggle']">
+            <ion-row>
+              <ion-col> Amount </ion-col>
+              <ion-col style="font-weight: bold !important;"> ₹ {{price(s.amount)}} </ion-col>
+              <ion-col> Pcs </ion-col>
+              <ion-col style="font-weight: bold !important;"> {{s.pieces}} </ion-col>
+            </ion-row>
+            <ion-row *ngIf="s.stone_type_name !=null && s.stone_type_name !=''">
+              <ion-col col-3> Type </ion-col>
+              <ion-col col-3 style="font-weight: bold !important;">{{s.stone_type_name}} </ion-col>
+              <ion-col col-3> Rate Per ({{s.uom_short_code}}) </ion-col>
+              <ion-col col-3 style="font-weight: bold !important;">{{s.rate_per_gram}}  </ion-col>
+
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+
+
+
+      </ion-card-content>
+    </ion-card>
+
+    <!--  <ion-row  no-padding> <ion-col col-6 style="max-width:37% !important">
+   <h3 style="font-weight: bold;">Branch</h3>
+   </ion-col>
+   <ion-col col-1 style="max-width:3% !important;margin: auto;">
+     :
+     </ion-col>
+     <ion-col col-5 style="max-width:60% !important;margin: auto;overflow: scroll;">
+       <ion-badge style="background: linear-gradient(to right,#000000 0%,#000000 75%,#000000 100%);">{{receivedData.branch_name}}</ion-badge>
+     </ion-col>
+  </ion-row>
+  <br>
+
+
+
+
+   <ion-row  no-padding> <ion-col col-6 style="max-width:37% !important">
+    <h3 style="font-weight: bold;">Stone Value</h3>
+    </ion-col>
+    <ion-col col-1 style="max-width:3% !important;margin: auto;">
+      :
+      </ion-col>
+      <ion-col col-5 style="max-width:60% !important;margin: auto;">
+        {{receivedData.stn_amt}}
+        </ion-col>
+   </ion-row>
+  <br>
+
+
+
+
+ -->
+    <!-- </ion-item>
+</ion-card>
+ -->
+  </div>
+
+
+
+
+</ion-content>

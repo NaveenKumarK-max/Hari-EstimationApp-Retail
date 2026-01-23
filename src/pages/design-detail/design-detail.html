@@ -1,0 +1,278 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{item.sub_design_name}}<br>
+      <span *ngIf="item.is_stock_avail==1 " class="instock">Instock</span>
+      <span *ngIf="item.is_stock_avail==0 "  class="outofstock">Out of stock</span>
+    </ion-title>
+  </ion-navbar>
+  <ion-row>
+    <ion-col text-center>
+      <img [ngStyle]="{height: calc+'px','min-height.px' : 100}"  src="{{item.defaultImage}}" imageViewer="{{item.defaultImage}}" onerror="this.onerror=null;this.src='assets/no-img.png';"/>
+    </ion-col>
+  </ion-row>
+</ion-header>
+<!--  -->
+<ion-content (ionScroll)="scrolling($event)"> 
+    <hr>
+    <ion-scroll scrollX="true" class="img-blk" *ngIf="item.images?.length > 0" > 
+      <ion-row *ngIf="item.images?.length > 0" nowrap>
+        <ion-col col-2 col-sm-3 col-md-2 col-lg-2 col-xl-2 class="img-preview-col" text-center *ngFor=" let image of item.images; let i=index " (click)="changeImaged(image)"> 
+          <img src='{{image}}' width="60px" height="60px" imageCache/>
+        </ion-col>
+      </ion-row> 
+    </ion-scroll>
+    <hr>
+    <ion-card no-margin>  
+      <ion-card-header (click)="toggle('desDetail')" no-padding>
+        <div class="theme-title-blk" no-margin>  
+            Product Detail 
+            <ion-icon *ngIf="!showDesignDet" name="add-circle" float-right></ion-icon>
+            <ion-icon *ngIf="showDesignDet" name="remove-circle" float-right></ion-icon> 
+        </div>
+      </ion-card-header>
+      <ion-card-content *ngIf="showDesignDet" no-padding>
+        <ion-row padding>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col">
+              <span class="text-small">Metal</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col">
+              <span class="text-small">: {{item.metal}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col">
+              <span class="text-small">Category</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col">
+              <span class="text-small">: {{item.category}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col" *ngIf="item.collection != null">
+              <span class="text-small">Collection</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col" *ngIf="item.collection != null">
+              <span class="text-small">: {{item.collection}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col">
+              <span class="text-small">Product</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col">
+              <span class="text-small">: {{item.product_name}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col">
+              <span class="text-small">Design</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col">
+              <span class="text-small">: {{item.design_name}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col">
+              <span class="text-small">SubDesign</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col">
+              <span class="text-small">: {{item.sub_design_name}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col" *ngIf="item.theme_name != null">
+              <span class="text-small">Theme</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col" *ngIf="item.theme_name != null">
+              <span class="text-small">: {{item.theme_name}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col" *ngIf="item.design_for != null">
+              <span class="text-small">Gender</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col" *ngIf="item.design_for != null">
+              <span class="text-small">: {{item.design_for}}</span>
+            </ion-col>
+            <ion-col text-wrap col-4 col-sm-4 col-md-2 col-lg-2 col-xl-2 class="custom-2col" *ngIf="item.usage_type != null">
+              <span class="text-small">Usage Type</span>
+            </ion-col>
+            <ion-col text-wrap col-8 col-sm-8 col-md-4 col-lg-4 col-xl-4 class="custom-2col" *ngIf="item.usage_type != null">
+              <span class="text-small">: {{item.usage_type}}</span>
+            </ion-col>
+            <ion-col text-wrap col-12 *ngIf="item.description != null">
+                {{item.description}}
+            </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+    <p></p>
+    <ion-card no-margin *ngIf="enable_customize">  
+      <ion-card-header (click)="toggle('customize')" no-padding>
+        <div class="theme-title-blk" no-margin>  
+            Customize Product
+            <ion-icon *ngIf="!showCustomize" name="add-circle" float-right></ion-icon>
+            <ion-icon *ngIf="showCustomize" name="remove-circle" float-right></ion-icon> 
+        </div>
+      </ion-card-header>
+      <ion-card-content *ngIf="showCustomize" no-padding>
+        <ion-row padding >
+            <ion-col col-12 class="custom-2col" *ngIf="item.purities?.length > 0" >
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Purity  <span class="required"> *</span></ion-label> 
+              </ion-item>
+              <ion-scroll style="    white-space: nowrap !important;" class="purity-scroll-blk" scrollX="true">  
+                <ion-chip #chip1 *ngFor="let pur of item.purities" color="light" [ngClass]="customData['id_purity'] == pur['id_purity'] ? 'selected' : 'unselected'" (click)="setPurity(pur.id_purity,pur.purity)" style="margin-left: 5%;">
+                  <ion-label>{{pur.purity}}</ion-label><ion-icon name="checkmark-circle" style="background-color:transparent!important;" *ngIf="item['id_purity'] == pur['id_purity']"></ion-icon> 
+                </ion-chip>
+              </ion-scroll>
+            </ion-col> 
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" >
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Weight <span class="required"> *</span></ion-label>
+                <ion-input type="number" placeholder="Enter weight in grams" [(ngModel)]="customData.weight" (ionChange)="customInputChanged('weight',customData.weight)"> </ion-input>
+              </ion-item>
+              <span float-right [ngClass]="inpErrorMsg['weight'] == 'Invalid' ? 'input-error-msg' : 'input-msg'"><span *ngIf="item.min_weight > 0">Min. {{item.min_weight}} g </span><span *ngIf="item.max_weight > 0">Max. {{item.max_weight}} g</span></span>
+            </ion-col>
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Pieces *</ion-label>
+                <ion-input type="number" placeholder="Pieces" [(ngModel)]="customData.pcs" > </ion-input>
+                <span float-right ></span>
+              </ion-item>
+            </ion-col>
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Due Date *</ion-label>
+                <!-- <ion-input type="number" readonly="true" class="ion_datetime" placeholder="Select Date" displayFormat="DD-MM-YYYY" [(ngModel)]="customData.due_date" (focusin)="show()"> </ion-input> -->
+                <ion-input type="number"  placeholder="No of Days"  [(ngModel)]="customData.due_date"> </ion-input>
+
+                <span float-right ></span>
+              </ion-item>
+            </ion-col>
+            <!-- <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Length</ion-label>
+                <ion-input type="number" placeholder="Enter length in Millimeter" [(ngModel)]="customData.len" (ionChange)="customInputChanged('len',customData.len)"> </ion-input>
+              </ion-item>
+              <span float-right [ngClass]="inpErrorMsg['len'] == 'Invalid' ? 'input-error-msg' : 'input-msg'"><span *ngIf="item.min_length > 0">Min. {{item.min_length}} mm </span><span *ngIf="item.max_length > 0">Max. {{item.max_length}} mm</span></span>
+            </ion-col>
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Width</ion-label>
+                <ion-input type="number" placeholder="Enter width in Millimeter" [(ngModel)]="customData.width" (ionChange)="customInputChanged('width',customData.width)"> </ion-input>
+                <span float-right [ngClass]="inpErrorMsg['width'] == 'Invalid' ? 'input-error-msg' : 'input-msg'"><span *ngIf="item.min_width > 0">Min. {{item.min_width}} mm </span><span *ngIf="item.max_width > 0">Max. {{item.max_width}} mm</span></span>
+              </ion-item>
+            </ion-col>
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Dia.</ion-label>
+                <ion-input type="number" placeholder="Enter diameter in Millimeter" [(ngModel)]="customData.dia" (ionChange)="customInputChanged('dia',customData.dia)"> </ion-input>
+                <span float-right [ngClass]="inpErrorMsg['dia'] == 'Invalid' ? 'input-error-msg' : 'input-msg'"><span *ngIf="item.min_dia > 0">Min. {{item.min_dia}} mm </span><span *ngIf="item.max_dia > 0">Max. {{item.max_dia}} mm</span></span>
+              </ion-item>
+            </ion-col> -->
+
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="item.weights?.length > 0" >
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Weight</ion-label>
+                <ion-select [(ngModel)]="customData.id_weight" (ngModelChange)=checkwgstock(customData.id_weight)  placeholder="-- Choose --">
+                  <ion-option *ngFor="let s of item.weights" [value]="s.id_weight">{{s['weight_description']}}</ion-option>
+                </ion-select>
+              </ion-item>
+          </ion-col>
+
+
+            <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col" *ngIf="item.sizes?.length > 0" >
+                <ion-item no-padding>
+                  <ion-label color="label-color" stacked>Size</ion-label>
+                  <ion-select [(ngModel)]="customData.id_size" (ngModelChange)=checkstock(customData.id_size) placeholder="-- Choose --">
+                    <ion-option *ngFor="let s of item.sizes" [value]="s.id_size">{{s.value}} {{s.name}}</ion-option>
+                  </ion-select>
+                </ion-item>
+            </ion-col>
+
+            <ion-col col-12 class="custom-2col" *ngIf="item.stones?.length > 0"> 
+              <ion-item no-padding>
+                  <ion-label color="label-color" stacked>Stones</ion-label> 
+                </ion-item>
+              <ion-card class="errorMsg" padding *ngIf="stnErrMsg">
+                  {{stnErrMsg}}
+              </ion-card>
+              <ion-list text-center>
+                <ion-row  style="background: #b1abab;color: white;">
+                  <ion-col col-4>Stone</ion-col>
+                  <ion-col col-4>Pcs</ion-col>
+                  <ion-col col-4>Weight</ion-col>
+                </ion-row>
+                <div *ngFor="let st of item.stones; let i=index" class="text-small">
+                  <ion-row>
+                    <ion-col col-1>
+                      <ion-checkbox  [(ngModel)]="st.selected" (ionChange)=stoneChaned(st.stone_id,i)></ion-checkbox>
+                    </ion-col>
+                    <ion-col col-4 class="text-small">
+                      {{st.stone_name}}
+                    </ion-col>
+                    <ion-col col-3>
+                      <ion-item>
+                        <ion-input type="number" [value] = "st.stone_pcs" [disabled]="!st.selected"></ion-input>
+                      </ion-item>
+                    </ion-col>
+                    <ion-col col-4>
+                      <ion-item>
+                        <ion-input type="number" [value] = "st.stone_wt" [disabled]="!st.selected"></ion-input>
+                      </ion-item>
+                    </ion-col>
+                  </ion-row> 
+                </div>
+              </ion-list>
+            </ion-col> 
+
+            <ion-col col-12 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Description</ion-label>
+                <ion-textarea [(ngModel)]="customData.sample_details" placeholder="Enter your description" rows="5"></ion-textarea>
+              </ion-item>
+            </ion-col>
+            <ion-col col-12 class="custom-2col">
+              <ion-item no-padding>
+                <ion-label color="label-color" stacked>Upload Sample</ion-label> 
+                <button *ngIf="targetPath?.length <= 10" ion-button outline small color="dark" type="button" item-right icon-left (click)="presentActionSheet()">
+                    <ion-icon name="camera"></ion-icon>
+                    Choose Image
+                </button> 
+              </ion-item>
+              <ion-grid> 
+                <ion-row *ngIf="showedit"> 
+                  <ion-col col-6 *ngFor="let targetPath of targetPaths; let id = index"> 
+                    <ion-card class="block"> 
+                      <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon> <img [src]="targetPath" *ngIf="targetPath" /> 
+                    </ion-card> 
+                  </ion-col> 
+                </ion-row>  
+              </ion-grid> 
+            </ion-col> 
+        </ion-row> 
+      </ion-card-content>
+    </ion-card>
+  
+    <!-- <h4 class="theme-color-secondary" text-center>SIMILAR PRODUCTS</h4> -->
+    <!-- <ion-grid>
+      <ion-row>
+        <ion-col col-6 [ngClass]="animateClass" *ngFor=" let item of subcategory; let i=index" (click)="openitemails(item.id_product)">
+            
+          <ion-card style="margin:0px;border: 1px solid #e4e4e4;height: 173px;border-radius:7px;">
+            <div style="margin: 3px;">
+              <span *ngIf="item.is_stock_avail==1 && item.stock_manage == 1" class="instock">Instock</span>
+              <span *ngIf="item.is_stock_avail==0 && item.stock_manage == 1"  class="outofstock">Out of stock</span>
+              <span *ngIf="item.is_new == 1" style="float:right;"><ion-badge color="secondary">New</ion-badge></span>
+            </div>
+            <img style="height: 120px;width: auto;margin: 0 auto;" *ngIf='item.imgurl != null' src='{{item.imgurl}}' imageCache/>
+            <img style="height: 120px;width: auto;margin: 0 auto;" *ngIf='item.imgurl == null' src='assets/images/no-img.png' imageCache/>
+            <div style="text-align:center;margin-top:7px;margin-bottom:10px;text-overflow: ellipsis;padding: 5px;font-size: 13px;overflow: hidden;color: #656565; white-space: nowrap; font-weight:bold; ">
+              {{item.name_design}}
+            </div>
+          </ion-card>
+          
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+</ion-content> 
+<ion-footer >
+  <button ion-button  icon-start full class="theme-btn" (click)="proceedToWishlist()">Add to Cart</button> 
+</ion-footer>  
+<!-- <ion-footer *ngIf="!hideUpdateItem" >
+  <button ion-button [disabled] = "!proceedWishlist" icon-start full class="theme-btn" (click)="updateWishlist()">Save</button> 
+</ion-footer>   -->
+    
+    
+    
+    

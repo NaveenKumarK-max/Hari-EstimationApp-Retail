@@ -1,0 +1,50 @@
+page-supsubdesign {
+    .st{
+        opacity: 0.5 !important; 
+    
+    }
+    .nost{
+    }
+    .card-md {
+         margin: 0px !important; 
+         width: calc(100% - 0px) !important;
+    }
+    .toolbar .toolbar-title{
+        text-transform: capitalize !important;
+        font-size: 13px !important;
+    }
+    .toolbar .toolbar-title {
+        color: black !important;
+        font-weight: bold !important;
+    }
+    .scroll-content{
+        margin-bottom: 83px !important;
+    }
+    #notification-button {            
+        // position: relative;
+        // width: 42px;
+        // // top:1px;
+        // right: 1px;
+        // overflow: visible!important;
+        float: right;
+    }
+    
+    
+    #notifications-badge {
+        background-color: red;
+        position: absolute;
+        top: -9px;
+        right: 4px;
+        border-radius: 100%;
+        padding: 0px;
+    padding-top: 3px;
+    height: 17px;
+    width: 17px;
+    }
+    .ion-badge{
+    
+    
+        font-size: 1rem !important;
+    }
+    
+}

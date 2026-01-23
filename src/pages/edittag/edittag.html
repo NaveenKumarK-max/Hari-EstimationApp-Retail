@@ -1,0 +1,208 @@
+<!--
+  Generated template for the EdittagPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title style="text-align: center !important;
+    margin-right: 15% !important;"><img class="header-logo" src='assets/header.svg'/></ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+  <div style="margin-bottom: 100px;">
+
+  <ion-row>
+    <ion-col no-padding text-wrap col-12>
+      <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon> Tags  <ion-badge color="light" float-right></ion-badge></div>
+    </ion-col>
+    </ion-row>
+  <ion-row>
+    <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6 class="custom-2col">   
+      <ion-item no-padding> 
+        <ion-label color="label-color" stacked>Tag Code <span class="required">*</span></ion-label>
+        <ion-input type="text" [(ngModel)]="tag_code"></ion-input> 
+        <button item-right ion-button margin-top color="light" (click)="getTagData(tag_code)"><ion-icon name="ios-search"></ion-icon></button>
+        <button item-right ion-button margin-top color="light" (click)="openQRScanner('tag')"><ion-icon name="ios-qr-scanner"></ion-icon></button>
+
+        <!-- <button item-right ion-button icon-start outline small color="dark" (click)="openQRScanner('tag')">
+          <ion-icon name="ios-qr-scanner"></ion-icon> 
+        </button> -->
+      </ion-item>
+    </ion-col>
+    </ion-row>
+    <ion-card class="errorMsg" padding *ngIf="tagErrorMsg">
+      {{tagErrorMsg}}
+    </ion-card>
+    <ion-card class="msg" padding *ngIf="tagMsg">
+      {{tagMsg}}
+    </ion-card>
+ 
+    <ion-list style="border: 1px solid lightgray;
+    border-bottom: 1px solid gray;
+    margin: 10px;" *ngFor="let hb of  esti['tag'];let i = index;">
+        <ion-item margin-top #tags  class="no-padding">
+          <ion-row> 
+            <ion-col text-wrap col-7 col-md-3 class="custom-2col" >
+              <img style="height: 100px;width: auto;" src="{{hb.image}}" imageViewer="{{hb.image}}" onerror="this.src='assets/no-img.png'" >
+            </ion-col>
+            <ion-col style="text-align: end;">
+              <button style="    width: 38px;" ion-button color="primary" (click)="presentActionSheet(i)"><ion-icon name="create"></ion-icon></button>
+              <button style="    width: 38px;" ion-button color="danger" (click)="delete(i)"><ion-icon name="trash"></ion-icon></button>
+            
+            </ion-col>
+            </ion-row>
+<!-- 
+            <ion-grid>
+
+              <ion-col style="margin: auto;">
+                Add Images <span style="font-weight: bold;" *ngIf="images.length > 0">- ({{images.length}})</span> *
+              </ion-col>
+                  <ion-row>
+                <ion-col col-10 style="margin-top: 30px;">
+                                  
+                    <div style="margin-bottom:10px" class="row" *ngFor="let targetPath of images; let id = index" >
+                        <div class="col"  col-3 no-padding style="text-align: center;" >
+                          Default<br>
+                          <ion-icon (click)="checkdefault(id)" [ngClass]="targetPath['is_default'] == 1 ? 'one':'two'" style="padding: 0px !important;    font-size: 1.8em;" name="checkmark-circle"></ion-icon>
+                       </div>
+                        <div  class="col" col-7 no-padding style="text-align:center;"><img class="uploadimg1" src="{{targetPath['image_name']}}" imageViewer="{{targetPath['image_name']}}" onerror="this.src='assets/no-img.png'"
+                      *ngIf="targetPath" /></div><div style="margin: auto;" class="col" col-2 no-padding  >
+                      <ion-icon (click)="deletePhoto(id)" style="padding: 0px !important;color: red;    font-size: 1.8em;" name="close-circle"></ion-icon></div>
+                    </div>
+          
+                </ion-col>
+                <ion-col style="margin: auto;" col-2 (click)="presentActionSheet('gallery')">
+                  <div  class="col" style="text-align: end;margin: auto;">
+                    <span style="padding:5px;border: 1px solid lightgray;"><ion-icon name="add"></ion-icon></span>
+                
+                  </div>      </ion-col>
+              </ion-row>
+          </ion-grid> -->
+
+          <ion-row>
+            <ion-col text-wrap col-3 col-md-2 class="vip">
+              {{hb.tag_code}} 
+            </ion-col>
+            <ion-col text-wrap col-12 col-md-12 class="vip" *ngIf="ret_settings['subproduct_required'] == 1" style="font-size: 11px !important;">
+              <span *ngIf="hb.collection_name != null">{{hb.collection_name}} <b> | </b> </span>
+              {{hb.product_name}} <b> | </b> 
+              {{hb.design_name}}
+            </ion-col>
+            <ion-col text-wrap col-4 col-md-2 class="vip" *ngIf="ret_settings['subproduct_required'] == 0">
+              {{hb.product_name}}
+            </ion-col>
+            <ion-col text-wrap col-5 col-md-2 class="vip" *ngIf="ret_settings['subproduct_required'] == 0">
+              {{hb.design_name}}
+            </ion-col>
+            </ion-row>
+              <ion-row>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Purity </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.purname}} 
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Pcs </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.piece}} 
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Size </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.size}} 
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Gross wgt </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.gross_wt}} 
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Less wgt </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.less_wt}}
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Net Wgt </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.net_wt}}
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Wast ({{hb.retail_max_wastage_percehb}} %)  </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.wast_wgt}}
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">MC </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.making_charge | number:'1.2-2' }}
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Taxable </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.taxable | number:'1.2-2' }}
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Tax </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              {{hb.tax_price | number:'1.2-2' }}
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <p class="text-small">Amount </p>
+            </ion-col>
+            <ion-col text-wrap col-3 col-md-2 class="custom-2col">
+              <b>{{hb.sales_value | number:'1.2-2' }}</b>
+            </ion-col>
+          </ion-row>
+
+          <!-- <p class="subtitles">Add Tag Photos</p>
+          <ion-row>
+            <ion-col col-9 style="margin: auto;">
+              <ion-row>
+             
+
+              </ion-row>
+            </ion-col>
+            <ion-col col-3 (click)="presentActionSheet()">
+              <button ion-button clear class="imageadd"><ion-icon name="add"></ion-icon></button>
+            </ion-col>
+          </ion-row> -->
+        </ion-item>
+      
+    </ion-list>
+    </div>
+</ion-content>
+<ion-footer style="bottom: 83px !important;">
+  <ion-fab center bottom style="left: 44% !important;" *ngIf="!scannerOn && show != true"> 
+    <button ion-fab mini color="primary" style="    width: 95px !important;
+    border-radius: 10px !important;
+    background:#000000 !important;" (click)="openQRScanner('tag')"><ion-icon name="ios-qr-scanner"></ion-icon>SCAN</button>
+  </ion-fab>
+  <!-- <button *ngIf="scannerOn" ion-button icon-start full class="warning" (click)="closeScanner()">Close Scanner</button>   -->
+</ion-footer>  
+<ion-footer style="bottom: 83px !important;">
+  <div *ngIf="show == true"  style="text-align: center;    margin-top: 5px;">
+    Upload Progress : 
+  </div>
+  <div *ngIf="show == true" class="progress-outer">
+    <div class="progress-inner" [style.width]="progress + '%'">
+        {{progress}}%
+    </div>
+  </div>
+  </ion-footer>

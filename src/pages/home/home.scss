@@ -1,0 +1,104 @@
+page-home { 
+    .rate{
+        font-size: 18px;
+        font-weight: 500;
+    }
+    .dash-card-1{
+       // border: 1px solid color($colors, theme-color);
+      //  background: color($colors, theme-color);
+        color: black;
+       // border-radius: 25px;
+        margin: 4%;
+        text-align: center; 
+        padding: 2%;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        border-radius: 5px;
+    }
+    .dash-card-2{
+        border: 1px solid #f2f0f0;
+        border-radius: 10px;
+        text-align: center;
+        min-height:100px !important;
+        box-shadow: rgba(99, 99, 99, 0.13) 0px 2px 8px 0px;
+        padding-bottom: 10px;
+    }
+    .dash-icon-card{
+        border: 1px solid #eee;
+        box-shadow: rgba(99, 99, 99, 0.13) 0px 2px 8px 0px;
+        transition: 0.3s;
+        margin: 2%;
+    }
+    .dash-card-title{
+        // font-family: 'Lato-Light' !important;
+    }
+    .dash-num{
+        font-size: 14px;
+        font-weight: 500;
+    }
+    .dash-img-icon{ 
+        height: 50px;
+    }
+    .dash-icons{
+		font-size: xxx-large;
+	}
+    #notification-button {            
+        // position: relative;
+        // width: 42px;
+        // // top:1px;
+        // right: 1px;
+        // overflow: visible!important;
+        float: right;
+        margin-top: 7px;
+    }
+    
+    
+    #notifications-badge {
+        background-color: red;
+        position: absolute;
+        top: 4px;
+        right: -1px;
+        border-radius: 100%;
+        font-size: 10px !important;
+    padding: 0px;
+    padding-top: 3px;
+    height: 17px;
+    width: 17px;
+    
+    }
+    #notifications-badgee {
+        background-color: red;
+        position: absolute;
+        top: 5px;
+        right: 28px;
+        border-radius: 100%;
+        font-size: 10px !important;
+    padding: 0px;
+    padding-top: 3px;
+    height: 17px;
+    width: 17px;
+    }
+    .ion-badge{
+    
+    
+        font-size: 1rem !important;
+    }
+    .scroll-content{
+        padding-bottom: 200px !important;
+        margin-top: 85px !important;
+    }
+
+        .footer-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 0px; /* same height as footer/tab */
+  text-align: center;
+}
+
+.estimation-btn {
+  border-radius: 10px;
+  background: #1A2A53 !important;
+  color: #fff;
+  bottom: 70px;
+}
+}

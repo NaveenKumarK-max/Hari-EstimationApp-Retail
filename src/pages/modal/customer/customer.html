@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Search Customer
+    </ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+        <button  ion-button icon-only (click)="openQuickCus()">
+          <ion-icon item-right name="ios-add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-row>
+    <ion-col col-10>
+      <ion-searchbar [(ngModel)]="txt" (keyup)="texto($event)"></ion-searchbar>
+    </ion-col>
+    <ion-col style="margin:auto;    font-size: 2em !important;
+    color: black !important;" col-2 (click)="getCus()">
+      <ion-icon name="search"  style="color:#000000 !important"></ion-icon> 
+    </ion-col>
+  </ion-row>
+  <ion-list>
+    <ion-row *ngFor="let c of customers" style="    border-bottom: 1px solid lightgrey;">
+      <ion-col col-10 style="    padding-top: 10px;
+      padding-bottom: 10px;">
+        <span (click)="selected(c)">{{ c.label }}</span>
+        <span  *ngIf="c.accounts > 0" color="secondary">
+         <ion-icon name="checkmark-circle"  color="secondary">Chit</ion-icon> 
+       </span>
+	   <div style="margin-top:5px" *ngIf="c.cus_review_avg != 0">
+	   <span style="background: orange;color: white;padding: 5px;border-radius: 5px;">
+    <ion-icon style="color: white;" name="star"></ion-icon><span *ngIf="c.cus_review_avg != null">{{c.cus_review_avg}}</span>&nbsp;<span *ngIf="c['last_review'] != null">{{c['last_review']['review']}}</span> 
+
+  </span>
+	   </div>
+      </ion-col>
+      <ion-col col-1 style="margin: auto;">
+        <ion-icon (click)="eye(c['id_customer'])" name="eye" style="float: right;"></ion-icon>
+      </ion-col>
+      <ion-col col-1 style="margin: auto;">
+        <ion-icon (click)="edit(c['id_customer'])" name="ios-create" style="float: right;"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-list>
+</ion-content>

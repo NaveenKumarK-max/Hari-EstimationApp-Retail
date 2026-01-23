@@ -1,0 +1,473 @@
+<!-- <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY">
+</iframe> -->
+<ion-header style="background: #000"> <ion-navbar>
+  <button ion-button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Product Details
+    <!-- <span *ngIf="item.is_stock_avail==1 " class="instock">Instock</span>
+    <span *ngIf="item.is_stock_avail==0 "  class="outofstock">Out of stock</span> -->
+    <!-- <div [ngStyle]="{'width.px': 30,'height.px': 30,'border-radius.px':50,'background':productdet.colorcode,'position':'absolute','right.px':55,'top.px':-6}"></div>-->
+ <div [ngStyle]="{'width.px': 30,'height.px': 30,'color':productdet.colorcode,'position':'absolute','right.px':55,'top.px':-6}">
+				<!-- <ion-icon *ngIf="productdet.colorcode != '' "  style="font-size:1.6em !important" name="bookmark"></ion-icon> -->
+			  </div>
+    <!-- <ion-icon [ngClass] = "productItems1.length > 0 ? 'co' : 'noco' " style="margin-top:-4px !important;font-size:1.4em !important;float: right;" name="heart" (click)="addWishlistw(productdet)"></ion-icon> -->
+
+  </ion-title> </ion-navbar>
+  <ion-row *ngIf="productdet.Status !=null && productdet.Status !=undefined">
+
+    <ion-col align="center" style="background: white !important;" >
+      <div>
+        <span *ngIf="productdet.Status == 'OPEN'"  style="float:right;"><ion-badge color="secondary">Stock Available {{productdet.BranchName}}</ion-badge></span>
+        <span *ngIf="productdet.Status != 'OPEN'"  style="float:right;"><ion-badge color="danger">Out of Stock</ion-badge></span>
+      </div>
+
+      <!-- <ion-slides style="margin-top: 22px;" (ionSlideWillChange)="slide()"  *ngIf="slidess && slidess.length" #slides [ngClass]="animateClass"   zoom ='true' speed='500' initialSlide='0'>
+        <ion-slide (click)="openurl(slide)" *ngFor="let slide of slidess;let in = index">
+          <img *ngIf="slideimg != null" [src]="slideimg" class="slide-image" imageViewer='{{slideimg}}' [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'"/>
+          <img *ngIf="slideimg == null" src='assets/no-img.png'  class="slide-image" imageViewer='assets/no-img.png' [ngStyle]="{height: calc+'px','min-height.px' : 100}" onerror="this.src='assets/no-img.png'"/>
+
+        </ion-slide>
+      </ion-slides> -->
+
+      <!-- <div style="margin-top: 22px;">
+
+      <img *ngIf="productdet.TagImage != null" class="proimage" [ngStyle]="{height: calc+'px','min-height.px' : 100}" src='{{productdet.TagImage}}'
+    imageViewer='{{productdet.TagImage}}' onerror="this.src='assets/no-img.png'" />
+    <img *ngIf="productdet.TagImage == null" class="proimage" [ngStyle]="{height: calc+'px','min-height.px' : 100}" src='assets/no-img.png'
+    imageViewer='assets/no-img.png' onerror="this.src='assets/no-img.png'" />
+    </div> -->
+
+    <!-- </iframe> -->
+    </ion-col>
+  </ion-row>
+</ion-header>
+  <ion-content (ionScroll)="scrolling($event)">
+    <div style="margin-bottom: 85px !important;">
+
+    <!-- <div style="margin: 5px;height: 17px">
+      <span  style="float:right;"><ion-badge color="secondary">Stock Available {{productdet.BranchName}}</ion-badge></span>
+      </div>
+
+  <ion-row>
+    <ion-col align="center">
+      <img *ngIf="productdet.TagImage != null" class="proimage" src='{{productdet.TagImage}}'
+    imageViewer='{{productdet.TagImage}}' onerror="this.src='assets/no-img.png'" />
+    <img *ngIf="productdet.TagImage == null" class="proimage" src='assets/no-img.png'
+    imageViewer='assets/no-img.png' onerror="this.src='assets/no-img.png'" />
+    </ion-col>
+  </ion-row> -->
+
+  <hr>
+  <ion-row nowrap>
+
+     <ion-card *ngIf="productdet" style="box-shadow: none;">
+  <img style="margin: auto;object-fit: cover !important;" src='{{productdet.image}}' onerror="this.src='assets/no-img.png'"  imageCache/>
+
+  </ion-card>
+
+ </ion-row>
+  <hr>
+
+    <hr>
+  <div>
+
+    <span>
+      <h5>&nbsp;{{productdet.sub_design_name}}</h5>
+    </span>
+  </div>
+  <div>
+
+    <span>
+      <!-- <h5 *ngIf="productdet">&nbsp;₹ {{price(productdet.Rate)}}</h5> -->
+    </span>
+  </div>
+  <hr>
+
+
+
+<div  >
+  <h6 style="text-align: center;
+  margin-bottom: 20px;">Metal Information</h6>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col col-6 no-padding>
+    <button ion-button clear small>Metal </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.metal_name}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col col-6 no-padding>
+    <button ion-button clear small>Product Name </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.product_name}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col col-6 no-padding>
+    <button ion-button clear small>Sub Product Name </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.sub_product}}
+  </ion-col>
+</ion-row>
+<ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Tag No </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.tag_num}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Pcs  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.pcs}}
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Gross Wt (Gms) </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.gross_wt}} g
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Net Wt (Gms)  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.net_wt}} g
+
+  </ion-col>
+  </ion-row>
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Purity  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{productdet.Purity}}
+  </ion-col>
+  </ion-row>
+
+
+  <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Metal Rate</button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      ₹ {{productdet.rate}}
+    </ion-col>
+    </ion-row>
+    <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+      <ion-col no-padding col-6>
+        <button ion-button clear small>Wastage %</button>
+      </ion-col>
+      <ion-col no-padding style="margin:auto" col-1>
+          :
+      </ion-col>
+      <ion-col no-padding style="margin:auto" col-5>
+        {{productdet.wast_percent}} %
+      </ion-col>
+      </ion-row>
+
+      <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+        <ion-col no-padding col-6>
+          <button ion-button clear small>Wastage Wgt</button>
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-1>
+            :
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-5>
+          {{productdet.wast_wgt}} g
+        </ion-col>
+        </ion-row>
+      <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+        <ion-col no-padding col-6>
+          <button ion-button clear small>GST </button>
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-1>
+            :
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-5>
+          ₹ {{productdet.tax_price}}
+        </ion-col>
+        </ion-row>
+
+      <ion-row style="border: 1px solid #f2f1f1" no-padding>
+
+        <ion-col no-padding col-6>
+          <button ion-button clear small>Total Stone Amount </button>
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-1>
+            :
+        </ion-col>
+        <ion-col no-padding style="margin:auto" col-5>
+          ₹ {{productdet.stone_price}}
+        </ion-col>
+        </ion-row>
+
+</div>
+
+<div  *ngIf="productdet.stones.length > 0 ">
+  <h6 style="text-align: center;
+  margin-bottom: 20px;">Stone Information</h6>
+  <ion-row *ngFor="let s of productdet.stones" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Type</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.stone_type}}
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Stone Name</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.stone_name}}
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Pcs  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.stone_pcs}}
+  </ion-col>
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Weight({{s.uom_short_code}}) </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.stone_wt}}
+     {{s.uom_short_code}}
+
+    <!-- {{fixprice(s['stone_wt'])}} {{s.uom_short_code}} -->
+
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Rate  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    ₹ {{s.rate}}
+  </ion-col>
+  </ion-row>
+</div>
+
+<!-- <div *ngIf="productdet">
+  <div  *ngIf="productdet.stones.length > 0 ||productdet.stones.length !=0 ">
+    <h6 style="text-align: center;
+    margin-bottom: 20px;">Stone Information</h6>
+    <ion-row *ngFor="let s of  productdet.stones" no-padding>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Type</button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.Nature}}
+    </ion-col>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Stone Name</button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.StoneName}}
+    </ion-col>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Pcs  </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.Pieces}}
+    </ion-col>
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Weight(Gms) </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      {{s.Weight}} g
+
+    </ion-col>
+
+    <ion-col no-padding col-6>
+      <button ion-button clear small>Rate  </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-5>
+      ₹ {{s.Rate}}
+    </ion-col>
+    </ion-row>
+  </div>
+</div> -->
+
+
+<!-- <div style="margin-bottom: 50px;" *ngIf="showdiamond.length > 0">
+  <h6  style="text-align: center;
+  margin-bottom: 20px;">Diamond Information</h6>
+  <ion-row *ngFor="let s of showdiamond;let i = index;"  style="margin-bottom: 15px;" no-padding>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Type</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.Nature}}
+  </ion-col>
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Stone Name</button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.StoneName}}
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Pcs  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{s.Pieces}}
+  </ion-col>
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Weight(CT) </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    {{fixprice(s['Weight'])}} ct
+
+  </ion-col>
+
+  <ion-col no-padding col-6>
+    <button ion-button clear small>Rate  </button>
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-1>
+      :
+  </ion-col>
+  <ion-col no-padding style="margin:auto" col-5>
+    ₹ {{price(s.Rate)}}
+  </ion-col> -->
+
+
+    <!-- <ion-col  style="margin-top: 15px;" *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Cut  </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Cut}}
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Color </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Color}}
+    </ion-col>
+
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Shape  </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Shape}}
+    </ion-col>
+
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding col-6>
+      <button ion-button clear small>Clarity  </button>
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  *ngIf="showdiamond.length - 1 == i" no-padding style="margin:auto" col-5>
+      {{productdet.Clarity}}
+    </ion-col>
+  </ion-row>
+</div>
+
+ -->

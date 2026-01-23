@@ -1,0 +1,53 @@
+ <ion-header>
+    <ion-navbar>
+        <!-- <button ion-button menuToggle><ion-icon name="menu"></ion-icon></button> -->
+        <ion-title>Wishlist</ion-title>
+    </ion-navbar>
+</ion-header>
+<!--
+<ion-content padding-vertical>
+    <items-list [page] ="'Wishlist'"></items-list>
+</ion-content>
+<ion-footer *ngIf="!hideAddToCart" >
+    <button ion-button [disabled] = "!proceedCart" icon-start full class="theme-btn" (click)="proceedToCart()">Add to Cart</button>
+</ion-footer>
+ -->
+ <ion-content no-padding>
+
+
+ <ion-searchbar  [(ngModel)]="name" placeholder="Search Customer" readonly (ionChange)="search()"></ion-searchbar>
+
+
+ <ion-row  style="    border: 1px solid lightgray;    margin-left: 3px;
+ margin-right: 3px;
+ margin-top: 10px;
+ margin-bottom: 2px;">
+  <ion-col col-3 style="font-weight: bold;text-align: center;    border-right: 1px solid lightgray;" >Image</ion-col>
+
+   <ion-col col-6 style="font-weight: bold;text-align: center;    border-right: 1px solid lightgray;" >Name</ion-col>
+
+   <ion-col col-3 style="font-weight: bold;text-align: center;    border-right: 1px solid lightgray;" >Delete</ion-col>
+
+ </ion-row>
+<ion-row style="border: 1px solid lightgray; margin-left: 3px;margin-right: 3px;" *ngFor="let w of wish;let i =index;">
+  <ion-col  (click)="openDesign(w,i)" col-3 style="text-align: center;margin: auto;">
+    <img *ngIf="w['img_arr'].length > 0" style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="{{w['img_arr'][0]}}" imageViewer="{{w['img_arr'][0]}}"  onerror="this.src='assets/no-img.png'" imageCache/>
+    <img *ngIf="w['img_arr'].length == 0" style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="assets/no-img.png" imageViewer="assets/no-img.png"  onerror="this.src='assets/no-img.png'" imageCache/>
+
+</ion-col>
+  <ion-col  (click)="openDesign(w,i)" col-6 style="text-align: center;margin: auto;">
+    {{w['sub_design_name']}}
+    <br>
+    <span style="color: red !important;">({{w['firstname']}}-{{w['mobile']}})</span>
+  </ion-col>
+
+  <ion-col (click)="remove(w)" col-3 style="text-align: center;margin: auto;">
+    <ion-icon style="color: red !important;" name="trash"></ion-icon>
+  </ion-col>
+</ion-row>
+<ion-row *ngIf="wish.length == 0" style="    margin-top: 10px;">
+  <ion-col style="text-align: center;color: maroon;">
+    No Products Found
+  </ion-col>
+</ion-row>
+</ion-content>

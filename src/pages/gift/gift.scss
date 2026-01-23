@@ -1,0 +1,20 @@
+page-gift {
+
+    .text-input-md{
+        margin: 0px !important;
+    }
+   
+    .text-input-md {
+      
+      width: calc(100% - 0px - 0px) !important;
+    }
+   
+  .scroll-content{
+      padding:10px !important;
+  }
+  .show{
+    animation: shake 1s cubic-bezier(.36,.07,.19,.97) both;
+
+  }
+}
+

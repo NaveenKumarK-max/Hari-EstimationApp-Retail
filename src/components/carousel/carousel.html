@@ -1,0 +1,11 @@
+<ion-slides (ionSlideWillChange)="slide()" *ngIf="slidess && slidess.length" #slides [ngClass]="animateClass" style="height: auto !important;" autoplay='4000' zoom='true' speed='500' loop='true' initialSlide='0' pager='true'>
+    <ion-slide *ngFor="let slide of slidess">
+        <img [src]="slide.offer_img_path" class="slide-image" />
+    </ion-slide>
+</ion-slides>
+
+<ion-slides *ngIf="slidess.length == 0" #slides [ngClass]="animateClass" style="height: auto !important;" autoplay='4000' zoom='true' speed='500' loop='true' initialSlide='0' pager='true'>
+    <ion-slide>
+        <img src="assets/default_banner.jpg" class="slide-image" />
+    </ion-slide>
+</ion-slides>

@@ -1,0 +1,82 @@
+<!--
+  Generated template for the SubdesignlistPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <!-- <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button> -->
+    <ion-title  style="text-align: center;
+    margin-right: 15%;"><img class="header-logo" src='assets/header.svg'/></ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <div style="margin-bottom: 100px;">
+  <ion-row>
+    <ion-col no-padding text-wrap col-12>
+      <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon> Design List  <ion-badge color="light" float-right></ion-badge></div>
+    </ion-col>
+    </ion-row>
+  <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">   
+    <ion-item (tap)="openMasSearch('Product')" no-padding>
+      <ion-label color="label-color" stacked>Product</ion-label>
+      <ion-input readonly='true' type="text" [(ngModel)]="hbData['product_name']"  ></ion-input>
+      <button  item-right ion-button clear color="dark" class="no-padding no-margin"  ><ion-icon name="arrow-dropdown"></ion-icon></button>
+    </ion-item>
+  </ion-col>
+  <ion-col col-12 col-sm-12 col-md-12 col-lg-6 col-xl-6  class="custom-2col">   
+    <ion-item  (tap)="openMasSearch('Design')" no-padding>
+      <ion-label color="label-color" stacked>Design</ion-label>
+      <ion-input readonly='true'  type="text" [(ngModel)]="hbData['design_name']" ></ion-input> 
+      <button  item-right ion-button clear color="dark" class="no-padding no-margin" ><ion-icon name="arrow-dropdown"></ion-icon></button>
+    </ion-item>
+  </ion-col>
+
+  <div *ngIf="show">
+
+    <ion-row >
+      <ion-col no-padding text-wrap col-12>
+        <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon>Sub Design List<ion-badge color="light" float-right></ion-badge></div>
+      </ion-col>
+      </ion-row>
+  
+      <ion-searchbar [(ngModel)]="input" placeholder="Search"
+      (ionChange)="search()"         
+      ></ion-searchbar> 
+  
+      <ion-row style="    margin-top: 10px;
+      border: 1px solid lightgrey;" *ngFor="let l of hbsubDesigns" (click)="editdesign(l)"> 
+    
+    <ion-col  col-3 style="text-align: center;margin: auto;">
+      <img style="height: 70px;
+      width: 80px;
+      object-fit: cover;
+      object-position: center;" src="{{l['default_image']}}" imageViewer="{{l['default_image']}}" onerror="this.src='assets/no-img.png'" />  
+          </ion-col>
+        <ion-col>
+          <div style="    padding: 5px;">Id : <span style="font-weight: bold;">{{l['id_sub_design']}}
+          </span>
+          <ion-icon name="ios-create" style="float: right;color: red;    font-size: 2em !important;"></ion-icon>
+
+        </div>
+
+          <div style="    padding: 5px;font-weight: bold;">{{l['label']}}
+            <!-- <ion-icon name="ios-create" style="float: right;"></ion-icon> -->
+          </div>
+         
+    
+        </ion-col>
+        <!-- <ion-col (click)="getEstiByEstiNo(l['esti_no'])" col-3 style="text-align: center;margin: auto;">
+          <img style="height: 80px;
+          width: auto;" src="{{l['stockqrcode']}}" imageViewer="{{l['stockqrcode']}}" onerror="this.src='assets/no-img.png'" />  
+              </ion-col> -->
+      </ion-row>
+    </div>
+  </div>
+</ion-content>

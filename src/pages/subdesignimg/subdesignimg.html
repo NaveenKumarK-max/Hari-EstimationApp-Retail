@@ -1,0 +1,118 @@
+<!--
+  Generated template for the CreatestockPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title  style="text-align: center;
+    margin-right: 15%;"><img class="header-logo" src='assets/header.svg'/></ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div style="margin-bottom: 100px;">
+
+  <ion-row style="margin-bottom: 20px;">
+    <ion-col no-padding text-wrap col-12>
+      <div class="theme-title-blk"> <ion-icon name="pricetags"></ion-icon>Edit Subdesign<ion-badge color="light" float-right></ion-badge></div>
+    </ion-col>
+    </ion-row>
+
+  <ion-row style="    margin-bottom: 15px;">
+    <ion-col>
+      Sub Design Name * &nbsp;&nbsp;:
+    </ion-col>
+    <ion-col>
+      {{whole['label']}}
+    </ion-col>
+  </ion-row>
+
+  <ion-row style="    margin-bottom: 15px;"> 
+    <ion-col style="margin: auto;">
+      Default Image *
+    </ion-col>
+    <ion-col>
+      <div class="row" >
+  <div style="
+  height: 80px;
+  width: 100px;
+" class="col">
+<img style="height: 80px;
+width: 90px;
+object-fit: cover;
+object-position: center;" src="{{image}}" imageViewer="{{image}}" onerror="this.src='assets/no-img.png'" />
+
+  </div>
+  <div (click)="presentActionSheet('default')" class="col" style="text-align: end;margin: auto;">
+    <span style="padding:5px;border: 1px solid lightgray;"><ion-icon name="add"></ion-icon></span>
+
+  </div>
+
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-grid>
+
+    <ion-col style="margin: auto;">
+      Add Images <span style="font-weight: bold;" *ngIf="images.length > 0">- ({{images.length}})</span> *
+    </ion-col>
+        <ion-row>
+      <ion-col col-10 style="margin-top: 30px;">
+        <!-- <ion-row>
+        
+          <div *ngIf="images.length > 0" class="coverphoto">
+            <button style="width: 135px;background: transparent !important;margin-bottom: 10px;" *ngFor="let targetPath of images; let id = index">
+           <div class="row">
+              <div  class="col" col-10 no-padding><img class="uploadimg1" src="{{targetPath['image_name']}}" imageViewer="{{targetPath['image_name']}}" onerror="this.src='assets/no-img.png'"
+            *ngIf="targetPath" /></div><div class="col" col-2 no-padding  ><ion-icon (click)="checkdefault(id)" [ngClass]="targetPath['is_default'] == 1 ? 'one':'two'" style="padding: 0px !important;" name="checkmark-circle"></ion-icon><ion-icon (click)="deletePhoto(id)" style="padding: 0px !important;color: red;bottom: 0;
+              right: 0;
+              position: absolute;" name="close-circle"></ion-icon></div>
+          </div>
+          </button>
+          </div>
+
+        </ion-row> -->
+        
+          <div style="margin-bottom:10px" class="row" *ngFor="let targetPath of images; let id = index" >
+            <!-- <button style="width: 135px;background: transparent !important;margin-bottom: 10px;" *ngFor="let targetPath of images; let id = index"> -->
+              <div class="col"  col-3 no-padding style="text-align: center;" >
+                Default<br>
+                <ion-icon (click)="checkdefault(id)" [ngClass]="targetPath['is_default'] == 1 ? 'one':'two'" style="padding: 0px !important;    font-size: 1.8em;" name="checkmark-circle"></ion-icon>
+             </div>
+              <div  class="col" col-7 no-padding style="text-align:center;"><img class="uploadimg1" src="{{targetPath['image_name']}}" imageViewer="{{targetPath['image_name']}}" onerror="this.src='assets/no-img.png'"
+            *ngIf="targetPath" /></div><div style="margin: auto;" class="col" col-2 no-padding  >
+            <ion-icon (click)="deletePhoto(id)" style="padding: 0px !important;color: red;    font-size: 1.8em;" name="close-circle"></ion-icon></div>
+          <!-- </button> -->
+          </div>
+
+      </ion-col>
+      <ion-col style="margin: auto;" col-2 (click)="presentActionSheet('gallery')">
+        <div  class="col" style="text-align: end;margin: auto;">
+          <span style="padding:5px;border: 1px solid lightgray;"><ion-icon name="add"></ion-icon></span>
+      
+        </div>      </ion-col>
+    </ion-row>
+</ion-grid>
+  <div style="text-align: center;margin-top:20px;">
+    <button (click)="submit()" ion-button style="background:#000000 !important">Submit</button>
+  </div>
+</div>
+</ion-content>
+<ion-footer style="bottom: 83px !important;">
+<div *ngIf="show == true"  style="text-align: center;    margin-top: 5px;">
+  Upload Progress : 
+</div>
+<div *ngIf="show == true" class="progress-outer">
+  <div class="progress-inner" [style.width]="progress + '%'">
+      {{progress}}%
+  </div>
+</div>
+</ion-footer>

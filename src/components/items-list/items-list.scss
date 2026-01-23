@@ -1,0 +1,21 @@
+items-list {  
+	.list-blk{ 
+		/* padding: 2%;
+		ion-item-sliding{
+			margin-top: 2% !important;
+			margin-bottom: 2% !important;
+    		padding: 1% !important;
+		} */
+		.item-img{
+			min-width: 80px !important;
+			min-height: 80px !important;
+			display: block;
+			line-height: 1;
+			margin: 8px 16px 8px 0;
+		}
+		ion-row{
+			padding: 0px 5px !important;	
+		}
+	}
+
+}

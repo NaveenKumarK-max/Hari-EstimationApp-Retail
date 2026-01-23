@@ -1,0 +1,126 @@
+<ion-header> <ion-navbar>
+<button ion-button menuToggle>
+	<ion-icon name="menu"></ion-icon>
+</button>
+<ion-title>Order Status
+	<ion-icon  name="md-funnel" (click)="filter()" style="color:black !important;float: right;font-size:1.4em !important" ></ion-icon>
+
+</ion-title> </ion-navbar> </ion-header>
+<ion-content> 
+ <p *ngIf="whole.length == 0" class="empty">No result found</p>
+
+	<ion-card 
+		 *ngFor=" let order of whole ;let i=index "> 
+	<ion-item> <ion-badge color="light">{{order.tag_code}} -	{{order.status_desc}}</ion-badge></ion-item>
+	<ion-item>
+		<ion-avatar item-left>
+<img *ngIf="order['img_arr'].length > 0" style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="{{order['img_arr'][0]}}" imageViewer="{{order['img_arr'][0]}}"  onerror="this.src='assets/no-img.png'" imageCache/>
+    <img *ngIf="order['img_arr'].length == 0" style="height: 50px;width: 50px;margin: 0 auto;object-fit: cover;"   src="assets/no-img.png" imageViewer="assets/no-img.png"  onerror="this.src='assets/no-img.png'" imageCache/>
+  
+		</ion-avatar>
+		<!-- <h3>
+			<p>
+				Tag Id :
+				<ion-badge style="background: linear-gradient(to right,#000000 0%,#000000 75%,#000000 100%);">{{order.tag_id}}</ion-badge>			
+			</p>
+			<p >Customer : {{order.firstname}} <span (tap)="open(i)" style="float: right;color: 
+			#000000">{{order.tog}}>></span></p> 
+		    <p >Mobile : {{order.mobile}}</p>
+
+		</h3> -->
+
+		<ion-row  no-padding> <ion-col style="max-width:37% !important;margin-bottom: 5px;">
+			<h3 style="font-weight: bold;">Tag Id</h3>
+			</ion-col> 
+			<ion-col style="max-width:3% !important;margin: auto;">
+				:
+				</ion-col> 
+				<ion-col style="max-width:60% !important;margin: auto;">
+					<ion-badge style="background: linear-gradient(to right,#000000 0%,#000000 75%,#000000 100%);">{{order.tag_id}}</ion-badge>			
+				</ion-col> 
+		 </ion-row>
+		 <ion-row  no-padding> <ion-col style="max-width:37% !important">
+			<h3 style="font-weight: bold;">Customer</h3>
+			</ion-col> 
+			<ion-col style="max-width:3% !important;margin: auto;">
+				:
+				</ion-col> 
+				<ion-col style="max-width:60% !important;margin: auto;">
+					{{order.firstname}}
+					</ion-col> 
+		 </ion-row>
+		 <ion-row  no-padding> <ion-col style="max-width:37% !important">
+			<h3 style="font-weight: bold;">Mobile</h3>
+			</ion-col> 
+			<ion-col style="max-width:3% !important;margin: auto;">
+				:
+				</ion-col> 
+				<ion-col style="max-width:60% !important;margin: auto;">
+					{{order.mobile}}<span (tap)="open(i)" style="float: right;color: 
+					#000000">{{order.tog}}>></span>
+					</ion-col> 
+		 </ion-row>
+
+		<div style="margin-top: 5px" *ngIf="order['tog'] == 'View Less'">
+		<ion-row  no-padding> <ion-col style="max-width:37% !important">
+			<h3 style="font-weight: bold;">Product Name</h3>
+			</ion-col> 
+			<ion-col style="max-width:3% !important;margin: auto;">
+				:
+				</ion-col> 
+				<ion-col style="max-width:60% !important;margin: auto;">
+					{{order.product_name}}
+					</ion-col> 
+		 </ion-row>
+		 <ion-row  no-padding> <ion-col style="max-width:37% !important">
+			<h3 style="font-weight: bold;">Design Name</h3>
+			</ion-col> 
+			<ion-col style="max-width:3% !important;margin: auto;">
+				:
+				</ion-col> 
+				<ion-col style="max-width:60% !important;margin: auto;">
+					{{order.design_name}}
+					</ion-col> 
+		 </ion-row>
+		 <ion-row  no-padding> <ion-col style="max-width:37% !important">
+			<h3 style="font-weight: bold;">Subdesign Name</h3>
+			</ion-col> 
+			<ion-col style="max-width:3% !important;margin: auto;">
+				:
+				</ion-col> 
+				<ion-col style="max-width:60% !important;margin: auto;">
+					{{order.sub_design_name}}
+					</ion-col> 
+		 </ion-row>
+			
+		<ion-row  no-padding> <ion-col>
+			<h3>{{order.area}}</h3>
+			</ion-col>  </ion-row>
+		<ion-row no-padding> <ion-col>
+		<h4 style="    font-weight: bold;">O.Dt: <span style="    font-weight: normal !important;">{{order.created_date}}</span> </h4>
+		</ion-col> <ion-col *ngIf="order.status == 3">
+		<h4 style="    font-weight: bold;">C.Dt: <span style="    font-weight: normal !important;">{{order.close_date}}</span></h4>
+		</ion-col> </ion-row> 
+		<h4>{{order.remarks}}</h4>
+		</div>
+	</ion-item>
+	</ion-card>
+	<!--<ion-fab bottom right #fab *ngFor=" let order of myorders let i=index">
+		<button ion-fab *ngIf="!checkStatus" (click)="Ascending()">Sort</button>
+		<button ion-fab *ngIf="checkStatus"  (click)="Descending()">Sort</button>
+	  </ion-fab> -->
+</ion-content>
+<!-- <ion-footer>
+<ion-toolbar color="primary">
+    <ion-buttons>
+      <button ion-button  (click)="openModal()">
+        <ion-icon name="options"></ion-icon> Filter
+      </button>
+    </ion-buttons>
+</ion-toolbar>
+</ion-footer> -->
+
+
+
+
+

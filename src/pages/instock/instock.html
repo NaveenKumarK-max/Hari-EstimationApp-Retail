@@ -1,0 +1,1020 @@
+<!--
+  Generated template for the DesignsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!-- <ion-header>
+  <ion-navbar>
+      <button ion-button menuToggle><ion-icon name="menu"></ion-icon></button>
+      <ion-title>SubDesigns
+        <ion-icon  name="md-funnel" (click)="open()" style="color:black !important;float: right;" ></ion-icon>
+
+      </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding-vertical>
+  <ion-grid no-padding>
+      <ion-row *ngIf="designs.length > 0" text-center>
+          <ion-col text-wrap col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4  *ngFor="let item of designs; let i=index" class="custom-2col" [ngClass]="animateClass" (click)="openDesign(item)">
+              <ion-card>
+                  <img class="full-image" src='{{item.default_image}}' onerror="this.onerror=null;this.src='assets/no-img.png';" imageCache/>
+                  <ion-item text-center no-margin>
+                      <h5 class="text-small theme-color">{{item.label}}</h5>
+                  </ion-item>
+              </ion-card>
+          </ion-col>
+      </ion-row>
+  </ion-grid>
+
+  <ion-row *ngIf="designs.length == 0 " style="text-align: center;">
+      <ion-col>
+          <h4>{{errormsg}}</h4>
+      </ion-col>
+  </ion-row>
+
+   <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+</ion-content> -->
+
+<ion-header>
+  <ion-navbar>
+      <!-- <button ion-button menuToggle>
+          <ion-icon name="menu"></ion-icon>
+      </button> -->
+      <ion-title>
+        <!-- Collections -->
+        <span>Metal</span> <span *ngIf="total_records != ''">({{total_records}})</span>
+
+        <div  style="        width: 30px !important;float: right; " >
+          <ion-icon style="color:black;float: right;font-size:1.4em !important;" name="heart" (click)="wishlist()"></ion-icon>
+        <ion-badge *ngIf="wish != null && wish.length > 0" style="   background-color: red;
+          position: absolute;
+          top: -6px;
+          right: 5px;
+          border-radius: 100%;
+          font-size: 10px !important;
+      padding: 0px;
+      padding-top: 3px;
+      height: 16px;
+      width: 17px;"   color="danger">{{wish.length}}</ion-badge>
+
+      </div>
+         <ion-icon  name="md-funnel" (click)="open()" style="color:black !important;float: right;font-size:1.4em !important" ></ion-icon>
+         <ion-icon style="color:black !important;float: right;font-size:1.4em !important" name="search" (click)="auto()"></ion-icon>
+
+      </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <!-- <ion-row *ngIf="total_records != 0" style="background:#eee;">
+    <ion-col col-8 style="margin: auto;">
+      There are {{total_records}} products.
+    </ion-col>
+          <ion-col col-4 align="right">
+              <ion-icon   *ngIf="!checkStatus" (click)="grid()" name="grid" ></ion-icon>
+              <ion-icon  *ngIf="checkStatus"  (click)="listgrid()" name="list"></ion-icon>
+          </ion-col>
+      </ion-row> -->
+      <!-- <ion-row  style="">
+        <ion-col style="font-weight: bold;
+        font-size: medium !important;
+        margin: 10px;    text-transform: capitalize;color:#000000;text-align: center;">
+          {{designs[0]['sub_design_name']}} ({{total_records}})
+        </ion-col>
+
+          </ion-row> -->
+          <!-- <ion-row  style="border: 1px solid lightgray;padding: 7px !important;">
+
+            <ion-col (click)="sort()" col-4 >
+              <img style="height: 15px;" src="assets/up-down.png"><span style="color: black;    margin-left: 2px;">Sort</span>
+            </ion-col>
+          <ion-col style="text-align: center;" (click)="open()" col-4 >
+            <ion-icon     name="ios-funnel-outline" ></ion-icon><span style="color: black;">Filter</span>
+        </ion-col>
+                  <ion-col style="text-align: end;" col-4 *ngIf="!checkStatus" (click)="grid()">
+                      <ion-icon     name="grid" ></ion-icon><span *ngIf="!checkStatus"  style="color: black;">View Style</span>
+                  </ion-col>
+                  <ion-col style="text-align: end;" col-4 *ngIf="checkStatus" (click)="listgrid()">
+                    <ion-icon     name="list"></ion-icon><span *ngIf="checkStatus"  style="color: black;">View Style</span>
+                </ion-col>
+              </ion-row> -->
+      <ion-grid no-padding>
+
+  <ion-row [class.hide]="checkStatus">
+      <ion-col style="padding: 2px !important;" col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4 [ngClass]="animateClass" *ngFor=" let item of designs; let i=index "  no-padding>
+           <ion-card style="border: 1px solid #e4e4e4;height: 183px;border-radius: 2px">
+             <!-- <div style="margin: 3px;"><span *ngIf="item.is_stock_avail==1 && item.stock_manage == 1" class="instock">Instock</span><span *ngIf="item.is_stock_avail==0 && item.stock_manage == 1"  class="outofstock">Out of stock</span></div> -->
+             <!-- <div style="margin: 3px;text-align: right;"><span class="instock">{{item.BranchName}}</span></div> -->
+             <!-- <ion-icon [ngClass] = "item.wishlist == 1 ? 'co' : 'noco' " (click)="addWishlist(item,i)" name="heart"></ion-icon>  -->
+
+             <img (click)="openDesign(item)" style="height: 150px;width: auto;margin: 0 auto;object-fit: cover !important;" *ngIf='item.TagImage != null' src='{{item.TagImage}}' onerror="this.src='assets/no-img.png'" imageCache/>
+              <img (click)="openDesign(item)" style="height: 150px;margin: 0 auto;object-fit: cover !important;" *ngIf='item.TagImage == null' src='assets/no-img.png' imageCache/>
+              <!-- <div (click)="openDesign(item)" *ngIf="item.Status != 'OPEN'" style="    position: absolute;
+  top: 55px;
+  transform: rotate(-32deg);                left: 0;
+              right: 0;
+              text-align: center;
+              background: white;
+              padding: 8px;">OUT OF STOCK</div> -->
+              <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+              font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+        justify-content: center;
+        align-items: center;text-transform: capitalize;">
+          <div  class="col" col-3 style="text-align: center;
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px !important;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: black !important;
+          text-transform: capitalize;">
+                  Metal
+
+          </div>
+          <div class="col" col-1 style="text-align: center;
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px !important;
+          overflow: hidden;
+          display: grid !important;
+          justify-content: left;
+          align-items: center;
+          color: black !important;
+          text-transform: capitalize;">
+            :
+                  </div>
+          <div class="col" col-8 style="
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px !important;
+          overflow: scroll;
+           white-space: nowrap;
+                     display: grid;
+          justify-content: left;
+          align-items: center;
+          color: #962129 !important;
+          text-transform: capitalize;">
+                  <span>{{item.MetalName}}</span>
+
+                  </div>
+
+
+              </div>
+
+
+<!--
+               <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+         justify-content: center;
+         align-items: center;text-transform: capitalize;">
+           <div  class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   Design
+
+           </div>
+           <div class="col" col-1 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: hidden;
+           display: grid !important;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+             :
+                   </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: scroll;
+            white-space: nowrap;
+                      display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   <span>{{item.sub_design_name}}</span>
+
+                   </div>
+
+
+               </div>
+               <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+         justify-content: center;
+         align-items: center;text-transform: capitalize;">
+           <div  class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   WtRange
+
+           </div>
+                     <div  class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px !important;
+                     overflow: hidden;
+                     white-space: nowrap;
+   padding-top: 8px;                      justify-content: left;
+   display: grid;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: scroll;
+           white-space: nowrap;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   <span>    {{fixprice(item['weights']['from_weight'])}} g - {{fixprice(item['weights']['to_weight'])}} g
+                  </span>
+
+                   </div>
+
+
+               </div> -->
+
+
+
+
+              <!-- <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+              font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+        justify-content: center;
+        align-items: center;text-transform: capitalize;">
+          <div  class="col" col-4 style="text-align: center;
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: black !important;
+          text-transform: capitalize;">
+                  Id.
+
+          </div>
+          <div class="col" col-1 style="text-align: center;
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid !important;
+          justify-content: left;
+          align-items: center;
+          color: black !important;
+          text-transform: capitalize;">
+            :
+                  </div>
+          <div class="col" col-7 style="
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: #962129 !important;
+          text-transform: capitalize;">
+                  <span>{{item.id_supp_catalogue}}</span>
+
+                  </div>
+
+
+              </div> -->
+
+<!--
+              <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+              font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 10px;overflow: hidden;color: #bb9532;
+        justify-content: left;
+        align-items: center;text-transform: capitalize;">
+          <div class="col" col-4 style="text-align: center;
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: black !important;
+          text-transform: capitalize;">
+                  G.Wt.
+
+                  </div>
+                    <div class="col" col-1 style="text-align: center;
+                    height: 25px;
+                    font-weight: 500;
+                    text-overflow: ellipsis;
+                    padding: 4px;
+                    padding-bottom: 0px !important;
+                    font-size: 10px;
+                    overflow: hidden;
+                    display: grid;
+                    justify-content: left;
+                    align-items: center;
+                    color: black !important;
+                    text-transform: capitalize;">
+                      :
+                            </div>
+          <div class="col" col-7 style="
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: #962129 !important;
+          text-transform: capitalize;">
+                  {{item.GrossWt}} g
+
+                  </div>
+
+
+              </div> -->
+
+              <!-- <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+              font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 10px;overflow: hidden;color: #bb9532;
+        justify-content: left;
+        align-items: center;text-transform: capitalize;">
+          <div class="col" col-4 style="text-align: center;
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: black !important;
+          text-transform: capitalize;">
+                  N.Wt.
+
+                  </div>
+                    <div class="col" col-1 style="text-align: center;
+                    height: 25px;
+                    font-weight: 500;
+                    text-overflow: ellipsis;
+                    padding: 4px;
+                    padding-bottom: 0px !important;
+                    font-size: 10px;
+                    overflow: hidden;
+                    display: grid;
+                    justify-content: left;
+                    align-items: center;
+                    color: black !important;
+                    text-transform: capitalize;">
+                      :
+                            </div>
+          <div class="col" col-7 style="
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: #962129 !important;
+          text-transform: capitalize;">
+                  {{item.net_wt}} g
+
+                  </div>
+
+
+              </div> -->
+
+              <!-- <div class="row"  style="    text-align: center;
+              font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 10px;overflow: hidden;color: #bb9532;
+        justify-content: left;
+        align-items: center;text-transform: capitalize;">
+           <div (click)="openDesign(item)" class="col" col-3 style="text-align: center;
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: hidden;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: black !important;
+          text-transform: capitalize;">
+                  Design
+
+                  </div>
+                    <div (click)="openDesign(item)" class="col" col-1 style="text-align: center;
+                    height: 25px;
+                    font-weight: 500;
+                    text-overflow: ellipsis;
+                    padding: 4px;
+                    padding-bottom: 0px !important;
+                    font-size: 10px;
+                    overflow: hidden;
+                    display: grid;
+                    justify-content: left;
+                    align-items: center;
+                    color: black !important;
+                    text-transform: capitalize;">
+                      :
+                            </div>
+          <div class="col" col-8 style="
+          height: 25px;
+          font-weight: 500;
+          text-overflow: ellipsis;
+          padding: 4px;
+          padding-bottom: 0px !important;
+          font-size: 10px;
+          overflow: scroll !important;
+          display: grid;
+          justify-content: left;
+          align-items: center;
+          color: #962129 !important;
+          text-transform: capitalize;
+          display: contents;">
+                 <span (click)="openDesign(item)" style="    margin-left: 4px;
+                 white-space: nowrap;
+                 padding-top: 5px;
+                 width: 34%;
+                 overflow: scroll !important;
+                text-align: left;"> {{item.sub_design_name}}</span>  -->
+                  <!-- <div style="margin-left:10px;"> -->
+                    <!-- <ion-icon style="    background:#000000;
+                  color: #ffc04b;
+                  border-radius: 5px;" (click)="proceedToWishlist(item)" name="ios-cart-outline"></ion-icon> -->
+                   <!-- <ion-icon [ngClass] = "item.wishlist == 1 ? 'co' : 'noco' " (click)="addWishlist(item)" name="heart"></ion-icon>
+                  </div> -->
+
+          <!-- </div>
+
+
+              </div> -->
+
+              <!-- <div class="row"  style="text-align: center;">
+                  <div class="col" col-12>
+                    <div style="
+                   text-align: center;color: #86354d !important;
+                    ">
+                      <span style="font-weight: bold;font-size: 20px;">₹{{price(item.Rate)}}</span>
+                    </div>
+
+                  </div>
+
+                </div> -->
+
+          </ion-card>
+
+      </ion-col>
+      <!-- <div class="itemempty"  *ngIf="designs?.length == 0">No item to display</div> -->
+  </ion-row>
+
+  </ion-grid>
+  <p  [class.hide]="!checkStatus" style="    margin-top: 0px;">
+    <ion-card *ngFor=" let item of designs; let i=index " style="border: 1px solid #e4e4e4;height: 130px;border-radius: 2px">
+
+      <ion-row >
+
+      <ion-col (click)="openDesign(item)" col-4>
+        <ion-icon [ngClass] = "item.wishlist == 1 ? 'co' : 'noco' " (click)="addWishlist(item,i)" name="heart"></ion-icon>
+
+        <img style="height: 120px;width: auto;margin: 0 auto;object-fit: cover !important;" *ngIf='item.TagImage != null' src='{{item.TagImage}}' onerror="this.src='assets/no-img.png'" imageCache/>
+        <img style="height: 120px;margin: 0 auto;object-fit: cover !important;" *ngIf='item.TagImage == null' src='assets/no-img.png' imageCache/>
+        <!-- <div *ngIf="item.Status != 'OPEN'" style="    position: absolute;
+  top: 50px;
+  transform: rotate(-32deg);                 left: 0;
+               right: 0;
+               text-align: center;
+               background: white;
+               padding: 8px;">OUT OF STOCK</div> -->
+      </ion-col>
+          <ion-col col-8  [ngClass]="animateClass"  >
+              <!-- <div style="margin: 3px;"><span *ngIf="item.is_stock_avail==1 && item.stock_manage == 1" class="instock">Instock</span><span *ngIf="item.is_stock_avail==0 && item.stock_manage == 1"  class="outofstock">Out of stock</span></div> -->
+              <!-- <div style="margin: 3px;text-align: right;"><span class="instock">{{item.BranchName}}</span></div> -->
+
+              <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+         justify-content: center;
+         align-items: center;text-transform: capitalize;margin-top: 10px;">
+           <div  class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   metal
+
+           </div>
+                     <div  class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px !important;
+                     overflow: hidden;
+                     white-space: nowrap;
+   padding-top: 8px;                      justify-content: left;
+   display: grid;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: scroll;
+           white-space: nowrap;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   <span>{{item.MetalName}}</span>
+
+                   </div>
+
+
+               </div>
+
+               <!-- <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+         justify-content: center;
+         align-items: center;text-transform: capitalize;">
+           <div  class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   Design
+
+           </div>
+                     <div  class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px !important;
+                     overflow: hidden;
+                     white-space: nowrap;
+   padding-top: 8px;                      justify-content: left;
+   display: grid;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: scroll;
+           white-space: nowrap;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   <span>{{item.sub_design_name}}</span>
+
+                   </div>
+
+
+               </div>
+
+               <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+         justify-content: center;
+         align-items: center;text-transform: capitalize;">
+           <div  class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   WtRange
+
+           </div>
+                     <div  class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px !important;
+                     overflow: hidden;
+                     white-space: nowrap;
+   padding-top: 8px;                      justify-content: left;
+   display: grid;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px !important;
+           overflow: scroll;
+           white-space: nowrap;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   <span>    {{fixprice(item['weights']['from_weight'])}} g - {{fixprice(item['weights']['to_weight'])}} g
+                  </span>
+
+                   </div>
+
+
+               </div> -->
+
+               <!-- <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 14px;overflow: hidden;color: #bb9532;
+         justify-content: center;
+         align-items: center;text-transform: capitalize;">
+           <div  class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   Id.
+
+           </div>
+                     <div  class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px;
+                     overflow: hidden;
+                     white-space: nowrap;
+   padding-top: 8px;                      justify-content: left;
+   display: grid;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   <span>{{item.id_supp_catalogue}}</span>
+
+                   </div>
+
+
+               </div> -->
+
+
+               <!-- <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 10px;overflow: hidden;color: #bb9532;
+         justify-content: left;
+         align-items: center;text-transform: capitalize;">
+           <div class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   G.Wt.
+
+                   </div>
+                     <div class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px;
+                     overflow: hidden;
+                     display: grid;
+                     justify-content: left;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   {{item.GrossWt}} g
+
+                   </div>
+
+
+               </div>
+
+               <div (click)="openDesign(item)" class="row"  style="    text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 10px;overflow: hidden;color: #bb9532;
+         justify-content: left;
+         align-items: center;text-transform: capitalize;">
+           <div class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   N.Wt.
+
+                   </div>
+                     <div class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px;
+                     overflow: hidden;
+                     display: grid;
+                     justify-content: left;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;">
+                   {{item.net_wt}} g
+
+                   </div>
+
+
+               </div> -->
+
+               <!-- <div class="row"  style="    margin-top: 10px;text-align: center;
+               font-weight: 500;text-overflow: ellipsis;padding-bottom:0px !important;font-size: 10px;overflow: hidden;color: #bb9532;
+         justify-content: left;
+         align-items: center;text-transform: capitalize;margin-top: 10px;">
+           <div (click)="openDesign(item)" class="col" col-3 style="text-align: center;
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: black !important;
+           text-transform: capitalize;">
+                   Design
+
+                   </div>
+                      <div (click)="openDesign(item)" class="col" col-1 style="text-align: center;
+                     height: 25px;
+                     font-weight: 500;
+                     text-overflow: ellipsis;
+                     padding: 4px;
+                     padding-bottom: 0px !important;
+                     font-size: 10px;
+                     overflow: hidden;
+                     display: grid;
+                     justify-content: left;
+                     align-items: center;
+                     color: black !important;
+                     text-transform: capitalize;">
+                       :
+                             </div>
+           <div class="col" col-8 style="
+           height: 25px;
+           font-weight: 500;
+           text-overflow: ellipsis;
+           padding: 4px;
+           padding-bottom: 0px !important;
+           font-size: 10px;
+           overflow: hidden;
+           display: grid;
+           justify-content: left;
+           align-items: center;
+           color: #962129 !important;
+           text-transform: capitalize;
+           display: contents;">
+                  <span (click)="openDesign(item)" style="    margin-left: 4px;
+                  white-space: nowrap;
+                  padding-top: 5px;
+                  width: 42%;
+                  overflow: scroll;
+                 text-align: left;"> {{item.sub_design_name}}</span>  -->
+                   <!-- <div style="margin-left:10px;"> -->
+                     <!-- <ion-icon style="    background:#000000;
+                   color: #ffc04b;
+                   border-radius: 5px;" (click)="proceedToWishlist(item)" name="ios-cart-outline"></ion-icon>  -->
+                   <!-- <ion-icon [ngClass] = "item.wishlist == 1 ? 'co' : 'noco' " (click)="addWishlist(item)" name="heart"></ion-icon>
+                   </div> -->
+<!--
+           </div>
+
+
+               </div> -->
+
+               <!-- <div class="row"  style="text-align: center;">
+                   <div class="col" col-12>
+                     <div style="
+                    text-align: center;color: #86354d !important;
+                     ">
+                       <span style="font-weight: bold;font-size: 20px;">₹{{price(item.Rate)}}</span>
+                     </div>
+
+                   </div>
+
+                 </div> -->
+                </ion-col>
+
+              </ion-row>
+           </ion-card>
+
+
+          </p>
+
+
+         <ion-infinite-scroll   style="text-align: center;" (ionInfinite)="doInfinite($event)">
+              <ion-infinite-scroll-content ></ion-infinite-scroll-content>
+              <!-- <img *ngIf="gif" style=" max-width: 60px !important;" src="assets/loader.gif"> -->
+
+          </ion-infinite-scroll>
+
+          <!-- <ion-fab bottom right >
+            <button (click)="sort()" ion-fab>Sort</button>
+
+          </ion-fab> -->
+          <!-- <ion-fab bottom right >
+            <button ion-fab>Sort</button>
+            <ion-fab-list side="top">
+              <button ion-fab (click)="sort(2)">A to Z</button>
+              <button ion-fab (click)="sort(3)">Z to A</button>
+              <button ion-fab (click)="sort(4)">Cost low </button>
+              <button ion-fab (click)="sort(5)">Cost high </button>
+              <button ion-fab (click)="sort(6)">Wg low </button>
+              <button ion-fab (click)="sort(7)">Wg high </button>
+
+            </ion-fab-list>
+          </ion-fab> -->
+  </ion-content>

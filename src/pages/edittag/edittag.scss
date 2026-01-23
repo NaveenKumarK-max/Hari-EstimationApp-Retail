@@ -1,0 +1,68 @@
+
+// ion-app.md{ // For QR scanner 
+//     background: none transparent !important;
+//     background-color: none !important;
+//   }
+  page-edittag {
+      .vip{
+        color: darkorange;
+      }
+      ion-item-sliding{
+        border: 1px solid #dcdcdc !important;
+      }
+      .border-right{
+        border-right: 1px solid #dcdcdc !important;
+      }
+      .coverphoto{
+        overflow: auto;
+        font-weight: bold;
+        white-space: nowrap;
+        width: -webkit-fill-available;
+        }
+        .uploadimg1{
+            height: 50px;
+            width: 60px;
+            object-fit: cover;
+            object-position: center;
+          }
+      // // For QR scanner 
+      // .qr-scanner-open { 
+      //   display: none !important;
+      //   height: 70px !important;
+      //   --overflow: hidden !important;
+      //   //style="background: none transparent;"
+      // } 
+      .esti-notes{
+        margin-top: 4% !important;
+        color: gray !important;
+        letter-spacing: 0.25px !important;
+      }
+      .summary-img-icon{
+        height: 19px;
+        width: 19px;
+      }
+      .progress-outer {
+        width: 96%;
+        margin: 3x 2%;
+        padding: 5px;
+        text-align: center;
+        background-color: #f4f4f4;
+        border: 1px solid #dcdcdc;
+        color: #fff;
+        border-radius: 20px;
+    }
+    
+    .progress-inner {
+        min-width: 15%;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 5px;
+        border-radius: 20px;
+        background-color: map-get($colors, primary);
+    }
+      // .content-md {
+      //     color: #000;
+      //     background-color: #fff;
+      // }    
+  }
+  

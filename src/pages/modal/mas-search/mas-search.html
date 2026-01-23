@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Search {{page}}
+    </ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon item-right name="ios-close-outline"></ion-icon>
+        </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <span *ngIf="listType == 'normal'">
+    <ion-searchbar (ionInput)="getSearch($event)"></ion-searchbar>
+    <ion-list>
+      <ion-item *ngFor="let d of list" (click)="selected(d)">
+        <span *ngIf="page == 'Section'">{{ d.section_name }}</span>
+        <span *ngIf="page == 'Product'">{{ d.product_name }}</span>
+        <span *ngIf="page == 'Design'">{{ d.design_name }}</span>
+        <span *ngIf="page == 'subDesign'">{{ d.sub_design_name }}</span>
+        <!-- <span *ngIf="page != 'Section'">{{ d.label }}</span> -->
+        <span *ngIf="page != 'Section'">{{ d.purity }}</span>
+      </ion-item>
+    </ion-list>
+  </span>
+  <tree-view *ngIf="listType == 'tree' && page == 'Product'" [TreeData]="list" [hasCheckbox]="true"></tree-view>
+</ion-content>

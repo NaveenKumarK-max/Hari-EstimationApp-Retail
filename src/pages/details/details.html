@@ -1,0 +1,226 @@
+<!--
+  Generated template for the DetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Customer Details</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content no-padding>
+
+  <ion-row style="    border: 1px solid lightgray;
+  margin: 5px;" *ngIf="details != ''" no-padding>
+   
+    <ion-col col-5 no-padding>
+      <button ion-button clear small>Customer Name </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto;font-weight: bold;" col-6>
+      {{details['cus_details'][0]['firstname']}}
+    </ion-col>
+    <ion-col *ngIf="details['last_review'] != null && details['last_review']['review'] != ''" col-5 no-padding>
+      <!-- <button ion-button clear small>Customer Name </button> -->
+    </ion-col>
+    <ion-col *ngIf="details['last_review'] != null && details['last_review']['review'] != ''" no-padding style="margin:auto" col-1>
+        <!-- : -->
+    </ion-col>
+    <ion-col *ngIf="details['last_review'] != null && details['last_review']['review'] != ''" no-padding style="margin:auto;font-weight: bold;" col-6>
+      <span style="background: orange;color: white;padding: 5px;border-radius: 5px;">
+      <span style="text-transform:uppercase" >{{details['last_review']['review']}}</span>
+      </span>
+    </ion-col>
+	<ion-col *ngIf="details['cus_details'][0]['is_vip'] == '1' " col-5 no-padding>
+      <button ion-button clear small>Customer Type </button>
+    </ion-col>
+    <ion-col *ngIf="details['cus_details'][0]['is_vip'] == '1' " no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col *ngIf="details['cus_details'][0]['is_vip'] == '1' " no-padding style="margin:auto;font-weight: bold;" col-6>
+       <span style="background: orange;color: white;padding: 5px;border-radius: 5px;">
+    <ion-icon style="color: white;" name="star"></ion-icon><span *ngIf="details['cus_details'][0]['is_vip'] == '1' ">VIP</span> 
+
+  </span>
+    </ion-col>
+    <ion-col style="margin:auto"  col-5 no-padding>
+      <button ion-button clear small>Rating </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col  no-padding style="margin:auto  ;  overflow: scroll;
+    white-space: nowrap;border-radius: 5px;" col-6>
+      
+ 
+  <p style="background: orange;color: white;padding: 1px;border-radius: 5px;width: fit-content;padding-right: 2px !important;">
+    <ion-icon style="color: white;" name="star"></ion-icon><span *ngIf="details.cus_review_avg != 0">{{details.cus_review_avg}}</span> 
+
+  </p>
+    </ion-col>
+    <ion-col col-5 no-padding>
+      <button ion-button clear small>Total Accounts </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-6>
+      <ion-badge style="background: green;color: white;">      {{details['cus_details'][0]['tot_account']}}
+      </ion-badge>
+
+        
+    </ion-col>
+  
+    
+    <ion-col no-padding col-5>
+      <button ion-button clear small>Active Accounts </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-6>
+      <ion-badge style="background: green;color: white;">      {{details['cus_details'][0]['active_acc']}}
+      </ion-badge>
+    </ion-col>
+    <ion-col no-padding col-5>
+      <button ion-button clear small>Closed Accounts  </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-6>
+      <ion-badge style="background: green;color: white;">      {{details['cus_details'][0]['closed_count']}}
+      </ion-badge>
+    </ion-col>
+    <ion-col no-padding col-5>
+      <button ion-button clear small>Inactive Accounts </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-6>
+      <ion-badge style="background: green;color: white;">      {{details['cus_details'][0]['inactive_acount']}}
+      </ion-badge>
+    </ion-col>
+    <ion-col no-padding col-5>
+      <button ion-button clear small>Gold (Gms)  </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto;font-weight: bold;" col-6>
+      {{details['cus_details'][0]['gold_wt']}} g
+  
+    </ion-col>
+    <ion-col no-padding col-5>
+      <button ion-button clear small>Silver (Gms)  </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto;font-weight: bold;" col-6>
+      {{details['cus_details'][0]['silver_wt']}} g
+    </ion-col>
+    <ion-col no-padding col-5>
+      <button ion-button clear small>MRP (Rs)  </button>
+    </ion-col>
+    <ion-col no-padding style="margin:auto" col-1>
+        :
+    </ion-col>
+    <ion-col no-padding style="margin:auto;font-weight: bold;" col-6>
+      ₹{{details['cus_details'][0]['tot_amount']}} 
+    </ion-col>
+    </ion-row>
+  
+    <ion-card *ngFor="let d of details['bill_details']">
+    <ion-row   style="
+      
+      font-weight: bold;text-align:center;
+  " >
+        <ion-col col-6 style="margin-top:13px;text-align: left;padding-left: 10px;">
+          Bill Date : <span style="font-weight: bold;">{{d['bill_date']}} </span>
+        </ion-col>
+        <ion-col col-6 style="margin-top:12px;text-align: left;padding-left: 10px;">
+          Bill No : <span style="font-weight: bold;">{{d['bill_no']}}</span>
+        </ion-col>
+        <ion-col col-6 style="margin-top:12px;text-align: left;padding-left: 10px;">
+          Branch : <span style="font-weight: bold;">{{d['branch_name']}} </span>  
+        </ion-col>
+        <ion-col col-6 style="margin-top:13px;text-align: left;padding-left: 10px;">
+          Gold Wt : <span style="font-weight: bold;">{{d['gold_wt']}} g</span>
+        </ion-col>
+        <ion-col col-6 style="margin-top:12px;text-align: left;padding-left: 10px;">
+          Silver Wt : <span style="font-weight: bold;">{{d['silver_wt']}} g</span>
+        </ion-col>
+        <ion-col col-6 style="margin-top:12px;text-align: left;padding-left: 10px;">
+          MRP Amt : <span style="font-weight: bold;">₹{{d['mrp_amount']}}</span>
+        </ion-col>
+        <ion-col col-6 style="margin-top:12px;text-align: left;padding-left: 10px;">
+          Bill Amt : <span style="font-weight: bold;">₹{{d['tot_bill_amount']}}</span> 
+        </ion-col>
+      </ion-row>
+    </ion-card>
+    <!-- <ion-scroll  scrollX="true" scrollY="true" style="border: 1px solid;height:200px;margin-right: 20px;margin-top: 10px;margin-left:10px;" >
+      <ion-row   style="
+      
+      font-weight: bold;text-align:center;
+  " nowrap>
+        <ion-col col-4 style="margin-top:13px;font-weight:bold;">
+          Bill Date
+        </ion-col>
+        <ion-col col-4 style="margin-top:12px;font-weight:bold;">
+          Bill No
+        </ion-col>
+        <ion-col col-6 style="margin-top:12px;font-weight:bold;">
+          Branch
+        </ion-col>
+        <ion-col col-5 style="margin-top:13px;font-weight:bold;">
+          Gold Wt
+        </ion-col>
+        <ion-col col-5 style="margin-top:12px;font-weight:bold;">
+          Silver Wt
+        </ion-col>
+        <ion-col col-5 style="margin-top:12px;font-weight:bold;">
+          MRP Amt
+        </ion-col>
+        <ion-col col-5 style="margin-top:12px;font-weight:bold;">
+          Bill Amt
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngFor="let d of details['bill_details']"  style="
+      
+      font-weight: bold;text-align:center;
+  " nowrap>
+        <ion-col col-4 style="margin-top:13px;">
+          {{d['bill_date']}} 
+        </ion-col>
+        <ion-col col-4 style="margin-top:12px;">
+          {{d['bill_no']}}
+        </ion-col>
+        <ion-col col-6 style="margin-top:12px;">
+          {{d['branch_name']}}   
+        </ion-col>
+        <ion-col col-5 style="margin-top:13px;">
+          {{d['gold_wt']}} g
+        </ion-col>
+        <ion-col col-5 style="margin-top:12px;">
+          {{d['silver_wt']}} g
+        </ion-col>
+        <ion-col col-5 style="margin-top:12px;">
+          ₹{{d['mrp_amount']}} 
+        </ion-col>
+        <ion-col col-5 style="margin-top:12px;">
+          ₹{{d['tot_bill_amount']}} 
+        </ion-col>
+      </ion-row>
+
+    </ion-scroll> -->
+</ion-content>

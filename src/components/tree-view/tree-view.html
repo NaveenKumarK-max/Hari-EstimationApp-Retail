@@ -1,0 +1,21 @@
+<div *ngFor="let item of TreeData" style="padding-left:20px">         
+    <ion-grid no-padding>
+        <ion-row>
+            <ion-col col-1 class="right" style="margin:auto;text-align:center">
+            <div>
+               <ion-icon style="font-size:large" item-start *ngIf="item.children?.length" (click)="toggleChildren(item)" color="theme-color" [name]="item.icon" tappable></ion-icon>       
+            </div>
+            </ion-col> 
+            <ion-col class="left">
+                <ion-item style="padding:0" no-lines>
+                    <ion-label style="font-size: 13px;font-weight: 500"> {{item.label}}</ion-label>
+                    <ion-checkbox item-start *ngIf="item.children?.length == 0" style="margin-right: 15px" [(ngModel)]="item.checked" color="theme-color" (click)="prodSelected(item)"></ion-checkbox>
+                    <ion-checkbox item-start *ngIf="item.children?.length > 0" style="margin-right: 15px" [(ngModel)]="item.checked" color="theme-color" disabled="true"></ion-checkbox>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+    <tree-view [TreeData]="item.children" *ngIf="item.visible" [hasCheckbox]="hasCheckbox"></tree-view>
+    
+</div>
+	
