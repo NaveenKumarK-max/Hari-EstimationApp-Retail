@@ -119,6 +119,7 @@ import { StatusViewPage } from '../pages/status-view/status-view';
 import { OrderStatusViewPage } from '../pages/order-status-view/order-status-view';
 import { CommonProvider } from '../providers/common';
 import { IndianCurrencyPipe } from './pipes/indian-currency';
+import { HttpClientModule } from '@angular/common/http';
 // import { DocumentViewer,DocumentViewerOptions } from '@ionic-native/document-viewer';
 
 
@@ -237,7 +238,7 @@ export function providers() {
             scrollPadding: false,
             scrollAssist: false
           }), IonicStorageModule.forRoot(), BrowserModule,
-        HttpModule, BrowserAnimationsModule, IonicImageViewerModule,StarRatingModule
+        HttpModule, BrowserAnimationsModule, IonicImageViewerModule,StarRatingModule,HttpClientModule
     ],
     bootstrap: [IonicApp],
     entryComponents: entryComponents(),

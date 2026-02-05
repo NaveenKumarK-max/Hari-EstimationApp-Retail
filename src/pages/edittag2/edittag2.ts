@@ -1,7 +1,7 @@
 import { Component ,ChangeDetectorRef} from '@angular/core';
 import { Events,IonicPage, NavController, NavParams,LoadingController,ActionSheetController,Platform,ToastController,AlertController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { FileUploadOptions, Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { CommonProvider ,BaseAPIURL} from '../../providers/common';
 import { RatioCrop, RatioCropOptions } from 'ionic-cordova-plugin-ratio-crop';
@@ -203,10 +203,16 @@ export class Edittag2Page {
 
     // Create options for the Camera Dialog
     var options = {
-    quality: 100,
+    quality: 60,
+    targetWidth: 1024,
+    targetHeight: 1024,
+    destinationType: this.camera.DestinationType.FILE_URI, // MUST
+    encodingType: this.camera.EncodingType.JPEG,
     sourceType: sourceType,
     saveToPhotoAlbum: false,
     correctOrientation: true,
+
+
 
     // allowEdit:true
 
@@ -318,8 +324,8 @@ export class Edittag2Page {
   public uploadImage(name) {
 
     console.log(this.images);
-
-    let imgs:any[] =  this.images.filter(data=>!data.hasOwnProperty('id_desmap_img'));
+ 
+   let imgs:any[] =  this.images.filter(data=>!data.hasOwnProperty('id_desmap_img'));
 
     if(imgs.length > 0){
     // let loader = this.load.create( {
@@ -328,111 +334,284 @@ export class Edittag2Page {
     // loader.present();
     this.show = true;
     console.log(imgs);
-    imgs.forEach(async (element,index) => {
+//     imgs.forEach(async (element,index) => {
 
 
+// await new Promise<void>(next => {
 
-      await new Promise<void>( next=>{
+//   const url = BaseAPIURL + 'admin_app_api/uploadTagimage';
 
-      // Destination URL
-      var url = BaseAPIURL+'admin_app_api/uploadTagimage';
-      var d = new Date(),
-      n = d.getTime()
-    // File for Upload
-    var targetPath = element['image_name']  + '?nocache=' + n;
+//   const targetPath = element.image_name; // ✅ FIXED
+//   const filename = element.name;
 
-    // File name only
-    var filename = name;
-    var options = {
-      fileKey: "name",
-      fileName: element['name'],
-      chunkedMode: false,
-      mimeType: "image/jpeg",
-      params: {
-        fileName: element['name'],
-        default: element['is_default'],
-        branch_id:this.empData['id_branch'],
-        tagid:this.esti['tag'][0]['tag_id'],
-        // imgid : this.images[index]['id_tag_img']
-      }
-    };
+//   const options: FileUploadOptions = {
+//     fileKey: 'file',
+//     fileName: filename,
+//     chunkedMode: false,
+//     mimeType: 'image/jpeg',
+//     params: {
+//       fileName: filename,
+//       default: element.is_default,
+//       branch_id: this.empData['id_branch'],
+//       tagid: this.esti['tag'][0]['tag_id']
+//     }
+//   };
+  
 
+//   const fileTransfer: TransferObject = this.transfer1.create();
 
+//   console.log('Uploading:', targetPath);
 
+//   fileTransfer.upload(targetPath, encodeURI(url), options).then(data => {
 
-    const fileTransfer: TransferObject = this.transfer1.create();
+//     const result = JSON.parse(data.response);
 
+//     let check = this.images.findIndex(
+//       img => img.image_name === element.image_name
+//     );
 
+//     if (check !== -1) {
+//       this.images[check]['id_desmap_img'] = result.imageid;
+//     }
 
-    console.log(targetPath)
-    console.log(encodeURI(url))
-    console.log(options)
-    console.log(url)
+//     if (index === imgs.length - 1) {
+//       let toastMsg = this.toast.create({
+//         message: "Image successfully uploaded.",
+//         duration: this.comman.toastTimeout,
+//         position: 'center'
+//       });
+//       toastMsg.present();
 
-    // Use the FileTransfer to upload the image
-    fileTransfer.upload( targetPath, encodeURI(url), options ).then(( data ) => {
-      console.log(data);
-      if(index == imgs.length - 1){
-        setTimeout(() => {
+//       this.esti['tag'] = [];
+//       this.image = '';
+//       this.images = [];
+//       this.show = false;
+//     }
 
-      let result = JSON.parse( data.response );
-      console.log(result);
-      console.log(result['imageid'])
-      // loader.dismissAll();
-      // this.image = this.pathForImage(name);
-      // this.imageid = result['imageid'];
-      let check:any = this.images.findIndex(data => data['image_name'] ==  element['image_name']);
-      this.images[check]['id_desmap_img'] = result['imageid'];
-      // this.esti['tag'][0]['img_details'][index]['id_tag_img'] = result['imageid'];
+//     next();
 
-      let toastMsg = this.toast.create({
-        message: "Image succesfully uploaded.",
-        duration: this.comman.toastTimeout,
-        position: 'center'
-      });
-      toastMsg.present();
-       this.esti['tag'] = [];
-             this.image = '';
-            this.images = [];
-            this.show = false;
+//   }).catch(err => {
+//     console.error(err);
+//     let toastMsg = this.toast.create({
+//       message: "Error while uploading Image.",
+//       duration: this.comman.toastTimeout,
+//       position: 'center'
+//     });
+//     toastMsg.present();
+//     next();
+//   });
 
-      // this.navCtrl.pop();
-    }, 3000);
+//   fileTransfer.onProgress((data) => {
+//     if (data.lengthComputable) {
+//       this.progress = Math.round((data.loaded / data.total) * 100);
+//       this.refresh();
+//     }
+//   });
 
-    }
-    next();
-
-    }, err => {
-      // loader.dismissAll()
-      console.log(err);
-       let toastMsg = this.toast.create({
-        message: "Error while uploading Image.",
-        duration: this.comman.toastTimeout,
-        position: 'center'
-      });
-      toastMsg.present();
-      next();
-
-    } );
-
-    fileTransfer.onProgress((data) => {
-      console.log(data)
-
-      this.progress = Math.round((data.loaded/data.total) * 100) ;
-      this.refresh();
-      console.log(this.progress)
-
-    });
-  } );
-// },err=>{
-//   console.log(err);
 // });
-} );
+
+
+
+
+//   //     await new Promise<void>( next=>{
+
+//   //     // Destination URL
+//   //     var url = BaseAPIURL+'admin_app_api/uploadTagimage';
+//   //     var d = new Date(),
+//   //     n = d.getTime()
+//   //   // File for Upload
+//   //   var targetPath = element['image_name']  + '?nocache=' + n;
+
+//   //   // File name only
+//   //   var filename = name;
+//   //   var options = {
+//   //     fileKey: "name",
+//   //     fileName: element['name'],
+//   //     chunkedMode: false,
+//   //     mimeType: "image/jpeg",
+//   //     params: {
+//   //       fileName: element['name'],
+//   //       default: element['is_default'],
+//   //       branch_id:this.empData['id_branch'],
+//   //       tagid:this.esti['tag'][0]['tag_id'],
+//   //       // imgid : this.images[index]['id_tag_img']
+//   //     }
+//   //   };
+
+
+
+
+//   //   const fileTransfer: TransferObject = this.transfer1.create();
+
+
+
+//   //   console.log(targetPath)
+//   //   console.log(encodeURI(url))
+//   //   console.log(options)
+//   //   console.log(url)
+
+//   //   // Use the FileTransfer to upload the image
+//   //   fileTransfer.upload( targetPath, encodeURI(url), options ).then(( data ) => {
+//   //     console.log(data);
+//   //     if(index == imgs.length - 1){
+//   //       setTimeout(() => {
+
+//   //     let result = JSON.parse( data.response );
+//   //     console.log(result);
+//   //     console.log(result['imageid'])
+//   //     // loader.dismissAll();
+//   //     // this.image = this.pathForImage(name);
+//   //     // this.imageid = result['imageid'];
+//   //     let check:any = this.images.findIndex(data => data['image_name'] ==  element['image_name']);
+//   //     this.images[check]['id_desmap_img'] = result['imageid'];
+//   //     // this.esti['tag'][0]['img_details'][index]['id_tag_img'] = result['imageid'];
+
+//   //     let toastMsg = this.toast.create({
+//   //       message: "Image succesfully uploaded.",
+//   //       duration: this.comman.toastTimeout,
+//   //       position: 'center'
+//   //     });
+//   //     toastMsg.present();
+//   //      this.esti['tag'] = [];
+//   //            this.image = '';
+//   //           this.images = [];
+//   //           this.show = false;
+
+//   //     // this.navCtrl.pop();
+//   //   }, 3000);
+
+//   //   }
+//   //   next();
+
+//   //   }, err => {
+//   //     // loader.dismissAll()
+//   //     console.log(err);
+//   //      let toastMsg = this.toast.create({
+//   //       message: "Error while uploading Image.",
+//   //       duration: this.comman.toastTimeout,
+//   //       position: 'center'
+//   //     });
+//   //     toastMsg.present();
+//   //     next();
+
+//   //   } );
+
+//   //   fileTransfer.onProgress((data) => {
+//   //     console.log(data)
+
+//   //     this.progress = Math.round((data.loaded/data.total) * 100) ;
+//   //     this.refresh();
+//   //     console.log(this.progress)
+
+//   //   });
+//   // } );
+// // },err=>{
+// //   console.log(err);
+// // });
+// } );
+
+this.uploadImagesOnce(imgs);
     }
     else{
-      this.navCtrl.pop();
+      let toastMsg = this.toast.create({
+        message: 'This image is already uploaded.',
+        duration: this.comman.toastTimeout,
+        position: 'center'
+      });
+      toastMsg.present();
+      // this.navCtrl.pop();
     }
+    this.tagData['tag_code']='';
+    this.checkold = false;
+  
+
+ 
   }
+
+
+async uploadImagesOnce(imgs: any[]) {
+
+  try {
+
+    const imagePayload = [];
+    const totalImages = imgs.length;
+
+    // 🔹 RESET PROGRESS
+    this.progress = 0;
+    this.refresh();
+
+    // 🔹 PHASE 1: Read files (0–70%)
+    for (let i = 0; i < imgs.length; i++) {
+
+      const element = imgs[i];
+
+      const filePath = element.image_name;
+      const dirPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
+      const fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+
+      const base64Data = await this.file.readAsDataURL(dirPath, fileName);
+      const pureBase64 = base64Data.split(',')[1];
+
+      imagePayload.push({
+        image: pureBase64,
+        fileName: element.name,
+        default: element.is_default
+      });
+
+      // 📊 Progress while reading
+      this.progress = Math.round(((i + 1) / totalImages) * 70);
+      this.refresh();
+    }
+
+    const payload = {
+      images: imagePayload,
+      tagid: this.esti['tag'][0]['tag_id']
+    };
+
+    // 🔹 PHASE 2: Upload (70–100%)
+    const result = await this.comman.uploadTagImage(payload);
+
+    console.log('UPLOAD SUCCESS RESPONSE:', result);
+
+    if (result && result.status) {
+
+      // 📊 Finish progress
+      this.progress = 100;
+      this.refresh();
+
+      this.toast.create({
+        message: 'Image successfully uploaded.',
+        duration: this.comman.toastTimeout,
+        position: 'bottom'
+      }).present();
+
+      // ✅ CLEANUP
+      this.esti['tag'] = [];
+      this.image = '';
+      this.images = [];
+      this.show = false;
+    }
+
+  } catch (err) {
+
+    console.error('UPLOAD FAILED:', err);
+
+    this.progress = 0;
+    this.refresh();
+
+    this.toast.create({
+      message: 'Error while uploading Image.',
+      duration: this.comman.toastTimeout,
+      position: 'bottom'
+    }).present();
+  }
+}
+
+
+
+
+
+
   loading(){
 
     this.loader = this.load.create( {
@@ -444,6 +623,8 @@ export class Edittag2Page {
     this.loader.dismiss();
   }
   submit(){
+
+       if(this.esti['tag'].length > 0){
     let check:any = this.images.findIndex(data => data['is_default'] == 1);
 
     if(this.imagename != '' || check >= 0){
@@ -457,6 +638,15 @@ export class Edittag2Page {
       });
       toastMsg.present();
     }
+
+      }else {
+      let toastMsg = this.toast.create({
+        message: 'Tag data not found.',
+        duration: this.comman.toastTimeout,
+        position: 'center'
+      });
+      toastMsg.present();
+      }
   }
 
 
@@ -855,7 +1045,7 @@ console.log(this.esti['tag']);
 
 getTagByID(tagData){
   if(tagData != ''){
-   var istagId = (tagData.search("/") > 0 ? true : false);
+/*    var istagId = (tagData.search("/") > 0 ? true : false);
    var isTagCode = (tagData.search("-") > 0 ? true : false);
    if(istagId){
      var tId   = tagData.split("/");
@@ -865,7 +1055,24 @@ getTagByID(tagData){
    else if(isTagCode){
      var searchTxt = tagData;
      var searchField  = "tag_code";
-   }
+   } */
+
+           var istagId = (tagData.search("/") > 0 ? true : false);
+      // var isTagCode = (tagData.search("-") > 0 ? true : false);
+      var isTagCode = ((tagData.search("-") > 0 || tagData.search("-") < 0) ? true : false);
+      if (istagId) {
+        var tId = tagData.split("/");
+        var searchTxt = (tId.length >= 2 ? tId[0] : "");
+        var searchField = this.checkold == true ? "old_tag_id" : "tag_id";
+      }
+      else if (isTagCode) {
+        var searchTxt = tagData;
+        var searchField = this.checkold == true ? "old_tag_id" : "tag_code";
+      }
+      else if (this.checkold) {
+        var searchTxt = tagData;
+        var searchField = "old_tag_id";
+      }
    // Search Tag
    let loader = this.load.create({
      content: 'Please Wait',

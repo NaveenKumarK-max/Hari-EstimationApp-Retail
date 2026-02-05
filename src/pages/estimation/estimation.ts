@@ -985,6 +985,7 @@ export class EstiPage {
   }
 
   getTagByID(tagData) {
+
     this.showr = false;
     if (tagData != '') {
       var istagId = (tagData.search("/") > 0 ? true : false);

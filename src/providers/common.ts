@@ -734,10 +734,25 @@ public getarea(data): any {
 
 }
 
+
+public uploadTagImage(data): any {
+ 
+    return this.http
+    .post( BaseAPIURL+'admin_app_api/uploadTagimage', data, this.getHeader())
+    .map((response) => {
+        // some response manipulation
+        let result = response.json();
+        return result;
+    })
+    .toPromise();
+
+}
+
 }
 
 export const BaseAPIURL = 'https://erp.harijewellery.in/staging/admin/index.php/';
-// export const BaseAPIURL = 'http://192.168.1.36/harijwl/admin/index.php/';
+// export const BaseAPIURL = 'http://192.168.1.44/harijwl/admin/index.php/';
+// export const BaseAPIURL = 'http://192.168.1.44/etail_development_src/admin/index.php/';
 
 
 // https://staging.rajathangamaligai.com/admin/
